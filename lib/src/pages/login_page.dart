@@ -15,9 +15,8 @@ class LoginPage extends StatelessWidget {
     );  
   }
 }
-
+//Front end Primera pagina, la imagen de fonto y los titulos 
 class Page1 extends StatelessWidget {
-  const Page1({Key key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +54,7 @@ class MainContent extends StatelessWidget {
 }
 
 class Background extends StatelessWidget {
-  const Background({Key key,}) : super(key: key);
-
+ 
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -74,6 +72,8 @@ class Background extends StatelessWidget {
     );
   }
 }
+
+//Front end segunda pagina, creacion del fondo y el formulario para el login
 class Page2 extends StatelessWidget {
 
   @override
@@ -87,6 +87,54 @@ class Page2 extends StatelessWidget {
       )
     );
   }
+
+  Widget _crearFondo(BuildContext context){
+    
+    final size = MediaQuery.of (context).size;
+  
+    final fondoMarron = Container(
+      height: size.height * 0.4,
+      width: double.infinity, 
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: <Color>[
+            Color.fromRGBO(48, 33, 17, 1.0),
+            Color.fromRGBO(92, 73, 52, 1.0),
+          ]
+        )
+      ),
+    );
+    final circulo = Container(
+      width: 80.0,
+      height: 80.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100.0),
+        color: Color.fromRGBO(255, 255, 255, 0.05),
+      ),
+    );
+
+    return Stack(
+      children:<Widget>[
+        fondoMarron,
+        Positioned(top:50.0, left:50.0, child:circulo),
+        Positioned(top:40.0, right:-30.0, child:circulo),
+        Positioned(top:100.0, right:50.0, child:circulo),
+        Positioned(top:230.0, right:5.0, child:circulo),
+        Positioned(top:240.0, left:10.0, child:circulo),
+
+        Container(
+          padding: EdgeInsets.only(top: 80.0),
+          child: Column(
+            children:<Widget>[
+              Icon(Icons.account_circle, color:Colors.white, size:80.0),
+              SizedBox(height:10.0, width: double.infinity),
+              Text('AgroLibreta', style:TextStyle( color: Colors.white, fontSize: 25.0))
+            ]
+          ),)
+      ],
+    );
+  }
+
   Widget _loginForm(BuildContext context){
 
     final size = MediaQuery.of(context).size;
@@ -103,7 +151,7 @@ class Page2 extends StatelessWidget {
           Container(
             width: size.width * 0.85,
             margin: EdgeInsets.symmetric(vertical:30.0),
-            padding: EdgeInsets.symmetric(vertical: 50.0),
+            padding: EdgeInsets.symmetric(vertical: 30.0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5.0),
@@ -118,8 +166,8 @@ class Page2 extends StatelessWidget {
             ),
             child:Column(
               children: <Widget> [
-                Text('Iniciar Sesión', style: TextStyle(fontSize: 20.0),),
-                SizedBox(height:50.0),
+                Text('Iniciar Sesión', style: TextStyle(fontSize: 25.0),),
+                SizedBox(height:20.0),
                 _crearEmail(),
                 SizedBox(height:30.0),
                 _crearPassword(),
@@ -175,50 +223,5 @@ class Page2 extends StatelessWidget {
     );
   }
 
-  Widget _crearFondo(BuildContext context){
-    
-    final size = MediaQuery.of (context).size;
-  
-    final fondoMorado = Container(
-      height: size.height * 0.4,
-      width: double.infinity, 
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: <Color>[
-            Color.fromRGBO(48, 33, 17, 1.0),
-            Color.fromRGBO(92, 73, 52, 1.0),
-          ]
-        )
-      ),
-    );
-    final circulo = Container(
-      width: 80.0,
-      height: 80.0,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100.0),
-        color: Color.fromRGBO(255, 255, 255, 0.05),
-      ),
-    );
-
-    return Stack(
-      children:<Widget>[
-        fondoMorado,
-        Positioned(top:50.0, left:50.0, child:circulo),
-        Positioned(top:40.0, right:-30.0, child:circulo),
-        Positioned(top:100.0, right:50.0, child:circulo),
-        Positioned(top:230.0, right:5.0, child:circulo),
-        Positioned(top:240.0, left:10.0, child:circulo),
-
-        Container(
-          padding: EdgeInsets.only(top: 80.0),
-          child: Column(
-            children:<Widget>[
-              Icon(Icons.account_circle, color:Colors.white, size:80.0),
-              SizedBox(height:10.0, width: double.infinity),
-              Text('AgroLibreta', style:TextStyle( color: Colors.white, fontSize: 25.0))
-            ]
-          ),)
-      ],
-    );
-  }
+ 
 }
