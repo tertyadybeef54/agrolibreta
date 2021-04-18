@@ -216,7 +216,6 @@ class Page2 extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal:30.0, vertical:15.0),
           child: Text('Ingresar', style: TextStyle(fontSize: 20.0),),
-          
         ),
         onPressed: (){},
         style: ElevatedButton.styleFrom(primary: Colors.brown),
