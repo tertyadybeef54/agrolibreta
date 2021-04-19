@@ -1,5 +1,6 @@
 import 'package:agrolibreta_v2/src/pages/crear_cultivo_page.dart';
 import 'package:agrolibreta_v2/src/pages/login_page.dart';
+import 'package:agrolibreta_v2/src/pages/registrar_usuario.dart';
 import 'package:flutter/material.dart';
 
 Map<String, WidgetBuilder> getAplicationRoutes() {
@@ -7,10 +8,11 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
     //'home': (BuildContext context) => HomePage(),
     //'cultivos': (BuildContext context) => CultivosPage(),
     // 'gastos': (BuildContext context) => GastosPage(),
-    // 'login': (BuildContext context) => LoginPage(),
+    
     // 'soportes': (BuildContext context) => SoportesPage(),
-    'crearCultivo': (BuildContext context) => CrearCultivoPage(),
-    'loginPage':(BuildContext context) => LoginPage(),
+    'crearCultivo'    : (BuildContext context) => CrearCultivoPage(),
+    'loginPage'       : (BuildContext context) => LoginPage(),
+    'registrarUsuario': (BuildContext context) => RegistrarUsuario(),
     // 'resumenGastos': (BuildContext context) => ResumenGastosPage(),
     // 'nuevoGasto': (BuildContext context) => NuevoGastoPage(),
     // 'crearUbicacion': (BuildContext context) => CrearUbicacionPage(),

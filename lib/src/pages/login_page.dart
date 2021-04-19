@@ -175,7 +175,10 @@ class Page2 extends StatelessWidget {
                 _crearBoton(),
               ],
             )
-          )
+          ),
+        
+          Text('¿Olvido la contraseña?', style: TextStyle(fontSize: 18.0)),
+          SizedBox(height: 100.0),
         ],
       )
     );

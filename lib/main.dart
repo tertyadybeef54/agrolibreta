@@ -1,5 +1,6 @@
 //import 'package:agrolibreta_v2/src/pages/crear_cultivo_page.dart';
-import 'package:agrolibreta_v2/src/pages/login_page.dart';
+//import 'package:agrolibreta_v2/src/pages/login_page.dart';
+import 'package:agrolibreta_v2/src/pages/registrar_usuario.dart';
 import 'package:agrolibreta_v2/src/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -24,11 +25,11 @@ class MyApp extends StatelessWidget {
         const Locale('es', 'ES'), // *See Advanced Locales below*
       ],
       title: 'AgroLibreta',
-      initialRoute: 'loginPage',
+      initialRoute: 'registrarUsuario',
       routes: getAplicationRoutes(),
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-          builder: (BuildContext context) => LoginPage(),
+          builder: (BuildContext context) => RegistrarUsuario(),
         );
       },
     );
