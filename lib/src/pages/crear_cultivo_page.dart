@@ -1,134 +1,291 @@
-import 'dart:convert';
-import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
+import 'package:agrolibreta_v2/src/data/estados_operations.dart';
+import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
+import 'package:agrolibreta_v2/src/data/producto_agricola_operations.dart';
+import 'package:agrolibreta_v2/src/widgets/ubicaciones_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-//import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
-class CrearCultivoPage extends StatelessWidget {
+import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
+import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
+import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
+import 'package:agrolibreta_v2/src/providers/db_provider.dart';
+
+class CrearCultivoPage extends StatefulWidget {
+  @override
+  _CrearCultivoPageState createState() => _CrearCultivoPageState();
+}
+
+class _CrearCultivoPageState extends State<CrearCultivoPage> {
+  UbicacionesOperations ubicacionesOperations = new UbicacionesOperations();
+  EstadosOperations estadosOperations = new EstadosOperations();
+  ModelosReferenciaOperations modelosReferenciaOperations =
+      new ModelosReferenciaOperations();
+  ProductoAgricolaOperations productoAgricolaOperations =
+      new ProductoAgricolaOperations();
+
+  UbicacionModel _selectedUbicacion;
+  callback(selectedUbicacion) {
+    setState(() {
+      _selectedUbicacion = selectedUbicacion;
+    });
+  }
+
+  //estilo de texto letra tamaño 20
+  final _style = new TextStyle(
+    fontSize: 20.0,
+  );
+  TextEditingController controlFecha = new TextEditingController();
+
+  //variables por defecto al crear un registro de cultivo
+  int _idEstado = 1; // activo por defecto.
+  int _idModeloReferencia = 1; // modelo por defecto.
+  int _idProductoAgricola = 1; // arveja por defecto
+  //valores que ingresa el usuario
+  String _nombreDistintivo = 'a';
+  int _areaSembrada = 1;
+  String _fechaInicio = 'a';
+  String fechaFinal = 'a';
+  int _presupuesto = 1;
+  int _precioVentaIdeal = 1;
+  //variables para crear la ubicacion
+  String _desUbicacion = 'a';
+  String _nombreUbicacion = 'a';
+  int _estadoUbi = 1; //activa por defecto
+  // cuando crea una nueva ubicacion el estado es 1=activo
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Center(
-          child: Text('Registrar cultivo'),
+          child: Text(
+            'Registrar cultivo',
+            style: _style,
+          ),
         ),
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+        padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 5.0),
         children: [
-          Text('Seleccione la ubicacion para el cultivo: '),
+          SizedBox(height: 20.0),
+          Text(
+            'Seleccione la ubicacion para el cultivo: ',
+            style: _style,
+          ),
           _seleccionarUbicacionCultivo(),
-          SizedBox(height: 30.0),
-          _input('Nombre del cultivo', 'Arveja 1', 'Ejemplo: Arveja 1',
-              TextInputType.name),
-          SizedBox(height: 30.0),
+          Divider(),
+          _input('Nombre distintivo para el cultivo', '',
+              'Ejemplo: Arveja con Luis', TextInputType.name, 1),
+          Divider(),
           _input('Area a sembrar en metros cuadrados', '10000',
-              'por ejemplo 10000', TextInputType.number),
-          SizedBox(height: 30.0),
-          //_fechaCultivo(context),
-          // crearFecha(context, _inputFieldController2, 'Fecha',
-          //     'Fecha de inicio de actividades', 'fecha del cultivo'),
-          SizedBox(height: 30.0),
-
-          ElevatedButton(
-              onPressed: () => _sincro(context), child: Text('sincro'))
-          //FloatingActionButton(onPressed: _sincro())
+              'Ejemplo: 10000', TextInputType.number, 2),
+          Divider(),
+          _fecha(context),
+          Divider(),
+          _input('Presupuesto estimado', '5000000', 'Ejemplo: 5000000',
+              TextInputType.number, 3),
+          Divider(),
+          _guardar(context),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () =>
-            Navigator.pushReplacementNamed(context, 'crearUbicacion'),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   }
 
-  _sincro(BuildContext context) async {
-    //final sincronizar = new UbicacionesProvider();
-    print('entra al boton sincro');
-    //await sincronizar.cargarUbicaciones();
-    await _subirUbicaciones(context);
-  }
-
-  Future<bool> _subirUbicaciones(BuildContext context) async {
-    print('entra al subir ubicaciones');
-    final _url = 'https://flutter-varios-41df3-default-rtdb.firebaseio.com';
-    final url = '$_url/Ubicaciones.json';
-    final ubicaciones = [];
-
-    final resp = await http.get(Uri.parse(url));
-    final Map<String, dynamic> decodedData2 = json.decode(resp.body);
-    final ids = []; //lista de los ids de las ubicaciones
-    //añadir cada uno de los ids a la lista
-    decodedData2.forEach((id, value) {
-      final idTemp = decodedData2[id]["idUbicacion"];
-      ids.add(idTemp);
-      print(idTemp);
-    });
-
-    ubicaciones.forEach((ubicacion) async {
-      if (!ids.contains(ubicacion.idUbicacion)) {
-        final resp = await http.post(Uri.parse(url),
-            body: ubicacionModelToJson(ubicacion));
-
-        final decodedData = json.decode(resp.body);
-
-        print(decodedData);
-      }
-    });
-
-    return true;
-  }
-
+  //##############################################################
+  //Seleccionar la ubicacion para el cultivo
   Widget _seleccionarUbicacionCultivo() {
+    //DBProvider.db.database;
     return Row(
-      children: <Widget>[
+      children: [
         Icon(Icons.add_location),
         SizedBox(width: 30.0),
-        Expanded(
-          child: DropdownButton(
-            value: '',
-            items: getOpcionesDropdown(),
-            onChanged: (opt) {},
-          ),
+        FutureBuilder<List<UbicacionModel>>(
+          future: ubicacionesOperations.consultarUbicaciones(),
+          builder: (context, snapshot) {
+            return snapshot.hasData
+                ? UbicacionesDropdowun(snapshot.data, callback)
+                : Text('sin ubicaciones');
+          },
+        ),
+        Stack(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 9.0, vertical: 8.8),
+              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.lightBlue),
+            ),
+            IconButton(
+              icon: Icon(Icons.add),
+              color: Colors.white,
+              onPressed: () => _registrarUbicacion(context),
+            ),
+          ],
         ),
       ],
     );
   }
 
-  //metodo para añadir las ubicaciones al dropdown
-  List<DropdownMenuItem<String>> getOpcionesDropdown() {
-    List<DropdownMenuItem<String>> lista = [];
-    final _ubicaciones = [];
-    _ubicaciones.forEach((valor) {
-      lista.add(DropdownMenuItem(
-        child: Text(valor),
-        value: valor,
-      ));
-    });
-    return lista;
-  }
-
+  // ingresar el nombre 1.distintivo, 2.area sembrada 3.presupuesto y 4. nombre ubicacion 5. descripcion ubicacion
+  // Se debe agrgar condicion de solo enteros para 2 y 3
   Widget _input(String descripcion, String hilabel, String labeltext,
-      TextInputType tipotext) {
+      TextInputType tipotext, int n) {
     var inputDecoration = InputDecoration(
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
       hintText: hilabel,
       labelText: labeltext,
       helperText: descripcion,
       icon: Icon(Icons.drive_file_rename_outline),
-      suffixIcon: Icon(Icons.touch_app),
+      //suffixIcon: Icon(Icons.touch_app),
     );
-    return TextField(
-      keyboardType: tipotext,
-      textCapitalization: TextCapitalization.sentences,
-      decoration: inputDecoration,
-      onChanged: (valor) {
-        // setState(() {
-        //   //_nombreCultivo = valor;
-        // });
-      },
+    return Container(
+      padding: EdgeInsets.only(bottom: 5.0),
+      height: 60.0,
+      width: double.infinity,
+      child: TextField(
+        textAlignVertical: TextAlignVertical.bottom,
+        keyboardType: tipotext,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: inputDecoration,
+        onChanged: (valor) {
+          setState(() {
+            if (n == 1) {
+              _nombreDistintivo = valor;
+            }
+            if (n == 2) {
+              _areaSembrada = int.parse(valor);
+            }
+            if (n == 3) {
+              _presupuesto = int.parse(valor);
+            }
+            if (n == 4) {
+              _nombreUbicacion = valor;
+            }
+            if (n == 5) {
+              _desUbicacion = valor;
+            }
+          });
+        },
+      ),
     );
+  }
+
+  // fecha
+  Widget _fecha(BuildContext context) {
+    return Container(
+      height: 60.0,
+      child: TextField(
+        textAlignVertical: TextAlignVertical.bottom,
+        enableInteractiveSelection: false,
+        controller: controlFecha,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+          hintText: 'fecha',
+          labelText: 'fecha',
+          helperText: 'Seleccione fecha de inicio del cultivo',
+          icon: Icon(Icons.calendar_today),
+          suffixIcon: Icon(Icons.touch_app),
+        ),
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+          _selectDate(context);
+        },
+      ),
+    );
+  }
+
+  _selectDate(BuildContext context) async {
+    //------------------------ para pruebas
+    final ModeloReferenciaModel modeloReferencia = new ModeloReferenciaModel(
+      suma: 100,
+    );
+    final EstadoModel estado = new EstadoModel(
+      nombreEstado: 'activo',
+    );
+    final productoagricola = new ProductoAgricolaModel(
+      nombreProducto: 'arveja',
+    );
+    modelosReferenciaOperations.nuevoModeloReferencia(modeloReferencia);
+    estadosOperations.nuevoEstado(estado);
+    productoAgricolaOperations.nuevoProductoAgricola(productoagricola);
+
+    //---------------------------
+
+    DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: new DateTime.now(),
+      firstDate: new DateTime(2021),
+      lastDate: new DateTime(2030),
+      locale: Locale('es', 'ES'),
+    );
+    if (picked != null) {
+      setState(() {
+        _fechaInicio = DateFormat('yyyy-MM-dd').format(picked);
+        controlFecha.text = _fechaInicio;
+      });
+    }
+  }
+
+  //boton _guardar y guardar en la base de datos el registro del cultivo
+  Widget _guardar(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
+      child: ElevatedButton(
+          onPressed: () => _save(context), child: Text('Guardar')),
+    );
+  }
+
+  void _save(BuildContext context) {
+    final cultivoTemp = new CultivoModel(
+      fkidUbicacion: _selectedUbicacion.idUbicacion,
+      fkidEstado: _idEstado,
+      fkidModeloReferencia: _idModeloReferencia,
+      fkidProductoAgricola: _idProductoAgricola,
+      nombreDistintivo: _nombreDistintivo,
+      areaSembrada: _areaSembrada,
+      fechaInicio: _fechaInicio,
+      fechaFinal: _fechaInicio,
+      presupuesto: _presupuesto,
+      precioVentaIdeal: _precioVentaIdeal,
+    );
+    CultivoOperations operacionCultivo = new CultivoOperations();
+    operacionCultivo.nuevoCultivo(cultivoTemp);
+  }
+
+  // dialogo para registrar una nueva ubicacion
+  void _registrarUbicacion(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            title: Text('Registrar ubicacion'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _input('Nombre de la ubicacion', '', '', TextInputType.name, 4),
+                Divider(),
+                _input('Descripcion', '', '', TextInputType.text, 5),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      final ubicacion = new UbicacionModel(
+                        nombreUbicacion: _nombreUbicacion,
+                        descripcion: _desUbicacion,
+                        estado: _estadoUbi,
+                      );
+                      ubicacionesOperations.nuevaUbicacion(ubicacion);
+                    });
+                    Navigator.pushReplacementNamed(context, 'crearCultivo');
+                  },
+                  child: Text('Guardar')),
+            ],
+          );
+        });
   }
 }
