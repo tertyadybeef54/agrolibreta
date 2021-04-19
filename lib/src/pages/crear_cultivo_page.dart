@@ -1,6 +1,14 @@
-import 'package:agrolibreta_v2/src/providers/db_provider.dart';
+import 'package:agrolibreta_v2/src/data/estados_operations.dart';
+import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
+import 'package:agrolibreta_v2/src/data/producto_agricola_operations.dart';
+import 'package:agrolibreta_v2/src/widgets/ubicaciones_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
+import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
+import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
+import 'package:agrolibreta_v2/src/providers/db_provider.dart';
 
 class CrearCultivoPage extends StatefulWidget {
   @override
@@ -8,45 +16,66 @@ class CrearCultivoPage extends StatefulWidget {
 }
 
 class _CrearCultivoPageState extends State<CrearCultivoPage> {
-  TextEditingController controlFecha = new TextEditingController();
-  List<String> ubicaciones = ['ubi1', 'ubi2', 'ubi3', 'ubi4', 'ubi5'];
-  String _ubicacionSeleccionada = 'ubi1';
-  String idUbicacion = '1';
-  String idEstado = '1';
-  String idModeloReferencia = '1';
-  String idProductoAgricola = '1';
-  // ignore: unused_field
-  String _nombreDistintivo = '';
-  // ignore: unused_field
-  String _areaSembrada = '';
-  String _fechaInicio = '';
-  String fechaFinal = '';
-  // ignore: unused_field
-  String _presupuesto = '';
-  String precioVentaIdeal = '';
+  UbicacionesOperations ubicacionesOperations = new UbicacionesOperations();
+  EstadosOperations estadosOperations = new EstadosOperations();
+  ModelosReferenciaOperations modelosReferenciaOperations =
+      new ModelosReferenciaOperations();
+  ProductoAgricolaOperations productoAgricolaOperations =
+      new ProductoAgricolaOperations();
 
-  String _ubicacion = '';
-  String _desUbicacion = '';
-  String _estado = '1'; // cuando crea una nueva ubicacion el estado es 1=activo
+  UbicacionModel _selectedUbicacion;
+  callback(selectedUbicacion) {
+    setState(() {
+      _selectedUbicacion = selectedUbicacion;
+    });
+  }
+
+  //estilo de texto letra tamaño 20
+  final _style = new TextStyle(
+    fontSize: 20.0,
+  );
+  TextEditingController controlFecha = new TextEditingController();
+
+  //variables por defecto al crear un registro de cultivo
+  int _idEstado = 1; // activo por defecto.
+  int _idModeloReferencia = 1; // modelo por defecto.
+  int _idProductoAgricola = 1; // arveja por defecto
+  //valores que ingresa el usuario
+  String _nombreDistintivo = 'a';
+  int _areaSembrada = 1;
+  String _fechaInicio = 'a';
+  String fechaFinal = 'a';
+  int _presupuesto = 1;
+  int _precioVentaIdeal = 1;
+  //variables para crear la ubicacion
+  String _desUbicacion = 'a';
+  String _nombreUbicacion = 'a';
+  int _estadoUbi = 1; //activa por defecto
+  // cuando crea una nueva ubicacion el estado es 1=activo
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Center(
-          child: Text('Registrar cultivo'),
+          child: Text(
+            'Registrar cultivo',
+            style: _style,
+          ),
         ),
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 35.0, vertical: 5.0),
+        padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 5.0),
         children: [
           SizedBox(height: 20.0),
-          Text('  Seleccione la ubicacion para el cultivo: '),
-          SizedBox(height: 10.0),
+          Text(
+            'Seleccione la ubicacion para el cultivo: ',
+            style: _style,
+          ),
           _seleccionarUbicacionCultivo(),
           Divider(),
           _input('Nombre distintivo para el cultivo', '',
-              'Ejemplo: Arveja con Luis', TextInputType.text, 1),
+              'Ejemplo: Arveja con Luis', TextInputType.name, 1),
           Divider(),
           _input('Area a sembrar en metros cuadrados', '10000',
               'Ejemplo: 10000', TextInputType.number, 2),
@@ -62,38 +91,22 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
     );
   }
 
-//##############################################################
-//
-//Seleccionar la ubicacion para el cultivo
-  List<DropdownMenuItem<String>> getOpcionesDropdown() {
-    //DBProvider.db.database;
-    List<DropdownMenuItem<String>> lista = [];
-    ubicaciones.forEach((ubicacion) {
-      lista.add(DropdownMenuItem(
-        child: Text(ubicacion),
-        value: ubicacion,
-      ));
-    });
-    return lista;
-  }
-
+  //##############################################################
+  //Seleccionar la ubicacion para el cultivo
   Widget _seleccionarUbicacionCultivo() {
+    //DBProvider.db.database;
     return Row(
       children: [
         Icon(Icons.add_location),
         SizedBox(width: 30.0),
-        DropdownButton(
-          value: _ubicacionSeleccionada,
-          icon: Icon(Icons.keyboard_arrow_down),
-          underline: Container(height: 2, color: Colors.black),
-          items: getOpcionesDropdown(),
-          onChanged: (opt) {
-            setState(() {
-              _ubicacionSeleccionada = opt;
-            });
+        FutureBuilder<List<UbicacionModel>>(
+          future: ubicacionesOperations.consultarUbicaciones(),
+          builder: (context, snapshot) {
+            return snapshot.hasData
+                ? UbicacionesDropdowun(snapshot.data, callback)
+                : Text('sin ubicaciones');
           },
         ),
-        SizedBox(width: 15.0),
         Stack(
           children: [
             Container(
@@ -113,7 +126,8 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
     );
   }
 
-// ingresar el nombre 1.distintivo, 2.area sembrada y 3.presupuesto
+  // ingresar el nombre 1.distintivo, 2.area sembrada 3.presupuesto y 4. nombre ubicacion 5. descripcion ubicacion
+  // Se debe agrgar condicion de solo enteros para 2 y 3
   Widget _input(String descripcion, String hilabel, String labeltext,
       TextInputType tipotext, int n) {
     var inputDecoration = InputDecoration(
@@ -139,13 +153,13 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
               _nombreDistintivo = valor;
             }
             if (n == 2) {
-              _areaSembrada = valor;
+              _areaSembrada = int.parse(valor);
             }
             if (n == 3) {
-              _presupuesto = valor;
+              _presupuesto = int.parse(valor);
             }
             if (n == 4) {
-              _ubicacion = valor;
+              _nombreUbicacion = valor;
             }
             if (n == 5) {
               _desUbicacion = valor;
@@ -156,7 +170,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
     );
   }
 
-// fecha
+  // fecha
   Widget _fecha(BuildContext context) {
     return Container(
       height: 60.0,
@@ -181,6 +195,22 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
   }
 
   _selectDate(BuildContext context) async {
+    //------------------------ para pruebas
+    final ModeloReferenciaModel modeloReferencia = new ModeloReferenciaModel(
+      suma: 100,
+    );
+    final EstadoModel estado = new EstadoModel(
+      nombreEstado: 'activo',
+    );
+    final productoagricola = new ProductoAgricolaModel(
+      nombreProducto: 'arveja',
+    );
+    modelosReferenciaOperations.nuevoModeloReferencia(modeloReferencia);
+    estadosOperations.nuevoEstado(estado);
+    productoAgricolaOperations.nuevoProductoAgricola(productoagricola);
+
+    //---------------------------
+
     DateTime picked = await showDatePicker(
       context: context,
       initialDate: new DateTime.now(),
@@ -198,11 +228,29 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
 
   //boton _guardar y guardar en la base de datos el registro del cultivo
   Widget _guardar(BuildContext context) {
-    return ElevatedButton(
-        onPressed: () => _save(context), child: Text('Guardar'));
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
+      child: ElevatedButton(
+          onPressed: () => _save(context), child: Text('Guardar')),
+    );
   }
 
-  _save(BuildContext context) {}
+  void _save(BuildContext context) {
+    final cultivoTemp = new CultivoModel(
+      fkidUbicacion: _selectedUbicacion.idUbicacion,
+      fkidEstado: _idEstado,
+      fkidModeloReferencia: _idModeloReferencia,
+      fkidProductoAgricola: _idProductoAgricola,
+      nombreDistintivo: _nombreDistintivo,
+      areaSembrada: _areaSembrada,
+      fechaInicio: _fechaInicio,
+      fechaFinal: _fechaInicio,
+      presupuesto: _presupuesto,
+      precioVentaIdeal: _precioVentaIdeal,
+    );
+    CultivoOperations operacionCultivo = new CultivoOperations();
+    operacionCultivo.nuevoCultivo(cultivoTemp);
+  }
 
   // dialogo para registrar una nueva ubicacion
   void _registrarUbicacion(BuildContext context) {
@@ -223,7 +271,19 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
               ],
             ),
             actions: [
-              TextButton(onPressed: () {}, child: Text('Guardar')),
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      final ubicacion = new UbicacionModel(
+                        nombreUbicacion: _nombreUbicacion,
+                        descripcion: _desUbicacion,
+                        estado: _estadoUbi,
+                      );
+                      ubicacionesOperations.nuevaUbicacion(ubicacion);
+                    });
+                    Navigator.pushReplacementNamed(context, 'crearCultivo');
+                  },
+                  child: Text('Guardar')),
             ],
           );
         });

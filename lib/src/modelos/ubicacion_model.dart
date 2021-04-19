@@ -16,21 +16,25 @@ class UbicacionModel {
     this.idUbicacion,
     this.nombreUbicacion,
     this.descripcion,
+    this.estado,
   });
 
   int idUbicacion;
   String nombreUbicacion;
   String descripcion;
+  int estado;
 
   factory UbicacionModel.fromJson(Map<String, dynamic> json) => UbicacionModel(
         idUbicacion: json["idUbicacion"],
         nombreUbicacion: json["nombreUbicacion"],
         descripcion: json["descripcion"],
+        estado: json["estado"],
       );
 
   Map<String, dynamic> toJson() => {
         "idUbicacion": idUbicacion,
         "nombreUbicacion": nombreUbicacion,
         "descripcion": descripcion,
+        "estado": estado,
       };
 }
