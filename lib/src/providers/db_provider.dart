@@ -25,14 +25,13 @@ class DBProvider {
   Future<Database> initDB() async {
     // Path de donde almacenaremos la base de datos
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, 'Agrolibreta2.db');
+    final path = join(documentsDirectory.path, 'Agrolibreta3.db');
     print(path);
     // Crear base de datos
     return await openDatabase(path, version: 2, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       print('crear base');
       await db.execute('''
-
         CREATE TABLE Cultivos(
           idCultivo INTEGER PRIMARY KEY AUTOINCREMENT,
           fkidUbicacion STRING NOT NULL,
@@ -52,7 +51,6 @@ class DBProvider {
         )
         ''');
       await db.execute('''
-
         CREATE TABLE ModelosReferencia(
           idModeloReferencia INTEGER PRIMARY KEY,
           suma REAL
@@ -73,12 +71,55 @@ class DBProvider {
         )
       ''');
       db.execute('''
-
         CREATE TABLE ProductosAgricolas(
           idProductoAgricola INTEGER PRIMARY KEY,
           nombreProducto STRING
         )
       ''');
+      db.execute('''
+        CREATE TABLE Conceptos(
+          idConcepto INTEGER PRIMARY KEY,
+          nombreConcepto STRING
+        )
+      ''');
+      db.execute('''
+        CREATE TABLE UnidadesMedida(
+          idUnidadMedida INTEGER PRIMARY KEY,
+          nombreUnidadMedida STRING,
+          descripcion STRING
+        )
+      ''');
+      db.execute('''
+        CREATE TABLE ProductosActividades(
+          idProductoActividad INTEGER PRIMARY KEY,
+          fkidConcepto STRING,
+          fkidUnidadMedida STRING,
+          nombreProductoActividad STRING,
+          FOREIGN KEY (fkidConcepto) REFERENCES Conceptos (idConcepto),
+          FOREIGN KEY (fkidUnidadMedida) REFERENCES UnidadesMedida (idUnidadMedida)
+        )
+      ''');
+      db.execute('''
+        CREATE TABLE RegistrosFotograficos(
+          idRegistroFotografico INTEGER PRIMARY KEY,
+          pathFoto STRING
+        )
+      ''');
+      db.execute('''
+        CREATE TABLE Costos(
+          idCosto INTEGER PRIMARY KEY,
+          fkidProductoActividad STRING,
+          fkidCultivo STRING,
+          fkidRegistroFotografico STRING,
+          cantidad REAL,
+          valorUnidad REAL,
+          fecha STRING,
+          FOREIGN KEY (fkidProductoActividad) REFERENCES ProductosActividades (idProductoActividad),
+          FOREIGN KEY (fkidCultivo) REFERENCES Cultivos (idCultivo),
+          FOREIGN KEY (fkidRegistroFotografico) REFERENCES RegistrosFotograficos (idRegistroFotografico)
+        )
+      ''');
+
       print('base creada');
     });
   }
