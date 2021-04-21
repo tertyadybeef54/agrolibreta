@@ -1,50 +1,51 @@
-import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
+import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
 import 'package:agrolibreta_v2/src/providers/db_provider.dart';
 
-class CostoOperations {
-  CostoOperations costoOperations;
+class ProductoActividadOperations {
+  ProductoActividadOperations productoActividadOperations;
 
   final dbProvider = DBProvider.db;
 
 //C - crear
-  Future<int> nuevoCosto(CostoModel nuevoCosto) async {
+  Future<int> nuevoProductoActividad(ProductoActividadModel nuevoProductoActividad) async {
     final db = await dbProvider.database;
-    final res = await db.insert('Costos', nuevoCosto.toJson());
+    final res = await db.insert('ProductosActividades', nuevoProductoActividad.toJson());
     // Es el ID del último registro insertado;
     print(res);
+    print('proAct creada');
     return res;
   }
 
 //R - leer
-  Future<List<CostoModel>> consultarCostos() async {
+  Future<List<ProductoActividadModel>> consultarProductosActividades() async {
     final db = await dbProvider.database;
-    final res = await db.query('Costos');
+    final res = await db.query('ProductosActividades');
 
     return res.isNotEmpty
-        ? res.map((s) => CostoModel.fromJson(s)).toList()
+        ? res.map((s) => ProductoActividadModel.fromJson(s)).toList()
         : [];
   }
 
 //U - actualizar
-  Future<int> updateCostos(CostoModel nuevoCosto) async {
+  Future<int> updateProductosActividades(ProductoActividadModel nuevoProductoActividad) async {
     final db = await dbProvider.database;
-    final res = await db.update('Costos', nuevoCosto.toJson(),
-        where: 'id = ?', whereArgs: [nuevoCosto.idCosto]);
+    final res = await db.update('ProductosActividades', nuevoProductoActividad.toJson(),
+        where: 'id = ?', whereArgs: [nuevoProductoActividad.idProductoActividad]);
     return res;
   }
 
 //D - borrar un registro
-  Future<int> deleteCosto(int id) async {
+  Future<int> deleteProductoActividad(int id) async {
     final db = await dbProvider.database;
     final res = await db
-        .delete('Costos', where: 'idCosto = ?', whereArgs: [id]);
+        .delete('ProductosActividades', where: 'idProductoActividad = ?', whereArgs: [id]);
     return res;
   }
 
-  Future<CostoModel> getCostoById(int id) async {
+  Future<ProductoActividadModel> getProductoActividadById(int id) async {
     final db = await dbProvider.database;
-    final res = await db.query('Costos', where: 'idCosto = ?', whereArgs: [id]);
+    final res = await db.query('ProductosActividades', where: 'idProductoActividad = ?', whereArgs: [id]);
 
-    return res.isNotEmpty ? CostoModel.fromJson(res.first) : null;
+    return res.isNotEmpty ? ProductoActividadModel.fromJson(res.first) : null;
   }
 }

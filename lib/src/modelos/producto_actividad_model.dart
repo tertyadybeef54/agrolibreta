@@ -13,25 +13,25 @@ class ProductoActividadModel {
         this.idProductoActividad,
         this.fkidConcepto,
         this.fkidUnidadMedida,
-        this.nombreTipoCosto,
+        this.nombreProductoActividad,
     });
 
     int idProductoActividad;
-    String fkidConcepto;
-    String fkidUnidadMedida;
-    String nombreTipoCosto;
+    int fkidConcepto;
+    int fkidUnidadMedida;
+    String nombreProductoActividad;
 
     factory ProductoActividadModel.fromJson(Map<String, dynamic> json) => ProductoActividadModel(
         idProductoActividad: json["idProductoActividad"],
         fkidConcepto: json["fkidConcepto"],
         fkidUnidadMedida: json["fkidUnidadMedida"],
-        nombreTipoCosto: json["nombreTipoCosto"],
+        nombreProductoActividad: json["nombreProductoActividad"],
     );
 
     Map<String, dynamic> toJson() => {
         "idProductoActividad": idProductoActividad,
         "fkidConcepto": fkidConcepto,
         "fkidUnidadMedida": fkidUnidadMedida,
-        "nombreTipoCosto": nombreTipoCosto,
+        "nombreProductoActividad": nombreProductoActividad,
     };
 }

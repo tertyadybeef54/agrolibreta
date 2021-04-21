@@ -12,6 +12,7 @@ class UnidadMedidaOperations {
     final res = await db.insert('UnidadesMedida', nuevoUnidadMedida.toJson());
     // Es el ID del último registro insertado;
     print(res);
+    print('unidad me creada');
     return res;
   }
 
@@ -43,7 +44,8 @@ class UnidadMedidaOperations {
 
   Future<UnidadMedidaModel> getUnidadMedidaById(int id) async {
     final db = await dbProvider.database;
-    final res = await db.query('UnidadesMedida', where: 'idUnidadMedida = ?', whereArgs: [id]);
+    final res = await db
+        .query('UnidadesMedida', where: 'idUnidadMedida = ?', whereArgs: [id]);
 
     return res.isNotEmpty ? UnidadMedidaModel.fromJson(res.first) : null;
   }

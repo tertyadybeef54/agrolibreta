@@ -1,14 +1,21 @@
-import 'package:agrolibreta_v2/src/data/estados_operations.dart';
-import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
-import 'package:agrolibreta_v2/src/data/producto_agricola_operations.dart';
-import 'package:agrolibreta_v2/src/widgets/ubicaciones_dropdown.dart';
+import 'package:agrolibreta_v2/src/widgets/concepto_dropdown.dart';
+import 'package:agrolibreta_v2/src/widgets/unidad_medida_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
-import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
-import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
-import 'package:agrolibreta_v2/src/providers/db_provider.dart';
+import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
+import 'package:agrolibreta_v2/src/data/costo_operations.dart';
+import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
+import 'package:agrolibreta_v2/src/data/registro_fotografico_operations.dart';
+import 'package:agrolibreta_v2/src/data/unidad_medida_operations.dart';
+
+import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
+import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
+import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
+//import 'package:agrolibreta_v2/src/modelos/registro_fotografico_model.dart';
+import 'package:agrolibreta_v2/src/modelos/unidad_medida_model.dart';
+
+import 'package:agrolibreta_v2/src/widgets/productoAtividad_dropdown.dart';
 
 class CrearCostoPage extends StatefulWidget {
   @override
@@ -16,17 +23,33 @@ class CrearCostoPage extends StatefulWidget {
 }
 
 class _CrearCostoPageState extends State<CrearCostoPage> {
-  UbicacionesOperations ubicacionesOperations = new UbicacionesOperations();
-  EstadosOperations estadosOperations = new EstadosOperations();
-  ModelosReferenciaOperations modelosReferenciaOperations =
-      new ModelosReferenciaOperations();
-  ProductoAgricolaOperations productoAgricolaOperations =
-      new ProductoAgricolaOperations();
+  //las operaciones de las 5 tablas que se usan
+  //Conceptos, UnidadesMedida, ProductosActividades, RegistroFotografico, Costos
+  ConceptoOperations conOper = new ConceptoOperations();
+  UnidadMedidaOperations uniMedOper = new UnidadMedidaOperations();
+  ProductoActividadOperations proActOper = new ProductoActividadOperations();
+  RegistroFotograficoOperations regFotOper =
+      new RegistroFotograficoOperations();
+  CostoOperations cosOper = new CostoOperations();
 
-  UbicacionModel _selectedUbicacion;
-  callback(selectedUbicacion) {
+  ProductoActividadModel _selectedProductoActividad;
+  callback(selectedProductoActividad) {
     setState(() {
-      _selectedUbicacion = selectedUbicacion;
+      _selectedProductoActividad = selectedProductoActividad;
+    });
+  }
+
+  ConceptoModel _selectedConcepto;
+  callback1(selectedConcepto) {
+    setState(() {
+      _selectedConcepto = selectedConcepto;
+    });
+  }
+
+  UnidadMedidaModel _selectedUnidadMedida;
+  callback2(selectedUnidadMedida) {
+    setState(() {
+      _selectedUnidadMedida = selectedUnidadMedida;
     });
   }
 
@@ -36,22 +59,21 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   );
   TextEditingController controlFecha = new TextEditingController();
 
-  //variables por defecto al crear un registro de cultivo
-  int _idEstado = 1; // activo por defecto.
-  int _idModeloReferencia = 1; // modelo por defecto.
-  int _idProductoAgricola = 1; // arveja por defecto
-  //valores que ingresa el usuario
-  String _nombreDistintivo = 'a';
-  int _areaSembrada = 1;
-  String _fechaInicio = 'a';
-  String fechaFinal = 'a';
-  int _presupuesto = 1;
-  int _precioVentaIdeal = 1;
-  //variables para crear la ubicacion
-  String _desUbicacion = 'a';
-  String _nombreUbicacion = 'a';
-  int _estadoUbi = 1; //activa por defecto
+  //variables para crear un registro de costo
+  int _fkidCultivo = 1;
+  double _cantidad = 1;
+  double _valorUnidad = 0;
+  String _fechaC;
+  //variables para la creacion de el producto actividad
+  String _nombreProductoActividad = '';
+  //variables para crear unidad de medida
+  String _nombreUnidadMedida = '';
+  String _descripcionUnidadMedida = '';
+
   // cuando crea una nueva ubicacion el estado es 1=activo
+  // String _nombreConcepto = "semilla";
+  // String _nombreUnidadMedida = "bulto";
+  // String _pathFoto = "data/img/image.jpg";
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +81,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            'Registrar cultivo',
+            'Registrar Costo',
             style: _style,
           ),
         ),
@@ -69,21 +91,18 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
         children: [
           SizedBox(height: 20.0),
           Text(
-            'Seleccione la ubicacion para el cultivo: ',
+            'Nombre del producto o actividad: ',
             style: _style,
           ),
-          _seleccionarUbicacionCultivo(),
+          _seleccioneProductoActividad(),
           Divider(),
-          _input('Nombre distintivo para el cultivo', '',
-              'Ejemplo: Arveja con Luis', TextInputType.name, 1),
+          _input('Cantidad', '5', 'Ejemplo: 5', TextInputType.number, 1),
           Divider(),
-          _input('Area a sembrar en metros cuadrados', '10000',
-              'Ejemplo: 10000', TextInputType.number, 2),
+          _input(
+              'Valor Unidad', '5700', 'Ejemplo: 5700', TextInputType.number, 2),
+          _valorTotal(),
           Divider(),
           _fecha(context),
-          Divider(),
-          _input('Presupuesto estimado', '5000000', 'Ejemplo: 5000000',
-              TextInputType.number, 3),
           Divider(),
           _guardar(context),
         ],
@@ -91,20 +110,20 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     );
   }
 
+  //1. primer dropdown - productos actividades
   //##############################################################
-  //Seleccionar la ubicacion para el cultivo
-  Widget _seleccionarUbicacionCultivo() {
-    //DBProvider.db.database;
+  //Seleccionar el producto actividad para el costo
+  Widget _seleccioneProductoActividad() {
     return Row(
       children: [
-        Icon(Icons.add_location),
+        Icon(Icons.label_important, color: Colors.black45),
         SizedBox(width: 30.0),
-        FutureBuilder<List<UbicacionModel>>(
-          future: ubicacionesOperations.consultarUbicaciones(),
+        FutureBuilder<List<ProductoActividadModel>>(
+          future: proActOper.consultarProductosActividades(),
           builder: (context, snapshot) {
             return snapshot.hasData
-                ? UbicacionesDropdowun(snapshot.data, callback)
-                : Text('sin ubicaciones');
+                ? ProductosActividadesDropdowun(snapshot.data, callback)
+                : Text('debe crearlos');
           },
         ),
         Stack(
@@ -118,7 +137,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
             IconButton(
               icon: Icon(Icons.add),
               color: Colors.white,
-              onPressed: () => _registrarUbicacion(context),
+              onPressed: () => _registrarProductoActividad(context),
             ),
           ],
         ),
@@ -126,6 +145,136 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     );
   }
 
+  // registrar un nuevo producto actividad si no existe
+  void _registrarProductoActividad(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            title: Text('Registrar producto o actividad'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                
+                _seleccioneUnidadMedida(),
+                Divider(),
+                _input('Nombre', '', '', TextInputType.name, 3),
+                Divider(),
+                _seleccioneConcepto(),
+                
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      final productoActividad = new ProductoActividadModel(
+                        nombreProductoActividad: _nombreProductoActividad,
+                        fkidConcepto: _selectedConcepto.idConcepto,
+                        fkidUnidadMedida: _selectedUnidadMedida.idUnidadMedida,
+                      );
+                      proActOper.nuevoProductoActividad(productoActividad);
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: Text('Guardar')),
+            ],
+          );
+        });
+  }
+
+  //2. segundo dropdown seleccionar el concepto
+  Widget _seleccioneConcepto() {
+    return Row(
+      children: [
+        Icon(Icons.list_alt, color: Colors.black45),
+        SizedBox(width: 30.0),
+        FutureBuilder<List<ConceptoModel>>(
+          future: conOper.consultarConceptos(),
+          builder: (context, snapshot) {
+            return snapshot.hasData
+                ? ConceptoDropdown(snapshot.data, callback1) //selected concepto
+                : Text('sin conceptos');
+          },
+        ),
+      ],
+    );
+  }
+
+  //3.tercer dropdown Seleccionar unidad de medida
+  Widget _seleccioneUnidadMedida() {
+    return Row(
+      children: [
+        Icon(Icons.label_important, color: Colors.black45),
+        SizedBox(width: 30.0),
+        FutureBuilder<List<UnidadMedidaModel>>(
+          future: uniMedOper.consultarUnidadesMedida(),
+          builder: (context, snapshot) {
+            return snapshot.hasData
+                ? UnidadMedidaDropdown(snapshot.data, callback2)
+                : Text('debe crearlas');
+          },
+        ),
+        Stack(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 9.0, vertical: 8.8),
+              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.lightBlue),
+            ),
+            IconButton(
+              icon: Icon(Icons.add),
+              color: Colors.white,
+              onPressed: () => _registrarUnidadMedida(context),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  //registrar nueva unidad de medida si no existe
+  void _registrarUnidadMedida(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            title: Text('Registrar unidad de medida'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _input('Nombre', '', '', TextInputType.name, 4),
+                Divider(),
+                _input('Descripcion', '', '', TextInputType.name, 5),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      final unidadMedida = new UnidadMedidaModel(
+                        nombreUnidadMedida: _nombreUnidadMedida,
+                        descripcion: _descripcionUnidadMedida,
+                      );
+                      uniMedOper.nuevoUnidadMedida(unidadMedida);
+                    });
+                    Navigator.pushNamed(context,'crearCosto');
+                  },
+                  child: Text('Guardar')),
+            ],
+          );
+        });
+  }
+
+  //inputs
+  //###############################################
   // ingresar el nombre 1.distintivo, 2.area sembrada 3.presupuesto y 4. nombre ubicacion 5. descripcion ubicacion
   // Se debe agrgar condicion de solo enteros para 2 y 3
   Widget _input(String descripcion, String hilabel, String labeltext,
@@ -150,19 +299,19 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
         onChanged: (valor) {
           setState(() {
             if (n == 1) {
-              _nombreDistintivo = valor;
+              _cantidad = double.parse(valor);
             }
             if (n == 2) {
-              _areaSembrada = int.parse(valor);
+              _valorUnidad = double.parse(valor);
             }
             if (n == 3) {
-              _presupuesto = int.parse(valor);
+              _nombreProductoActividad = valor;
             }
             if (n == 4) {
-              _nombreUbicacion = valor;
+              _nombreUnidadMedida = valor;
             }
             if (n == 5) {
-              _desUbicacion = valor;
+              _descripcionUnidadMedida = valor;
             }
           });
         },
@@ -170,7 +319,18 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     );
   }
 
-  // fecha
+  //calcular valor total
+  Widget _valorTotal() {
+    setState(() {});
+    double total = _valorUnidad * _cantidad;
+    return Text(
+      'Total: ${total.toString()}',
+      textAlign: TextAlign.right,
+    );
+  }
+
+  //fecha
+  //###############################################
   Widget _fecha(BuildContext context) {
     return Container(
       height: 60.0,
@@ -180,9 +340,9 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
         controller: controlFecha,
         decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-          hintText: 'fecha',
+          hintText: '',
           labelText: 'fecha',
-          helperText: 'Seleccione fecha de inicio del cultivo',
+          helperText: 'Seleccione fecha de compra',
           icon: Icon(Icons.calendar_today),
           suffixIcon: Icon(Icons.touch_app),
         ),
@@ -196,18 +356,29 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
 
   _selectDate(BuildContext context) async {
     //------------------------ para pruebas
-    final ModeloReferenciaModel modeloReferencia = new ModeloReferenciaModel(
-      suma: 100,
+    /* 
+    final concepto = new ConceptoModel(
+      nombreConcepto: _nombreConcepto,
     );
-    final EstadoModel estado = new EstadoModel(
-      nombreEstado: 'activo',
+    final nuevoUnidadMedida = new UnidadMedidaModel(
+      nombreUnidadMedida: _nombreUnidadMedida,
+      descripcion: '',
     );
-    final productoagricola = new ProductoAgricolaModel(
-      nombreProducto: 'arveja',
+    final nuevoProductoActividad = new ProductoActividadModel(
+      fkidConcepto: 1,
+      fkidUnidadMedida: 1,
+      nombreProductoActividad: 'piquinegra',
     );
-    modelosReferenciaOperations.nuevoModeloReferencia(modeloReferencia);
-    estadosOperations.nuevoEstado(estado);
-    productoAgricolaOperations.nuevoProductoAgricola(productoagricola);
+    final nuevoRegistroFotografico = new RegistroFotograficoModel(
+      pathFoto: _pathFoto,
+    );
+
+    await conOper.nuevoConcepto(concepto);
+    await uniMedOper.nuevoUnidadMedida(nuevoUnidadMedida);
+    await proActOper.nuevoProductoActividad(nuevoProductoActividad);
+    await regFotOper.nuevoRegistroFotografico(nuevoRegistroFotografico);
+    
+     */
 
     //---------------------------
 
@@ -220,12 +391,14 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     );
     if (picked != null) {
       setState(() {
-        _fechaInicio = DateFormat('yyyy-MM-dd').format(picked);
-        controlFecha.text = _fechaInicio;
+        _fechaC = DateFormat('yyyy-MM-dd').format(picked);
+        controlFecha.text = _fechaC;
       });
     }
   }
 
+  //guardar
+  //###############################################
   //boton _guardar y guardar en la base de datos el registro del cultivo
   Widget _guardar(BuildContext context) {
     return Container(
@@ -236,56 +409,14 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   }
 
   void _save(BuildContext context) {
-    final cultivoTemp = new CultivoModel(
-      fkidUbicacion: _selectedUbicacion.idUbicacion,
-      fkidEstado: _idEstado,
-      fkidModeloReferencia: _idModeloReferencia,
-      fkidProductoAgricola: _idProductoAgricola,
-      nombreDistintivo: _nombreDistintivo,
-      areaSembrada: _areaSembrada,
-      fechaInicio: _fechaInicio,
-      fechaFinal: _fechaInicio,
-      presupuesto: _presupuesto,
-      precioVentaIdeal: _precioVentaIdeal,
+    final costoTemp = new CostoModel(
+      fkidProductoActividad: _selectedProductoActividad.idProductoActividad,
+      fkidCultivo: _fkidCultivo,
+      fkidRegistroFotografico: 1,
+      cantidad: _cantidad,
+      valorUnidad: _valorUnidad,
+      fecha: _fechaC,
     );
-    CultivoOperations operacionCultivo = new CultivoOperations();
-    operacionCultivo.nuevoCultivo(cultivoTemp);
-  }
-
-  // dialogo para registrar una nueva ubicacion
-  void _registrarUbicacion(BuildContext context) {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Registrar ubicacion'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _input('Nombre de la ubicacion', '', '', TextInputType.name, 4),
-                Divider(),
-                _input('Descripcion', '', '', TextInputType.text, 5),
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      final ubicacion = new UbicacionModel(
-                        nombreUbicacion: _nombreUbicacion,
-                        descripcion: _desUbicacion,
-                        estado: _estadoUbi,
-                      );
-                      ubicacionesOperations.nuevaUbicacion(ubicacion);
-                    });
-                    Navigator.pushReplacementNamed(context, 'crearCultivo');
-                  },
-                  child: Text('Guardar')),
-            ],
-          );
-        });
+    cosOper.nuevoCosto(costoTemp);
   }
 }

@@ -23,7 +23,7 @@ class CostoModel {
     int fkidProductoActividad;
     int fkidCultivo;
     int fkidRegistroFotografico;
-    int cantidad;
+    double cantidad;
     double valorUnidad;
     String fecha;
 

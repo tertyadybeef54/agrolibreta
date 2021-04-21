@@ -25,7 +25,7 @@ class DBProvider {
   Future<Database> initDB() async {
     // Path de donde almacenaremos la base de datos
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, 'Agrolibreta2.db');
+    final path = join(documentsDirectory.path, 'Agrolibreta3.db');
     print(path);
     // Crear base de datos
     return await openDatabase(path, version: 2, onOpen: (db) {},
@@ -113,7 +113,7 @@ class DBProvider {
           fkidRegistroFotografico STRING,
           cantidad REAL,
           valorUnidad REAL,
-          fecha STRING
+          fecha STRING,
           FOREIGN KEY (fkidProductoActividad) REFERENCES ProductosActividades (idProductoActividad),
           FOREIGN KEY (fkidCultivo) REFERENCES Cultivos (idCultivo),
           FOREIGN KEY (fkidRegistroFotografico) REFERENCES RegistrosFotograficos (idRegistroFotografico)
