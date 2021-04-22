@@ -22,15 +22,20 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text('Mis Cultivos'),
-        )
+        title:Center(child: Text('        Mis Cultivos')),
+        actions: <Widget>[
+          IconButton(
+          iconSize: 40.0,
+          icon: new Icon(Icons.account_circle),
+          onPressed: ()=> Navigator.pushNamed(context,'perfilUsuario'),
+          ),
+        ],
       ),
       body: _crearListaDeCultivo(),
-
+      
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: (){},
+      child: Icon(Icons.add),
+       onPressed: (){},
       ),
       bottomNavigationBar: _Navegacion(),
     );
