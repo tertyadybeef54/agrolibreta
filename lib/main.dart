@@ -25,7 +25,6 @@ class MyApp extends StatelessWidget {
       ],
       title: 'AgroLibreta',
       initialRoute: 'home',
-      initialRoute: 'crearCosto',
       routes: getAplicationRoutes(),
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
