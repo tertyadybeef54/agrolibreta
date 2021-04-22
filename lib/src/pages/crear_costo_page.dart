@@ -12,7 +12,6 @@ import 'package:agrolibreta_v2/src/data/unidad_medida_operations.dart';
 import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
 import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
-//import 'package:agrolibreta_v2/src/modelos/registro_fotografico_model.dart';
 import 'package:agrolibreta_v2/src/modelos/unidad_medida_model.dart';
 
 import 'package:agrolibreta_v2/src/widgets/productoAtividad_dropdown.dart';
@@ -239,38 +238,38 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
 
   //registrar nueva unidad de medida si no existe
   void _registrarUnidadMedida(BuildContext context) {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Registrar unidad de medida'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _input('Nombre', '', '', TextInputType.name, 4),
-                Divider(),
-                _input('Descripcion', '', '', TextInputType.name, 5),
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      final unidadMedida = new UnidadMedidaModel(
-                        nombreUnidadMedida: _nombreUnidadMedida,
-                        descripcion: _descripcionUnidadMedida,
-                      );
-                      uniMedOper.nuevoUnidadMedida(unidadMedida);
-                    });
-                    Navigator.pushNamed(context,'crearCosto');
-                  },
-                  child: Text('Guardar')),
-            ],
-          );
-        });
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0)),
+        title: Text('Registrar unidad de medida'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _input('Nombre', '', '', TextInputType.name, 4),
+            Divider(),
+            _input('Descripcion', '', '', TextInputType.name, 5),
+          ],
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                setState(() {
+                  final unidadMedida = new UnidadMedidaModel(
+                    nombreUnidadMedida: _nombreUnidadMedida,
+                    descripcion: _descripcionUnidadMedida,
+                  );
+                  uniMedOper.nuevoUnidadMedida(unidadMedida);
+                });
+                Navigator.pushNamed(context,'crearCosto');
+              },
+              child: Text('Guardar')),
+        ],
+      );
+    });
   }
 
   //inputs
@@ -321,7 +320,9 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
 
   //calcular valor total
   Widget _valorTotal() {
-    setState(() {});
+    setState(() {
+      
+    });
     double total = _valorUnidad * _cantidad;
     return Text(
       'Total: ${total.toString()}',

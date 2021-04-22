@@ -1,4 +1,3 @@
-//import 'package:agrolibreta_v2/src/pages/crear_cultivo_page.dart';
 import 'package:agrolibreta_v2/src/pages/home_page.dart';
 import 'package:agrolibreta_v2/src/pages/perfil_usuario_page.dart';
 
@@ -7,6 +6,7 @@ import 'package:flutter/material.dart';
 //import 'package:agrolibreta_v2/src/pages/crear_cultivo_page.dart';
 import 'package:agrolibreta_v2/src/pages/login_page.dart';
 import 'package:agrolibreta_v2/src/pages/crear_costo_page.dart';
+import 'package:agrolibreta_v2/src/pages/crear_modelo_referencia.dart';
 
 Map<String, WidgetBuilder> getAplicationRoutes() {
   return <String, WidgetBuilder>{
@@ -16,11 +16,11 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
     // 'gastos': (BuildContext context) => GastosPage(),
      'login': (BuildContext context) => LoginPage(),
     // 'soportes': (BuildContext context) => SoportesPage(),
-    //'crearCultivo': (BuildContext context) => CrearCultivoPage(),
+    'crearCultivo': (BuildContext context) => CrearCultivoPage(),
     // 'resumenGastos': (BuildContext context) => ResumenGastosPage(),
      'crearCosto': (BuildContext context) => CrearCostoPage(),
     // 'crearUbicacion': (BuildContext context) => CrearUbicacionPage(),
-    // 'vModelo': (BuildContext context) => ModeloReferencia(),
+    'crearModeloReferencia': (BuildContext context) => CrearModeloReferencia(),
   };
 }
 /*
