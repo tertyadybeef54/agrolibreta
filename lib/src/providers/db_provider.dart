@@ -25,10 +25,10 @@ class DBProvider {
   Future<Database> initDB() async {
     // Path de donde almacenaremos la base de datos
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, 'Agrolibreta3.db');
+    final path = join(documentsDirectory.path, 'Agrolibreta1.db');
     print(path);
     // Crear base de datos
-    return await openDatabase(path, version: 2, onOpen: (db) {},
+    return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       print('crear base');
       await db.execute('''
@@ -117,6 +117,16 @@ class DBProvider {
           FOREIGN KEY (fkidProductoActividad) REFERENCES ProductosActividades (idProductoActividad),
           FOREIGN KEY (fkidCultivo) REFERENCES Cultivos (idCultivo),
           FOREIGN KEY (fkidRegistroFotografico) REFERENCES RegistrosFotograficos (idRegistroFotografico)
+        )
+      ''');
+      db.execute('''
+        CREATE TABLE Porcentajes(
+          idPorcentaje INTEGER PRIMARY KEY,
+          fk2idModeloReferencia STRING,
+          fk2idConcepto STRING,
+          porcentaje REAL,
+          FOREIGN KEY (fk2idModeloReferencia) REFERENCES ModelosReferencia (idModeloReferencia),
+          FOREIGN KEY (fk2idConcepto) REFERENCES Conceptos (idConcepto)
         )
       ''');
 
