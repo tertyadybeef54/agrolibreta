@@ -84,7 +84,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
 
   Widget _crearDocumento(){
     return TextField(
-      textCapitalization: TextCapitalization.sentences,
+      
       keyboardType: TextInputType.number,
       style: TextStyle(fontSize: 20.0),
       decoration: InputDecoration(
@@ -101,7 +101,6 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
 
   Widget _crearEmail(){
     return TextField(
-      textCapitalization: TextCapitalization.sentences,
       keyboardType: TextInputType.emailAddress,
       style: TextStyle(fontSize: 20.0),
       decoration: InputDecoration(
@@ -140,12 +139,12 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
         context: context,
         initialDate: new DateTime.now(),
         firstDate: new DateTime(1910),
-        lastDate: new DateTime(2031),
+        lastDate: new DateTime.now(),
       );
 
       if (picked != null){
         setState((){
-        _fecha = DateFormat('yyyy-MM-dd').format(picked);
+        _fecha = DateFormat('dd-MM-yyyy').format(picked);
         _inputFieldDateController.text = _fecha;
         });
       }
