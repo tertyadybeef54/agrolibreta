@@ -123,7 +123,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
   void _editInfoAlert(BuildContext context, String titulo, TextInputType tipotext) {
     showDialog(
       context: context,
-      barrierDismissible: true, 
+      barrierDismissible: false, 
       builder: (contex){
         return AlertDialog(
           title: Text('Editar $titulo', style: TextStyle(fontSize: 18.0),),
@@ -170,7 +170,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
   void _editFechaAlert(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: true, 
+      barrierDismissible: false, 
       builder: (contex){
         return AlertDialog(
           title: Text('Editar Fecha de Nacimiento' , style: TextStyle(fontSize: 18.0)),
@@ -292,7 +292,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
   void _cerrarSesionAlert(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: true, 
+      barrierDismissible: false, 
       builder: (contex){
         return AlertDialog(
           title: Text('Cerrar Sesion'),

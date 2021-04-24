@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:agrolibreta_v2/src/widgets/barraNavegacion.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -37,7 +38,7 @@ class _HomePageState extends State<HomePage> {
       child: Icon(Icons.add),
        onPressed: (){},
       ),
-      bottomNavigationBar: _Navegacion(),
+      bottomNavigationBar: Navegacion(),
     );
   }
 
@@ -88,51 +89,15 @@ class _HomePageState extends State<HomePage> {
   }
                 
   Widget _botonEntrar() {
-    
-    return TextButton(onPressed: () {}, child: Text('Entrar'));}
-  //   return Row(
-      
-  //     children: [
-  //       SizedBox(width: 10.0),
-         
-      //TextButton(onPressed: () {}, child: Text('Entrar');
-        
-  //     ],
-  //   );
-  //}
-}
-
-
-
-class _Navegacion extends StatefulWidget {
-  
-  @override
-  __NavegacionState createState() => __NavegacionState();
-}
-
-class __NavegacionState extends State<_Navegacion> {
-
-  int _currentIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      iconSize: 25,
-      currentIndex: _currentIndex,
-      items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.dns), label: 'Utilidades'),
-        BottomNavigationBarItem(icon: Icon(Icons.collections),label: 'Galeria'),
-        BottomNavigationBarItem(icon: Icon(Icons.content_paste_rounded),label:'Informes'),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label:'Consultar'),
-      ],
-      onTap: (index){
-        setState((){
-          _currentIndex = index;
-        });
-      },
-    );
+    return TextButton(onPressed: () {}, child: Text('Entrar'));
   }
+  
+  
+  
 }
+
+
+
+
+
       
