@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         const Locale('es', 'ES'), // *See Advanced Locales below*
       ],
       title: 'AgroLibreta',
-      initialRoute: 'crearModeloReferencia',
+      initialRoute: 'resumenCostos',
       routes: getAplicationRoutes(),
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(

@@ -45,20 +45,21 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
       body: Stack(
         children: [
           ListView.builder(
+            padding: EdgeInsets.only(
+                left: 30.0, right: 30.0, top: 20.0, bottom: 90.0),
             itemCount: valores.length,
             itemBuilder: (context, index) {
               return Card(
                 child: ListTile(
+                  leading: Icon(Icons.grass_rounded),
                   onTap: () {},
                   title: Text('${conceptos[index]}:  ${valores[index]} %'),
+                  trailing: Icon(Icons.keyboard_arrow_right),
                 ),
               );
             },
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Text('suma restante: $_resto %'),
-          ),
+          _sumaBoton(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -95,7 +96,7 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
                         fk2idModeloReferencia: _idModeloReferencia,
                         fk2idConcepto: _selectedConcepto.idConcepto,
                         porcentaje: _porcentaje);
-                    porOper.nuevoPorcentaje(nuevoPorcentaje);
+                    await porOper.nuevoPorcentaje(nuevoPorcentaje);
                     porcentajes =
                         await porOper.consultarPorcentajesbyModeloReferencia(
                             _idModeloReferencia.toString());
@@ -120,8 +121,8 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
         });
   }
 
-//##########################################
-//dropdown para seleccionar un concepto ya creado
+  //##########################################
+  //dropdown para seleccionar un concepto ya creado
   Widget _seleccioneConcepto() {
     return Row(
       children: [
@@ -157,34 +158,6 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
 //###################################################
 //registro de un nuevo concepto con su funcion de input
   void _registrarConcepto(BuildContext context) {
-    Widget _inputNombre(String descripcion, String hilabel, String labeltext,
-        TextInputType tipotext) {
-      var inputDecoration = InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-        hintText: hilabel,
-        labelText: labeltext,
-        helperText: descripcion,
-        icon: Icon(Icons.drive_file_rename_outline),
-        //suffixIcon: Icon(Icons.touch_app),
-      );
-      return Container(
-        padding: EdgeInsets.only(bottom: 5.0),
-        height: 60.0,
-        width: double.infinity,
-        child: TextField(
-          textAlignVertical: TextAlignVertical.bottom,
-          keyboardType: tipotext,
-          textCapitalization: TextCapitalization.sentences,
-          decoration: inputDecoration,
-          onChanged: (valor) {
-            setState(() {
-              _nombreConcepto = valor;
-            });
-          },
-        ),
-      );
-    }
-
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -201,19 +174,46 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
             ),
             actions: [
               TextButton(
-                  onPressed: () {
-                    setState(() {
-                      final nuevoConcepto = new ConceptoModel(
-                        nombreConcepto: _nombreConcepto,
-                      );
-                      conOper.nuevoConcepto(nuevoConcepto);
-                    });
-                    Navigator.pop(context, 'crearModeloReferencia');
+                  onPressed: () async {
+                    final nuevoConcepto = new ConceptoModel(
+                      nombreConcepto: _nombreConcepto,
+                    );
+                    await conOper.nuevoConcepto(nuevoConcepto);
+                    setState(() {});
+                    Navigator.pushNamed(context, 'crearModeloReferencia');
                   },
                   child: Text('Guardar')),
             ],
           );
         });
+  }
+
+  Widget _inputNombre(String descripcion, String hilabel, String labeltext,
+      TextInputType tipotext) {
+    var inputDecoration = InputDecoration(
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+      hintText: hilabel,
+      labelText: labeltext,
+      helperText: descripcion,
+      icon: Icon(Icons.drive_file_rename_outline),
+      //suffixIcon: Icon(Icons.touch_app),
+    );
+    return Container(
+      padding: EdgeInsets.only(bottom: 5.0),
+      height: 60.0,
+      width: double.infinity,
+      child: TextField(
+        textAlignVertical: TextAlignVertical.bottom,
+        keyboardType: tipotext,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: inputDecoration,
+        onChanged: (valor) {
+          setState(() {
+            _nombreConcepto = valor;
+          });
+        },
+      ),
+    );
   }
 
   //#######################################################
@@ -241,6 +241,25 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
             _porcentaje = double.parse(valor);
           });
         },
+      ),
+    );
+  }
+
+  // widges que muestra la suma restante y el boton
+  Widget _sumaBoton() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text('suma restante: $_resto %'),
+          SizedBox(
+            height: 10.0,
+          ),
+          ElevatedButton(onPressed: () {}, child: Text('Finalizar')),
+          SizedBox(
+            height: 30.0,
+          )
+        ],
       ),
     );
   }

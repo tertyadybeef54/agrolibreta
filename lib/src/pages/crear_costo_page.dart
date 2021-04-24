@@ -14,7 +14,7 @@ import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
 import 'package:agrolibreta_v2/src/modelos/unidad_medida_model.dart';
 
-import 'package:agrolibreta_v2/src/widgets/productoAtividad_dropdown.dart';
+import 'package:agrolibreta_v2/src/widgets/producto_actividad_dropdown.dart';
 
 class CrearCostoPage extends StatefulWidget {
   @override
