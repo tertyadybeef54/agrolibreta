@@ -129,6 +129,17 @@ class DBProvider {
           FOREIGN KEY (fk2idConcepto) REFERENCES Conceptos (idConcepto)
         )
       ''');
+      db.execute('''
+        CREATE TABLE Usuario(
+        	idUsuario INTEGER PRIMARY KEY,
+        	documento INTEGER,
+        	password STRING,
+        	nombres STRING,
+        	apellidos STRING,
+        	correo STRING,
+        	fechaNacimiento STRING
+        ) 
+      ''');
 
       print('base creada');
     });

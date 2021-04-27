@@ -1,4 +1,4 @@
-import 'package:agrolibreta_v2/src/pages/resumen_costos_page.dart';
+import 'package:agrolibreta_v2/src/pages/informe_cultivo_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:agrolibreta_v2/src/pages/login_page.dart';
@@ -10,6 +10,8 @@ import 'package:agrolibreta_v2/src/pages/crear_cultivo_page.dart';
 import 'package:agrolibreta_v2/src/pages/home_page.dart';
 import 'package:agrolibreta_v2/src/pages/info_cultivo_page.dart';
 import 'package:agrolibreta_v2/src/pages/perfil_usuario_page.dart';
+import 'package:agrolibreta_v2/src/pages/resumen_costos_page.dart';
+import 'package:agrolibreta_v2/src/pages/costos_page.dart';
 
 Map<String, WidgetBuilder> getAplicationRoutes() {
   return <String, WidgetBuilder>{
@@ -23,6 +25,9 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
      'crearCosto': (BuildContext context) => CrearCostoPage(),
     'crearModeloReferencia': (BuildContext context) => CrearModeloReferencia(),
     'selecionarModeloReferencia': (BuildContext context) => SelectModeloReferencia(),
+    'costos': (BuildContext context) => CostosPage(),
+    'informe': (BuildContext context) => InformeCultivoPage(),
+    
   };
 }
 /*

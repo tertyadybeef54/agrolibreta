@@ -18,7 +18,7 @@ class ProductosActividadesDropdowun extends StatefulWidget {
 }
 
 class _ProductosActividadesDropdownState extends State<ProductosActividadesDropdowun> {
-  String selected = 'Seleccione Producto o Actividad';
+  String selected = 'Seleccionar';
   @override
   Widget build(BuildContext context) {
     
