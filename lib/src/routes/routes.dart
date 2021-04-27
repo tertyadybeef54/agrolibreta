@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 import 'package:agrolibreta_v2/src/pages/login_page.dart';
@@ -9,10 +10,7 @@ import 'package:agrolibreta_v2/src/pages/crear_cultivo_page.dart';
 import 'package:agrolibreta_v2/src/pages/config_cultivo_page.dart';
 import 'package:agrolibreta_v2/src/pages/info_cultivo_page.dart';
 import 'package:agrolibreta_v2/src/pages/utilidades_page.dart';
-import 'package:agrolibreta_v2/src/pages/util_modelos_referencia_page.dart';
-import 'package:agrolibreta_v2/src/pages/util_ubicaciones_page.dart';
-import 'package:agrolibreta_v2/src/pages/util_unidades_medida_page.dart';
-import 'package:agrolibreta_v2/src/pages/util_productos_actividades_page.dart';
+
 import 'package:agrolibreta_v2/src/pages/Galeria_registros_fotograficos_page.dart';
 import 'package:agrolibreta_v2/src/pages/nuevo_registro_fotografico_page.dart';
 import 'package:agrolibreta_v2/src/pages/detalle_registro_fotografico_page.dart';
@@ -24,24 +22,15 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
     'configCultivo'       : (BuildContext context) => ConfigCultivoPage(),
     'infoCultivo'         : (BuildContext context) => InformacionCultivo(),
     'utilCultivo'         : (BuildContext context) => UtilidadesPage(),
-    'utilModelosRef'      : (BuildContext context) => UtilModelosReferenciaPage(),
-    'utilLocations'       : (BuildContext context) => UtilUbicacionesPage(),
-    'utilUniMedidas'      : (BuildContext context) => UtilUnidadesMedidaPage(),
-    'utilProdActividades' : (BuildContext context) => UtilProductosActividadesPage(),
+    
     'galeriaRegistrosFoto': (BuildContext context) => GaleriaRegistrosFotograficosPage(),
     'nuevoRegistroFoto'   : (BuildContext context) => NuevoRegistroFotograficoPage(),
     'detalleRegistroFoto' : (BuildContext context) => DetalleRegistroFotograficoPage(),
     //'cultivos': (BuildContext context) => CultivosPage(),
     // 'gastos': (BuildContext context) => GastosPage(),
-     'login': (BuildContext context) => LoginPage(),
-    // 'soportes': (BuildContext context) => SoportesPage(),
-    'crearCultivo': (BuildContext context) => CrearCultivoPage(),
-    // 'resumenGastos': (BuildContext context) => ResumenGastosPage(),
-     'crearCosto': (BuildContext context) => CrearCostoPage(),
-    // 'crearUbicacion': (BuildContext context) => CrearUbicacionPage(),
-    'crearModeloReferencia': (BuildContext context) => CrearModeloReferencia(),
-  };
+  }
 }
+
 /*
 
 INSERT INTO Cultivos(idCultivo, idUbicacion, idEstado, idModeloReferencia, idProductoAgricola, idNombreDistintivo, areaSembrada, fechaInicio, fechaFinal, presupuesto) VALUES ('1','1','1','1','1','arveja de la buena','100','09-04-2021','','5000000');

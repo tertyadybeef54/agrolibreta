@@ -12,7 +12,7 @@ class ConceptoOperations {
     final res = await db.insert('Conceptos', nuevoConcepto.toJson());
     // Es el ID del último registro insertado;
     print(res);
-    print('conceto creado');
+    print('concepto creado');
     return res;
   }
 
