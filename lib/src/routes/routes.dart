@@ -1,23 +1,36 @@
-
-import 'package:agrolibreta_v2/src/pages/config_cultivo_page.dart';
-import 'package:agrolibreta_v2/src/pages/crear_cultivo_page.dart';
-import 'package:agrolibreta_v2/src/pages/home_page.dart';
-import 'package:agrolibreta_v2/src/pages/info_cultivo_page.dart';
-import 'package:agrolibreta_v2/src/pages/perfil_usuario_page.dart';
-
 import 'package:flutter/material.dart';
 
-//import 'package:agrolibreta_v2/src/pages/crear_cultivo_page.dart';
 import 'package:agrolibreta_v2/src/pages/login_page.dart';
+import 'package:agrolibreta_v2/src/pages/home_page.dart';
+import 'package:agrolibreta_v2/src/pages/perfil_usuario_page.dart';
 import 'package:agrolibreta_v2/src/pages/crear_costo_page.dart';
 import 'package:agrolibreta_v2/src/pages/crear_modelo_referencia.dart';
+import 'package:agrolibreta_v2/src/pages/crear_cultivo_page.dart';
+import 'package:agrolibreta_v2/src/pages/config_cultivo_page.dart';
+import 'package:agrolibreta_v2/src/pages/info_cultivo_page.dart';
+import 'package:agrolibreta_v2/src/pages/utilidades_page.dart';
+import 'package:agrolibreta_v2/src/pages/util_modelos_referencia_page.dart';
+import 'package:agrolibreta_v2/src/pages/util_ubicaciones_page.dart';
+import 'package:agrolibreta_v2/src/pages/util_unidades_medida_page.dart';
+import 'package:agrolibreta_v2/src/pages/util_productos_actividades_page.dart';
+import 'package:agrolibreta_v2/src/pages/Galeria_registros_fotograficos_page.dart';
+import 'package:agrolibreta_v2/src/pages/nuevo_registro_fotografico_page.dart';
+import 'package:agrolibreta_v2/src/pages/detalle_registro_fotografico_page.dart';
 
 Map<String, WidgetBuilder> getAplicationRoutes() {
   return <String, WidgetBuilder>{
-    'home'          : (BuildContext context) => HomePage(),
-    'perfilUsuario' : (BuildContext context) => PerfilUsuarioPage(),
-    'configCultivo' : (BuildContext context) => ConfigCultivoPage(),
-    'infoCultivo'   : (BuildContext context) => InformacionCultivo(),
+    'home'                : (BuildContext context) => HomePage(),
+    'perfilUsuario'       : (BuildContext context) => PerfilUsuarioPage(),
+    'configCultivo'       : (BuildContext context) => ConfigCultivoPage(),
+    'infoCultivo'         : (BuildContext context) => InformacionCultivo(),
+    'utilCultivo'         : (BuildContext context) => UtilidadesPage(),
+    'utilModelosRef'      : (BuildContext context) => UtilModelosReferenciaPage(),
+    'utilLocations'       : (BuildContext context) => UtilUbicacionesPage(),
+    'utilUniMedidas'      : (BuildContext context) => UtilUnidadesMedidaPage(),
+    'utilProdActividades' : (BuildContext context) => UtilProductosActividadesPage(),
+    'galeriaRegistrosFoto': (BuildContext context) => GaleriaRegistrosFotograficosPage(),
+    'nuevoRegistroFoto'   : (BuildContext context) => NuevoRegistroFotograficoPage(),
+    'detalleRegistroFoto' : (BuildContext context) => DetalleRegistroFotograficoPage(),
     //'cultivos': (BuildContext context) => CultivosPage(),
     // 'gastos': (BuildContext context) => GastosPage(),
      'login': (BuildContext context) => LoginPage(),

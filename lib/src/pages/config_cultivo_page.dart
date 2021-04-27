@@ -32,7 +32,7 @@ class _ConfigCultivoPageState extends State<ConfigCultivoPage> {
           ),
           Divider(height: 10.0),
           ListTile(
-            title:Text('Modelo de Refenrecia'),
+            title:Text('Modelo de Referencia'),
             leading: Icon(Icons.article),
             trailing: Icon(Icons.keyboard_arrow_right),
             onTap: (){},
