@@ -4,13 +4,20 @@ class UnidadMedidaList extends StatelessWidget {
 
   const UnidadMedidaList();
 
-  @override
+ @override
   Widget build(BuildContext context) {
-
-    final ubicaciones = [1, 2, 3]; 
-
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('unidadesMedida'),
+      ),
+      body: _ubicacionTiles(context),
+    );
+  }
+  Widget _ubicacionTiles(BuildContext context){
+    final unidadesMedida = [1, 2, 3];
     return ListView.builder(
-      itemCount: ubicaciones.length,
+      itemCount: unidadesMedida.length,
       itemBuilder: (_, i) => Dismissible(
         key: UniqueKey(),
         background: Container(

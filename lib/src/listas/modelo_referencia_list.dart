@@ -4,13 +4,20 @@ class ModeloReferenciaList extends StatelessWidget {
 
   const ModeloReferenciaList();
 
-  @override
+   @override
   Widget build(BuildContext context) {
-
-    final ubicaciones = [1, 2, 3]; 
-
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('modelosReferencia'),
+      ),
+      body: _ubicacionTiles(context),
+    );
+  }
+  Widget _ubicacionTiles(BuildContext context){
+    final modelosReferencia = [1, 2, 3];
     return ListView.builder(
-      itemCount: ubicaciones.length,
+      itemCount: modelosReferencia.length,
       itemBuilder: (_, i) => Dismissible(
         key: UniqueKey(),
         background: Container(
