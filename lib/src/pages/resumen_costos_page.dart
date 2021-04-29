@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class ResumencostosPage extends StatelessWidget {
-  final String _nombreCul = 'Arveja de abril';
+  final String _nombreCul = '        Arveja de abril';
   final List<String> _conceptos = [
     'semilla',
     'insumos',
@@ -19,12 +19,12 @@ class ResumencostosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     //final double mitad = MediaQuery.of(context).size.width / 2;
     return Scaffold(
-      appBar: _appBar(),
+      appBar: _appBar(context),
       body: Stack(
         children: <Widget>[
           ListView.builder(
             padding:
-                EdgeInsets.only(left: 10.0, right: 10, top: 30.0, bottom: 20.0),
+                EdgeInsets.only(left: 0.0, right: 0.0, top: 30.0, bottom: 20.0),
             itemCount: _conceptos.length,
             itemBuilder: (context, index) {
               return _concepto(
@@ -44,17 +44,21 @@ class ResumencostosPage extends StatelessWidget {
   }
 
   //metodo que crear el widget del appBar
-  Widget _appBar() {
+  Widget _appBar(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       title: Center(
         child: Text(_nombreCul),
       ),
+        actions: <Widget>[
+          IconButton(
+            iconSize: 40.0,
+            icon: new Icon(Icons.settings),
+            onPressed: () => Navigator.pushNamed(context, 'configCultivo'),
+          ),
+        ],
     );
   }
-
-//metodo que pone el nombre del cultivo y el boton de socios
-
-  //metodo para crear la tabla con los cuatro tipos de gastos
 
 //Metodo para crar cada uno de las cuatro clasificaciones de los gastos
   Widget _concepto(String concepto, double totalCosto, double totalSugerido,
@@ -62,60 +66,54 @@ class ResumencostosPage extends StatelessWidget {
     return Row(
       children: [
         ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-            child: Container(
-              height: 150.0,
-              width: 150.0,
-              margin: EdgeInsets.all(15.0),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(62, 66, 107, 0.7),
-                  borderRadius: BorderRadius.circular(20.0)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Image(
-                    image: AssetImage('assets/no-image.png'),
-                    width: 135.0,
-                    height: 85.0,
-                    fit: BoxFit.cover,
-                  ),
-                  SizedBox(height: 5.0),
-                  Text(concepto),
-                  Text('Total: ${totalCosto.toString()}'),
-                  Text('Sugerido: ${totalSugerido.toString()}'),
-                  SizedBox(height: 5.0)
-                ],
-              ),
+          child: Container(
+            height: 150.0,
+            width: 150.0,
+            margin: EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+                color: Colors.lightBlue,
+                borderRadius: BorderRadius.circular(20.0)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Image(
+                  image: AssetImage('assets/no-image.png'),
+                  width: 135.0,
+                  height: 85.0,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(height: 5.0),
+                Text(concepto),
+                Text('Total: ${totalCosto.toString()}'),
+                Text('Sugerido: ${totalSugerido.toString()}'),
+                SizedBox(height: 5.0)
+              ],
             ),
           ),
         ),
         ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-            child: Container(
-              height: 150.0,
-              width: 150.0,
-              margin: EdgeInsets.all(15.0),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(62, 66, 107, 0.7),
-                  borderRadius: BorderRadius.circular(20.0)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Image(
-                    image: AssetImage('assets/no-image.png'),
-                    width: 135.0,
-                    height: 85.0,
-                    fit: BoxFit.cover,
-                  ),
-                  SizedBox(height: 5.0),
-                  Text(concepto2),
-                  Text('Total: ${totalCosto2.toString()}'),
-                  Text('Sugerido: ${totalSugerido2.toString()}'),
-                  SizedBox(height: 5.0)
-                ],
-              ),
+          child: Container(
+            height: 150.0,
+            width: 150.0,
+            margin: EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+                color: Colors.lightBlue,
+                borderRadius: BorderRadius.circular(20.0)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Image(
+                  image: AssetImage('assets/no-image.png'),
+                  width: 135.0,
+                  height: 85.0,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(height: 5.0),
+                Text(concepto2),
+                Text('Total: ${totalCosto2.toString()}'),
+                Text('Sugerido: ${totalSugerido2.toString()}'),
+                SizedBox(height: 5.0)
+              ],
             ),
           ),
         ),
@@ -126,7 +124,7 @@ class ResumencostosPage extends StatelessWidget {
   Widget _botonNuevoGasto(BuildContext context) {
     return FloatingActionButton(
       child: Icon(Icons.add),
-      onPressed: () => Navigator.pushNamed(context, 'nuevoGasto'),
+      onPressed: () => Navigator.pushNamed(context, 'crearCosto'),
     );
   }
 }

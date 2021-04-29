@@ -14,10 +14,10 @@ class CultivoDropdown extends StatefulWidget {
     Key key,
   }) : super(key: key);
   @override
-  _ConceptoDropdownState createState() => _ConceptoDropdownState();
+  _CultivoDropdownState createState() => _CultivoDropdownState();
 }
 
-class _ConceptoDropdownState extends State<CultivoDropdown> {
+class _CultivoDropdownState extends State<CultivoDropdown> {
   String selected = 'Seleccionar';
   @override
   Widget build(BuildContext context) {
