@@ -91,7 +91,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
             Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children:[
-              Text('  Cambiar Contraseña'),
+              Text('  Cambiar password'),
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: ()=>_cambiarPasswordAlert(context),
@@ -237,42 +237,61 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
       barrierDismissible: true, 
       builder: (contex){
         return AlertDialog(
-          title: Text('Cambiar Contraseña' , style: TextStyle(fontSize: 18.0)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(bottom: 10.0),
-                height: 60.0,
-                child: TextField(
-                  obscureText: true,
-                  style: TextStyle(fontSize: 18.0),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0)
-                    ),
-                    labelText: 'Contraseña Actual',
-                    icon: Icon(Icons.lock_open_outlined),
-                  ),
-                ),
-              ),
-              SizedBox(height:10.0),
-              Container(
-                padding: EdgeInsets.only(bottom: 10.0),
-                height: 60.0,
-                  child:TextField(
+          title: Text('Cambiar password' , style: TextStyle(fontSize: 18.0)),
+          content: Container(
+            height: 150,
+            child: ListView(
+              //mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(bottom: 8.0),
+                  height: 50.0,
+                  child: TextField(
                     obscureText: true,
                     style: TextStyle(fontSize: 18.0),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0)
                       ),
-                      labelText: 'Nueva Contraseña',
-                      icon: Icon(Icons.lock_outline_rounded),
+                      labelText: 'password Actual',
+                      icon: Icon(Icons.lock_open_outlined),
                     ),
                   ),
-              ),
-            ],
+                ),
+                SizedBox(height:5.0),
+                Container(
+                  padding: EdgeInsets.only(bottom: 10.0),
+                  height: 60.0,
+                    child:TextField(
+                      obscureText: true,
+                      style: TextStyle(fontSize: 18.0),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0)
+                        ),
+                        labelText: 'Nuevo password',
+                        icon: Icon(Icons.lock_outline_rounded),
+                      ),
+                    ),
+                ),
+                SizedBox(height:10.0),
+                Container(
+                  padding: EdgeInsets.only(bottom: 10.0),
+                  height: 60.0,
+                    child:TextField(
+                      obscureText: true,
+                      style: TextStyle(fontSize: 18.0),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0)
+                        ),
+                        labelText: 'Repetir password',
+                        icon: Icon(Icons.lock_outline_rounded),
+                      ),
+                    ),
+                ),
+              ],
+            ),
           ),
           actions: <Widget>[
             TextButton(

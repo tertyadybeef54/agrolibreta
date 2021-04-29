@@ -1,33 +1,76 @@
+import 'package:agrolibreta_v2/src/pages/costos_page.dart';
+import 'package:agrolibreta_v2/src/pages/galeria_registros_fotograficos_page.dart';
+import 'package:agrolibreta_v2/src/pages/home_page.dart';
+import 'package:agrolibreta_v2/src/pages/informe_cultivo_page.dart';
+import 'package:agrolibreta_v2/src/pages/utilidades_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Navegacion extends StatefulWidget {
-  
-  @override
-  _NavegacionState createState() => _NavegacionState();
-}
-
-class _NavegacionState extends State<Navegacion> {
-
-  int _currentIndex = 0;
-
+class TapsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      iconSize: 25,
-      currentIndex: _currentIndex,
-      items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.dns), label: 'Utilidades'),
-        BottomNavigationBarItem(icon: Icon(Icons.collections),label: 'Galeria'),
-        BottomNavigationBarItem(icon: Icon(Icons.content_paste_rounded),label:'Informes'),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label:'Consultar'),
-      ],
-      onTap: (index){
-        setState((){
-          _currentIndex = index;
-        });
-      },
+    return ChangeNotifierProvider(
+      create: (_) => new _NavegacionModel(),
+      child: Scaffold(
+        body: _Paginas(),
+        bottomNavigationBar: _Navegacion(),
+      ),
     );
   }
+}
+
+
+class _Navegacion extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final navegacionModel = Provider.of<_NavegacionModel>(context);
+    return BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        iconSize: 25,
+        currentIndex: navegacionModel.paginaActual,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.dns), label: 'Utilidades'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.collections), label: 'Galeria'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.content_paste_rounded), label: 'Informes'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'costos'),
+        ],
+        onTap: (index) => navegacionModel.paginaActual = index);
+  }
+}
+class _Paginas extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final navegacionModel = Provider.of<_NavegacionModel>(context);
+    return PageView(
+      controller: navegacionModel.pageController,
+      physics: BouncingScrollPhysics(),
+      children: <Widget>[
+        HomePage(),
+        UtilidadesPage(),
+        GaleriaRegistrosFotograficosPage(),
+        InformeCultivoPage(),
+        CostosPage(),
+      ],
+    );
+  }
+}
+
+
+//provider que cambia el valor del index del botton navigator bar
+class _NavegacionModel with ChangeNotifier {
+  int _paginaActual = 0;
+  PageController _pageController = new PageController();
+
+  int get paginaActual => this._paginaActual;
+  set paginaActual(int valor) {
+    this._paginaActual = valor;
+    notifyListeners();
+    _pageController.animateToPage(valor,
+        duration: Duration(milliseconds: 250), curve: Curves.easeInOut);
+  }
+
+  PageController get pageController => _pageController;
 }

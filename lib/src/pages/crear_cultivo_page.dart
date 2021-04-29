@@ -57,6 +57,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Center(
           child: Text(
             'Registrar cultivo',
@@ -125,9 +126,74 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       ],
     );
   }
-
-  // ingresar el nombre 1.distintivo, 2.area sembrada 3.presupuesto y 4. nombre ubicacion 5. descripcion ubicacion
-  // Se debe agrgar condicion de solo enteros para 2 y 3
+  // dialogo para registrar una nueva ubicacion
+  void _registrarUbicacion(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            title: Text('Registrar ubicacion'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _inputI('', 'llanito', 'Nombre de la ubicacion', TextInputType.name, 4),
+                Divider(),
+                _inputI('', 'llanito del norte', 'Descripcion', TextInputType.text, 5),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      final ubicacion = new UbicacionModel(
+                        nombreUbicacion: _nombreUbicacion,
+                        descripcion: _desUbicacion,
+                        estado: _estadoUbi,
+                      );
+                      ubicacionesOperations.nuevaUbicacion(ubicacion);
+                    });
+                    Navigator.pushReplacementNamed(context, 'crearCultivo');
+                  },
+                  child: Text('Guardar')),
+            ],
+          );
+        });
+  }
+  // ingresar 4. nombre ubicacion 5. descripcion ubicacion
+  Widget _inputI(String descripcion, String hilabel, String labeltext,
+      TextInputType tipotext, int n) {
+    var inputDecoration = InputDecoration(
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+      hintText: hilabel,
+      labelText: labeltext,
+    );
+    return Container(
+      padding: EdgeInsets.only(bottom: 5.0),
+      height: 60.0,
+      width: double.infinity,
+      child: TextField(
+        textAlignVertical: TextAlignVertical.bottom,
+        keyboardType: tipotext,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: inputDecoration,
+        onChanged: (valor) {
+          setState(() {
+            if (n == 4) {
+              _nombreUbicacion = valor;
+            }
+            if (n == 5) {
+              _desUbicacion = valor;
+            }
+          });
+        },
+      ),
+    );
+  }
+    // ingresar el 1.nombre distintivo, 2.area sembrada 3.presupuesto. descripcion ubicacion
+  // Se debe agregar condicion de solo enteros para 2 y 3
   Widget _input(String descripcion, String hilabel, String labeltext,
       TextInputType tipotext, int n) {
     var inputDecoration = InputDecoration(
@@ -136,11 +202,8 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       labelText: labeltext,
       helperText: descripcion,
       icon: Icon(Icons.drive_file_rename_outline),
-      //suffixIcon: Icon(Icons.touch_app),
     );
     return Container(
-      padding: EdgeInsets.only(bottom: 5.0),
-      height: 60.0,
       width: double.infinity,
       child: TextField(
         textAlignVertical: TextAlignVertical.bottom,
@@ -158,17 +221,13 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
             if (n == 3) {
               _presupuesto = int.parse(valor);
             }
-            if (n == 4) {
-              _nombreUbicacion = valor;
-            }
-            if (n == 5) {
-              _desUbicacion = valor;
-            }
           });
         },
       ),
     );
   }
+
+
 
   // fecha
   Widget _fecha(BuildContext context) {
@@ -215,12 +274,12 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       context: context,
       initialDate: new DateTime.now(),
       firstDate: new DateTime(2021),
-      lastDate: new DateTime(2030),
+      lastDate: new DateTime(2031),
       locale: Locale('es', 'ES'),
     );
     if (picked != null) {
       setState(() {
-        _fechaInicio = DateFormat('yyyy-MM-dd').format(picked);
+        _fechaInicio = DateFormat('dd-MM-yyyy').format(picked);
         controlFecha.text = _fechaInicio;
       });
     }
@@ -228,10 +287,13 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
 
   //boton _guardar y guardar en la base de datos el registro del cultivo
   Widget _guardar(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
-      child: ElevatedButton(
-          onPressed: () => _save(context), child: Text('Guardar')),
+    return Center(
+      child: Column(
+        children: [
+          ElevatedButton(
+                onPressed: () => _save(context), child: Text('Guardar')),
+        ],
+      ),
     );
   }
 
@@ -252,40 +314,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
     operacionCultivo.nuevoCultivo(cultivoTemp);
   }
 
-  // dialogo para registrar una nueva ubicacion
-  void _registrarUbicacion(BuildContext context) {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Registrar ubicacion'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _input('Nombre de la ubicacion', '', '', TextInputType.name, 4),
-                Divider(),
-                _input('Descripcion', '', '', TextInputType.text, 5),
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      final ubicacion = new UbicacionModel(
-                        nombreUbicacion: _nombreUbicacion,
-                        descripcion: _desUbicacion,
-                        estado: _estadoUbi,
-                      );
-                      ubicacionesOperations.nuevaUbicacion(ubicacion);
-                    });
-                    Navigator.pushReplacementNamed(context, 'crearCultivo');
-                  },
-                  child: Text('Guardar')),
-            ],
-          );
-        });
-  }
+  
+  
+
 }

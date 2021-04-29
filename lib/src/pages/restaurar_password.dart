@@ -1,81 +1,15 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class RestaurarPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PageView(
-      scrollDirection: Axis.vertical,
-      children: [
-        Page1(),
-        Page2(),
-      ],
-    ));
-  }
-}
-
-//Front end Primera pagina, la imagen de fonto y los titulos
-class Page1 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Background(),
-        MainContent(),
-      ],
+        body: 
+        Page2()
+      
     );
   }
 }
-
-class MainContent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 280),
-            Text('AgroLibreta',
-                style: TextStyle(
-                    fontSize: 60,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)),
-            SizedBox(height: 100),
-            Text('Escuela Ingenieria de Sistemas',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.white)),
-            Text('Universidad Industrial de Santander',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.white)),
-            Expanded(child: Container()),
-            Icon(Icons.keyboard_arrow_down, size: 100, color: Colors.white),
-          ]),
-    );
-  }
-}
-
-class Background extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Image.asset('assets/login.jpg'),
-      height: double.infinity,
-      alignment: Alignment.topCenter,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(colors: <Color>[
-        Color.fromRGBO(48, 33, 17, 1.0),
-        Color.fromRGBO(92, 73, 52, 1.0),
-      ])),
-    );
-  }
-}
-
 //Front end segunda pagina, creacion del fondo y el formulario para el login
 class Page2 extends StatelessWidget {
   @override
@@ -157,18 +91,16 @@ class Page2 extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text(
-                  'Iniciar Sesión',
+                  'Ingrese su correo',
                   style: TextStyle(fontSize: 25.0),
                 ),
                 SizedBox(height: 20.0),
                 _crearEmail(),
                 SizedBox(height: 30.0),
-                _crearPassword(),
-                SizedBox(height: 30.0),
                 _crearBoton(context),
               ],
             )),
-        TextButton(onPressed: (){Navigator.pushNamed(context, 'restaurarPassword');}, child: Text('¿Olvido la contraseña?', style: TextStyle(fontSize: 18.0))),
+            Text('Al correo se enviará su nuevo password'),
         SizedBox(height: 100.0),
       ],
     ));
@@ -184,23 +116,6 @@ class Page2 extends StatelessWidget {
           icon: Icon(Icons.email_outlined, color: Colors.brown),
           hintText: 'ejemplo@correo.com',
           hintStyle: TextStyle(fontSize: 20.0),
-          labelText: 'Correo electronico',
-          labelStyle: TextStyle(fontSize: 20.0),
-        ),
-      ),
-    );
-  }
-//input del password
-  Widget _crearPassword() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
-        obscureText: true,
-        style: TextStyle(fontSize: 20.0),
-        decoration: InputDecoration(
-          icon: Icon(Icons.lock_outline, color: Colors.brown),
-          labelText: 'Contraseña',
-          labelStyle: TextStyle(fontSize: 20.0),
         ),
       ),
     );
@@ -211,12 +126,12 @@ class Page2 extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
         child: Text(
-          'Ingresar',
+          'Restaurar',
           style: TextStyle(fontSize: 20.0),
         ),
       ),
       onPressed: () {
-        Navigator.pushReplacementNamed(context, 'taps');
+        Navigator.pop(context);
       },
       style: ElevatedButton.styleFrom(primary: Colors.brown),
     );
