@@ -78,6 +78,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Center(
           child: Text(
             'Registrar Costo',
@@ -154,17 +155,18 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             title: Text('Registrar producto o actividad'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                
-                _seleccioneUnidadMedida(),
-                Divider(),
-                _input('Nombre', '', '', TextInputType.name, 3),
-                Divider(),
-                _seleccioneConcepto(),
-                
-              ],
+            content: Container(
+              height: 155.0,
+              child: ListView(
+                children: [
+                  
+                  _seleccioneUnidadMedida(),
+                  Divider(),
+                  _inputI('', 'Nombre del prod...', 'Nombre', TextInputType.name, 3),
+                  _seleccioneConcepto(),
+                  
+                ],
+              ),
             ),
             actions: [
               TextButton(
@@ -187,19 +189,13 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
 
   //2. segundo dropdown seleccionar el concepto
   Widget _seleccioneConcepto() {
-    return Row(
-      children: [
-        Icon(Icons.list_alt, color: Colors.black45),
-        SizedBox(width: 30.0),
-        FutureBuilder<List<ConceptoModel>>(
+    return FutureBuilder<List<ConceptoModel>>(
           future: conOper.consultarConceptos(),
           builder: (context, snapshot) {
             return snapshot.hasData
                 ? ConceptoDropdown(snapshot.data, callback1) //selected concepto
                 : Text('sin conceptos');
           },
-        ),
-      ],
     );
   }
 
@@ -207,8 +203,6 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   Widget _seleccioneUnidadMedida() {
     return Row(
       children: [
-        Icon(Icons.label_important, color: Colors.black45),
-        SizedBox(width: 30.0),
         FutureBuilder<List<UnidadMedidaModel>>(
           future: uniMedOper.consultarUnidadesMedida(),
           builder: (context, snapshot) {
@@ -249,9 +243,9 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _input('Nombre', '', '', TextInputType.name, 4),
+            _inputI('', 'kg', 'Ejemplo: kg', TextInputType.name, 4),
             Divider(),
-            _input('Descripcion', '', '', TextInputType.name, 5),
+            _inputI('', 'bolsas de kilo', 'Descripcion', TextInputType.name, 5),
           ],
         ),
         actions: [
@@ -303,15 +297,6 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
             if (n == 2) {
               _valorUnidad = double.parse(valor);
             }
-            if (n == 3) {
-              _nombreProductoActividad = valor;
-            }
-            if (n == 4) {
-              _nombreUnidadMedida = valor;
-            }
-            if (n == 5) {
-              _descripcionUnidadMedida = valor;
-            }
           });
         },
       ),
@@ -327,6 +312,39 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     return Text(
       'Total: ${total.toString()}',
       textAlign: TextAlign.right,
+    );
+  }
+  //input internos
+  Widget _inputI(String descripcion, String hilabel, String labeltext,
+      TextInputType tipotext, int n) {
+    var inputDecoration = InputDecoration(
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+      hintText: hilabel,
+      labelText: labeltext,
+    );
+    return Container(
+      padding: EdgeInsets.only(bottom: 5.0),
+      height: 60.0,
+      width: double.infinity,
+      child: TextField(
+        textAlignVertical: TextAlignVertical.bottom,
+        keyboardType: tipotext,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: inputDecoration,
+        onChanged: (valor) {
+          setState(() {
+            if (n == 3) {
+              _nombreProductoActividad = valor;
+            }
+            if (n == 4) {
+              _nombreUnidadMedida = valor;
+            }
+            if (n == 5) {
+              _descripcionUnidadMedida = valor;
+            }
+          });
+        },
+      ),
     );
   }
 

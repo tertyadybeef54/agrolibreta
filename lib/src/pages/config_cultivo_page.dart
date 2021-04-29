@@ -1,4 +1,7 @@
+import 'package:agrolibreta_v2/src/widgets/estados_cultivo_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:agrolibreta_v2/src/data/estados_operations.dart';
+import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
 
 class ConfigCultivoPage extends StatefulWidget {
   
@@ -7,14 +10,21 @@ class ConfigCultivoPage extends StatefulWidget {
 }
 
 class _ConfigCultivoPageState extends State<ConfigCultivoPage> {
-
-  String _estadoSeleccionado = 'Activo';
+  EstadosOperations estOper = new EstadosOperations();
+  // ignore: unused_field
   List <String> _estados = ['Activo','Inactivo','Perdido'];
-
+  // ignore: unused_field
+  EstadoModel _selectedEstado;
+  callback(selectedEstado) {
+    setState(() {
+      _selectedEstado = selectedEstado;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Center(child: Text('Configuración Cultivo')),
       ),
       body: ListView(
@@ -35,7 +45,7 @@ class _ConfigCultivoPageState extends State<ConfigCultivoPage> {
             title:Text('Modelo de Referencia'),
             leading: Icon(Icons.article),
             trailing: Icon(Icons.keyboard_arrow_right),
-            onTap: (){},
+            onTap: ()=>Navigator.pushNamed(context, 'verModelo'),
           ),
           Divider(height: 10.0),
           ListTile(
@@ -60,7 +70,7 @@ class _ConfigCultivoPageState extends State<ConfigCultivoPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              _crearDropdown(),
+              _seleccioneConcepto(),
             ]
           ),
           actions: <Widget>[
@@ -78,33 +88,15 @@ class _ConfigCultivoPageState extends State<ConfigCultivoPage> {
     );  
   }
 
-  List <DropdownMenuItem<String>> getOpcionesDropdown(){
-
-    List <DropdownMenuItem<String>> lista = []; 
-    _estados.forEach((estado) { 
-      lista.add(DropdownMenuItem(
-        child: Text(estado),
-        value: estado,
-      ));
-    });
-    return lista;
-  }
-
-  Widget _crearDropdown() {
-    return Row(
-      children: <Widget> [
-        Icon(Icons.drag_indicator),
-        SizedBox(width:30.0),
-        DropdownButton(
-          value: _estadoSeleccionado,
-          items: getOpcionesDropdown(),
-          onChanged: (opt){
-              _estadoSeleccionado = opt;
-            setState(() {
-            });
+//dropdown para seleccionar el estado del cultivo
+   Widget _seleccioneConcepto() {
+    return FutureBuilder<List<EstadoModel>>(
+          future: estOper.consultarEstados(),
+          builder: (context, snapshot) {
+            return snapshot.hasData
+                ? EstadoDropdown(snapshot.data, callback) //selected concepto
+                : Text('sin conceptos');
           },
-        ),
-      ],
     );
   }
 }

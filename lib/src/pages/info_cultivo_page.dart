@@ -102,7 +102,7 @@ TextEditingController _inputFieldDateController = new TextEditingController();
               Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children:[
-                Text('  Precio de Venta sugerido: $precioVenta'),
+                Text('  Precio de venta sugerido: $precioVenta'),
                 IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: ()=>_editPrecioVentaAlert(context),

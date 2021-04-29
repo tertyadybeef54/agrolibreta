@@ -4,13 +4,20 @@ class ProductoActividadList extends StatelessWidget {
 
   const ProductoActividadList();
 
-  @override
+ @override
   Widget build(BuildContext context) {
-
-    final ubicaciones = [1, 2, 3]; 
-
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('productosActividades'),
+      ),
+      body: _ubicacionTiles(context),
+    );
+  }
+  Widget _ubicacionTiles(BuildContext context){
+    final productosActividades = [1, 2, 3];
     return ListView.builder(
-      itemCount: ubicaciones.length,
+      itemCount: productosActividades.length,
       itemBuilder: (_, i) => Dismissible(
         key: UniqueKey(),
         background: Container(
