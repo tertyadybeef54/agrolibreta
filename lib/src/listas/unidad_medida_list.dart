@@ -9,29 +9,29 @@ class UnidadMedidaList extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
-        title: Text('unidadesMedida'),
+        automaticallyImplyLeading: false,
+        title: Center(child: Text('Unidades de Medida')),
       ),
-      body: _ubicacionTiles(context),
+      body: _unidadesMedidaTiles(context),
     );
   }
-  Widget _ubicacionTiles(BuildContext context){
-    final unidadesMedida = [1, 2, 3];
+  Widget _unidadesMedidaTiles(BuildContext context){
+    final ubicaciones = [1, 2, 3];
     return ListView.builder(
-      itemCount: unidadesMedida.length,
-      itemBuilder: (_, i) => Dismissible(
-        key: UniqueKey(),
-        background: Container(
-          color: Colors.red,
-        ),
-        child: ListTile(
-          leading: Icon(
-            Icons.home_outlined,
-            color: Theme.of(context).primaryColor),
-          title: Text('1'),
-          subtitle: Text('1'),
-          onTap: () {},
-        ),
-      ),
+      itemCount: ubicaciones.length,
+      itemBuilder: (_, i) => _listTile(i+1),
     );
+  }
+  Widget _listTile(int i)  {
+      return Column(
+        children: [
+          ListTile(
+             title: Text('$i nombre'),
+             subtitle: Text('descripcion'),
+             onTap: () {},
+           ),
+          Divider(),
+        ],
+      );
   }
 }

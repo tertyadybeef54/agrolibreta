@@ -46,7 +46,7 @@ class _Paginas extends StatelessWidget {
     final navegacionModel = Provider.of<_NavegacionModel>(context);
     return PageView(
       controller: navegacionModel.pageController,
-      physics: BouncingScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       children: <Widget>[
         HomePage(),
         UtilidadesPage(),

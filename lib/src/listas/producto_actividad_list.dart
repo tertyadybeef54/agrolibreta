@@ -9,29 +9,36 @@ class ProductoActividadList extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
-        title: Text('productosActividades'),
+        automaticallyImplyLeading: false,
+        title: Center(child: Text('Productos y Actividades')),
       ),
-      body: _ubicacionTiles(context),
+      body: _productoActividadTiles(context),
     );
   }
-  Widget _ubicacionTiles(BuildContext context){
-    final productosActividades = [1, 2, 3];
+  Widget _productoActividadTiles(BuildContext context){
+    final ubicaciones = [1, 2, 3];
     return ListView.builder(
-      itemCount: productosActividades.length,
-      itemBuilder: (_, i) => Dismissible(
-        key: UniqueKey(),
-        background: Container(
-          color: Colors.red,
-        ),
-        child: ListTile(
-          leading: Icon(
-            Icons.home_outlined,
-            color: Theme.of(context).primaryColor),
-          title: Text('1'),
-          subtitle: Text('1'),
-          onTap: () {},
-        ),
-      ),
+      itemCount: ubicaciones.length,
+      itemBuilder: (_, i) => _listTile(i+1),
     );
+  }
+  Widget _listTile(int i)  {
+      return Column(
+        children: [
+          ListTile(
+             title: Text('$i. nombre: triple 15'),
+             subtitle: Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children: [
+                 Text('concepto: fertilizantes'),
+                 Text('unidad: kg'),
+               ],
+             ),
+             onTap: () {},
+           ),
+           
+          Divider(),
+        ],
+      );
   }
 }
