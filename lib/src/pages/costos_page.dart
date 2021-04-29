@@ -93,15 +93,17 @@ class _CostosPageState extends State<CostosPage> {
           filtros(),
         ],
       ),
-      floatingActionButton: _botonNuevoGasto(context),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: _botonNuevoGasto(context),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
   Widget _appBar() {
     return AppBar(
       title: Center(
-        child: Text('Costos'),
+        child: 
+            Text('Buscar costos por:'),
+         
       ),
     );
   }
@@ -114,32 +116,33 @@ class _CostosPageState extends State<CostosPage> {
         ),
         Row(
           children: [
-            SizedBox(width: 10.0),
-            Text('Desde: '),
+            SizedBox(width: 8.0),
+            Text('Cultivo: '),
+            _seleccioneCultivo(),
+          ],
+        ),
+        
+        Row(
+          children: [
+            SizedBox(width: 8.0),
+            Text('Desde:'),
             _fFechaDesde(context),
-            Text(' hasta: '),
+            Text(' hasta:'),
             _fFechaHasta(context),
           ],
         ),
         Row(
           children: [
-            SizedBox(width: 10.0),
+            SizedBox(width: 8.0),
             Text('Producto o actividadad: '),
             _seleccioneProductoActividad(),
           ],
         ),
         Row(
           children: [
-            SizedBox(width: 10.0),
+            SizedBox(width: 8.0),
             Text('Concepto: '),
             _seleccioneConcepto(),
-          ],
-        ),
-        Row(
-          children: [
-            SizedBox(width: 10.0),
-            Text('Cultivo: '),
-            _seleccioneCultivo(),
           ],
         ),
       ],
@@ -150,7 +153,7 @@ class _CostosPageState extends State<CostosPage> {
   Widget _fFechaDesde(BuildContext context) {
     return Container(
       height: 30.0,
-      width: 150.0,
+      width: 148.0,
       child: TextField(
         textAlignVertical: TextAlignVertical.center,
         enableInteractiveSelection: false,
@@ -193,7 +196,7 @@ class _CostosPageState extends State<CostosPage> {
   Widget _fFechaHasta(BuildContext context) {
     return Container(
       height: 30.0,
-      width: 120,
+      width: 118,
       child: TextField(
         textAlignVertical: TextAlignVertical.center,
         enableInteractiveSelection: false,
@@ -262,12 +265,7 @@ class _CostosPageState extends State<CostosPage> {
 
   Widget titulos(BuildContext context) {
     //estas variables permiten obtener el ancho para ser asignado a cada criterio
-    final double ancho1 = MediaQuery.of(context).size.width * 0.15;
-    final double ancho2 = MediaQuery.of(context).size.width * 0.07;
-    final double ancho3 = MediaQuery.of(context).size.width * 0.15;
-    final double ancho4 = MediaQuery.of(context).size.width * 0.30;
-    final double ancho5 = MediaQuery.of(context).size.width * 0.12;
-    final double ancho6 = MediaQuery.of(context).size.width * 0.15;
+    final double ancho = MediaQuery.of(context).size.width;
     return Container(
       padding: EdgeInsets.only(top: 168.0),
       child: Row(
@@ -275,12 +273,12 @@ class _CostosPageState extends State<CostosPage> {
           SizedBox(
             width: 5.0,
           ),
-          criterio('Fecha', ancho1),
-          criterio('Cant', ancho2),
-          criterio('Und.', ancho3),
-          criterio('Nombre', ancho4),
-          criterio('V.und', ancho5),
-          criterio('V.total', ancho6),
+          criterio('Fecha', ancho * 0.15),
+          criterio('Cant', ancho * 0.07),
+          criterio('Und.', ancho * 0.15),
+          criterio('Nombre', ancho * 0.30),
+          criterio('V.und', ancho * 0.12),
+          criterio('V.total', ancho * 0.14),
           SizedBox(
             width: 5.0,
           )
@@ -290,23 +288,18 @@ class _CostosPageState extends State<CostosPage> {
   }
 
   Widget _costo(Map costo, BuildContext context) {
-    final double ancho1 = MediaQuery.of(context).size.width * 0.15;
-    final double ancho2 = MediaQuery.of(context).size.width * 0.07;
-    final double ancho3 = MediaQuery.of(context).size.width * 0.15;
-    final double ancho4 = MediaQuery.of(context).size.width * 0.30;
-    final double ancho5 = MediaQuery.of(context).size.width * 0.12;
-    final double ancho6 = MediaQuery.of(context).size.width * 0.15;
+    final double ancho = MediaQuery.of(context).size.width;
     return Row(
       children: <Widget>[
         SizedBox(
           width: 5.0,
         ),
-        criterio(costo['fecha'], ancho1),
-        criterio(costo['cant'].toString(), ancho2),
-        criterio(costo['und.'].toString(), ancho3),
-        criterio(costo['nombre'], ancho4),
-        criterio(costo['v.und'].toString(), ancho5),
-        criterio(costo['v.total'].toString(), ancho6),
+        criterio(costo['fecha'], ancho * 0.15),
+        criterio(costo['cant'].toString(), ancho * 0.07),
+        criterio(costo['und.'].toString(), ancho * 0.15),
+        criterio(costo['nombre'], ancho * 0.30),
+        criterio(costo['v.und'].toString(), ancho * 0.12),
+        criterio(costo['v.total'].toString(), ancho * 0.14),
         SizedBox(
           width: 5.0,
         )
@@ -325,10 +318,10 @@ class _CostosPageState extends State<CostosPage> {
     );
   }
 
-  Widget _botonNuevoGasto(BuildContext context) {
-    return FloatingActionButton(
-      child: Icon(Icons.add),
-      onPressed: () => Navigator.pushNamed(context, 'nuevoGasto'),
-    );
-  }
+  // Widget _botonNuevoGasto(BuildContext context) {
+  //   return FloatingActionButton(
+  //     child: Icon(Icons.add),
+  //     onPressed: () => Navigator.pushNamed(context, 'nuevoGasto'),
+  //   );
+  // }
 }
