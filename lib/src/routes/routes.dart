@@ -36,7 +36,7 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
         SelectModeloReferencia(),
     'costos': (BuildContext context) => CostosPage(),
     'informe': (BuildContext context) => InformeCultivoPage(),
-    'utilCultivo': (BuildContext context) => UtilidadesPage(),
+    'utilidades': (BuildContext context) => UtilidadesPage(),
     'galeriaRegistrosFoto': (BuildContext context) =>
         GaleriaRegistrosFotograficosPage(),
     'nuevoRegistroFoto': (BuildContext context) =>
