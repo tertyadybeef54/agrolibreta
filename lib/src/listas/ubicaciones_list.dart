@@ -8,7 +8,8 @@ class UbicacionList extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ubicaciones'),
+        automaticallyImplyLeading: false,
+        title: Center(child: Text('Ubicaciones')),
       ),
       body: _ubicacionTiles(context),
     );
@@ -17,22 +18,22 @@ class UbicacionList extends StatelessWidget {
     final ubicaciones = [1, 2, 3];
     return ListView.builder(
       itemCount: ubicaciones.length,
-      itemBuilder: (_, i) => Dismissible(
-        key: UniqueKey(),
-        background: Container(
-          color: Colors.red,
-        ),
-        child: ListTile(
-          leading: Icon(
-            Icons.home_outlined,
-            color: Theme.of(context).primaryColor),
-          title: Text('1'),
-          subtitle: Text('1'),
-          onTap: () {},
-        ),
-      ),
+      itemBuilder: (_, i) => _listTile(i+1),
     );
   }
+  Widget _listTile(int i)  {
+      return Column(
+        children: [
+          ListTile(
+             title: Text('$i nombre'),
+             subtitle: Text('descripcion'),
+             onTap: () {},
+           ),
+          Divider(),
+        ],
+      );
+  }
 }
+
 
 

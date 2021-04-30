@@ -9,29 +9,36 @@ class ModeloReferenciaList extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
-        title: Text('modelosReferencia'),
+        automaticallyImplyLeading: false,
+        title: Center(child: Text('Modelos de Referencia')),
       ),
-      body: _ubicacionTiles(context),
+      body: _modeloReferenciaTiles(context),
     );
   }
-  Widget _ubicacionTiles(BuildContext context){
-    final modelosReferencia = [1, 2, 3];
+  Widget _modeloReferenciaTiles(BuildContext context){
+    final ubicaciones = [1, 2, 3];
     return ListView.builder(
-      itemCount: modelosReferencia.length,
-      itemBuilder: (_, i) => Dismissible(
-        key: UniqueKey(),
-        background: Container(
-          color: Colors.red,
-        ),
-        child: ListTile(
-          leading: Icon(
-            Icons.home_outlined,
-            color: Theme.of(context).primaryColor),
-          title: Text('1'),
-          subtitle: Text('1'),
-          onTap: () {},
-        ),
-      ),
+      itemCount: ubicaciones.length,
+      itemBuilder: (_, i) => _listTile(i+1),
     );
+  }
+  Widget _listTile(int i)  {
+      return Column(
+        children: [
+          ListTile(
+             title: Text('MR: $i'),
+             subtitle: Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children: [
+                 Text('Fertilizantes: 40%'),
+                 Text('Mano de obra: 60%'),
+               ],
+             ),
+             onTap: () {},
+           ),
+           
+          Divider(),
+        ],
+      );
   }
 }
