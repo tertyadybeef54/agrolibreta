@@ -11,8 +11,8 @@ class UnidadMedidaOperations {
     final db = await dbProvider.database;
     final res = await db.insert('UnidadesMedida', nuevoUnidadMedida.toJson());
     // Es el ID del último registro insertado;
-    print(res);
     print('unidad me creada');
+    print(res);
     return res;
   }
 

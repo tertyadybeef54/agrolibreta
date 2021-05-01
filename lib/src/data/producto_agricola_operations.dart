@@ -1,3 +1,4 @@
+import 'package:agrolibreta_v2/src/modelos/producto_agricola_model.dart';
 import 'package:agrolibreta_v2/src/providers/db_provider.dart';
 
 class ProductoAgricolaOperations {
@@ -10,6 +11,7 @@ class ProductoAgricolaOperations {
     final db = await dbProvider.database;
     final res = await db.insert('ProductosAgricolas', nuevoProductoAgricola.toJson());
     // Es el ID del último registro insertado;
+    print('proAgr');
     print(res);
     return res;
   }
