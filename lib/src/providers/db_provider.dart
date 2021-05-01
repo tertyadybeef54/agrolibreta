@@ -3,11 +3,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-export 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
-export 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
-export 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
-export 'package:agrolibreta_v2/src/modelos/estado_model.dart';
-export 'package:agrolibreta_v2/src/modelos/producto_agricola_model.dart';
 
 class DBProvider {
   static Database _database;
@@ -25,7 +20,7 @@ class DBProvider {
   Future<Database> initDB() async {
     // Path de donde almacenaremos la base de datos
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, 'Agrolibreta1.db');
+    final path = join(documentsDirectory.path, 'Agrolibreta.db');
     print(path);
     // Crear base de datos
     return await openDatabase(path, version: 1, onOpen: (db) {},

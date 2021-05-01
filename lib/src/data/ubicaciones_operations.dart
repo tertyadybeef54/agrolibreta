@@ -1,3 +1,4 @@
+import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
 import 'package:agrolibreta_v2/src/providers/db_provider.dart';
 
 //CRUD PARA Ubicacaciones
@@ -11,6 +12,7 @@ class UbicacionesOperations {
     final db = await dbProvider.database;
     final res = await db.insert('Ubicaciones', nuevaUbicacion.toJson());
     // Es el ID del último registro insertado;
+    print('ubi');
     print(res);
     return res;
   }

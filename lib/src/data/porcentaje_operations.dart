@@ -11,6 +11,7 @@ class PorcentajeOperations {
     final db = await dbProvider.database;
     final res = await db.insert('Porcentajes', nuevoPorcentaje.toJson());
     // Es el ID del último registro insertado;
+    print('por');
     print(res);
     return res;
   }

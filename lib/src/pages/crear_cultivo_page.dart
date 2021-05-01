@@ -1,14 +1,22 @@
-import 'package:agrolibreta_v2/src/data/estados_operations.dart';
-import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
-import 'package:agrolibreta_v2/src/data/producto_agricola_operations.dart';
-import 'package:agrolibreta_v2/src/widgets/ubicaciones_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
-import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
+//import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
+import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
-import 'package:agrolibreta_v2/src/providers/db_provider.dart';
+//import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
+//import 'package:agrolibreta_v2/src/modelos/producto_agricola_model.dart';
+
+import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
+import 'package:agrolibreta_v2/src/data/estados_operations.dart';
+import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
+import 'package:agrolibreta_v2/src/data/producto_agricola_operations.dart';
+import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
+
+import 'package:agrolibreta_v2/src/widgets/ubicaciones_dropdown.dart';
+import 'package:provider/provider.dart';
+
+import 'package:agrolibreta_v2/src/dataproviders/cultivos_data.dart';
 
 class CrearCultivoPage extends StatefulWidget {
   @override
@@ -16,6 +24,7 @@ class CrearCultivoPage extends StatefulWidget {
 }
 
 class _CrearCultivoPageState extends State<CrearCultivoPage> {
+  CultivoOperations operacionCultivo = new CultivoOperations();
   UbicacionesOperations ubicacionesOperations = new UbicacionesOperations();
   EstadosOperations estadosOperations = new EstadosOperations();
   ModelosReferenciaOperations modelosReferenciaOperations =
@@ -40,17 +49,18 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
   int _idEstado = 1; // activo por defecto.
   int _idModeloReferencia = 1; // modelo por defecto.
   int _idProductoAgricola = 1; // arveja por defecto
-  //valores que ingresa el usuario
-  String _nombreDistintivo = 'a';
-  int _areaSembrada = 1;
-  String _fechaInicio = 'a';
-  String fechaFinal = 'a';
+  //valores para crear el cultivo, el id es automatico
+  String _nombreDistintivo = 'nn'; //nn sin especificar
+  double _areaSembrada = 1;
+  String _fechaInicio = 'nn';
+  // ignore: unused_field
+  String _fechaFinal = 'nn';
   int _presupuesto = 1;
-  int _precioVentaIdeal = 1;
+  double _precioVentaIdeal = 1;
   //variables para crear la ubicacion
-  String _desUbicacion = 'a';
-  String _nombreUbicacion = 'a';
-  int _estadoUbi = 1; //activa por defecto
+  String _nombreUbicacion = 'nn';
+  String _desUbicacion = 'nn';
+  int _estadoUbi = 1; //estado ubi activa, por defecto
   // cuando crea una nueva ubicacion el estado es 1=activo
 
   @override
@@ -126,6 +136,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       ],
     );
   }
+
   // dialogo para registrar una nueva ubicacion
   void _registrarUbicacion(BuildContext context) {
     showDialog(
@@ -139,9 +150,11 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _inputI('', 'llanito', 'Nombre de la ubicacion', TextInputType.name, 4),
+                _inputI('', 'llanito', 'Nombre de la ubicacion',
+                    TextInputType.name, 4),
                 Divider(),
-                _inputI('', 'llanito del norte', 'Descripcion', TextInputType.text, 5),
+                _inputI('', 'llanito del norte', 'Descripcion',
+                    TextInputType.text, 5),
               ],
             ),
             actions: [
@@ -155,13 +168,14 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
                       );
                       ubicacionesOperations.nuevaUbicacion(ubicacion);
                     });
-                    Navigator.pushReplacementNamed(context, 'crearCultivo');
+                    Navigator.pop(context);
                   },
                   child: Text('Guardar')),
             ],
           );
         });
   }
+
   // ingresar 4. nombre ubicacion 5. descripcion ubicacion
   Widget _inputI(String descripcion, String hilabel, String labeltext,
       TextInputType tipotext, int n) {
@@ -192,7 +206,8 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       ),
     );
   }
-    // ingresar el 1.nombre distintivo, 2.area sembrada 3.presupuesto. descripcion ubicacion
+
+  // ingresar el 1.nombre distintivo, 2.area sembrada 3.presupuesto. descripcion ubicacion
   // Se debe agregar condicion de solo enteros para 2 y 3
   Widget _input(String descripcion, String hilabel, String labeltext,
       TextInputType tipotext, int n) {
@@ -216,7 +231,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
               _nombreDistintivo = valor;
             }
             if (n == 2) {
-              _areaSembrada = int.parse(valor);
+              _areaSembrada = double.parse(valor);
             }
             if (n == 3) {
               _presupuesto = int.parse(valor);
@@ -226,8 +241,6 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       ),
     );
   }
-
-
 
   // fecha
   Widget _fecha(BuildContext context) {
@@ -255,18 +268,18 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
 
   _selectDate(BuildContext context) async {
     //------------------------ para pruebas
-    final ModeloReferenciaModel modeloReferencia = new ModeloReferenciaModel(
-      suma: 100,
-    );
-    final EstadoModel estado = new EstadoModel(
-      nombreEstado: 'activo',
-    );
-    final productoagricola = new ProductoAgricolaModel(
-      nombreProducto: 'arveja',
-    );
-    modelosReferenciaOperations.nuevoModeloReferencia(modeloReferencia);
-    estadosOperations.nuevoEstado(estado);
-    productoAgricolaOperations.nuevoProductoAgricola(productoagricola);
+    // final ModeloReferenciaModel modeloReferencia = new ModeloReferenciaModel(
+    //   suma: 0,
+    // );
+    // final EstadoModel estado = new EstadoModel(
+    //   nombreEstado: 'activo',
+    // );
+    // final productoagricola = new ProductoAgricolaModel(
+    //   nombreProducto: 'arveja',
+    // );
+    // modelosReferenciaOperations.nuevoModeloReferencia(modeloReferencia);
+    // estadosOperations.nuevoEstado(estado);
+    // productoAgricolaOperations.nuevoProductoAgricola(productoagricola);
 
     //---------------------------
 
@@ -291,13 +304,18 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       child: Column(
         children: [
           ElevatedButton(
-                onPressed: () => _save(context), child: Text('Guardar')),
+              child: Text('Guardar'),
+              onPressed: () {
+                _save(context);
+                Navigator.pop(context);
+              }),
         ],
       ),
     );
   }
 
   void _save(BuildContext context) {
+    final cultivosData = Provider.of<CultivosData>(context,listen: false);
     final cultivoTemp = new CultivoModel(
       fkidUbicacion: _selectedUbicacion.idUbicacion,
       fkidEstado: _idEstado,
@@ -306,15 +324,10 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       nombreDistintivo: _nombreDistintivo,
       areaSembrada: _areaSembrada,
       fechaInicio: _fechaInicio,
-      fechaFinal: _fechaInicio,
+      fechaFinal: _fechaFinal,
       presupuesto: _presupuesto,
       precioVentaIdeal: _precioVentaIdeal,
     );
-    CultivoOperations operacionCultivo = new CultivoOperations();
-    operacionCultivo.nuevoCultivo(cultivoTemp);
+    cultivosData.anadirCultivo(cultivoTemp);
   }
-
-  
-  
-
 }

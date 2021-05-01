@@ -11,6 +11,7 @@ class CostoOperations {
     final db = await dbProvider.database;
     final res = await db.insert('Costos', nuevoCosto.toJson());
     // Es el ID del último registro insertado;
+    print('cos');
     print(res);
     return res;
   }

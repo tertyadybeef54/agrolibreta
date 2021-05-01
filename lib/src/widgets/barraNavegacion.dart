@@ -1,3 +1,4 @@
+import 'package:agrolibreta_v2/src/dataproviders/cultivos_data.dart';
 import 'package:agrolibreta_v2/src/pages/costos_page.dart';
 import 'package:agrolibreta_v2/src/pages/galeria_registros_fotograficos_page.dart';
 import 'package:agrolibreta_v2/src/pages/home_page.dart';
@@ -44,6 +45,7 @@ class _Paginas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navegacionModel = Provider.of<_NavegacionModel>(context);
+    Provider.of<CultivosData>(context,listen: false);
     return PageView(
       controller: navegacionModel.pageController,
       physics: NeverScrollableScrollPhysics(),
