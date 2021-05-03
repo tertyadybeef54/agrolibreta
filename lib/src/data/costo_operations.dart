@@ -37,15 +37,34 @@ class CostoOperations {
 //D - borrar un registro
   Future<int> deleteCosto(int id) async {
     final db = await dbProvider.database;
-    final res = await db
-        .delete('Costos', where: 'idCosto = ?', whereArgs: [id]);
+    final res =
+        await db.delete('Costos', where: 'idCosto = ?', whereArgs: [id]);
     return res;
   }
 
+//otras consultas
+//costo por id
   Future<CostoModel> getCostoById(int id) async {
     final db = await dbProvider.database;
     final res = await db.query('Costos', where: 'idCosto = ?', whereArgs: [id]);
 
     return res.isNotEmpty ? CostoModel.fromJson(res.first) : null;
+  }
+
+//Suma de costos por concepto
+  Future<double> sumaCostosByConcepto(int idCultivo, String idConcepto) async {
+    final db = await dbProvider.database;
+    final List<Map<String, dynamic>> res = await db.rawQuery('''
+
+      SELECT * FROM Costos WHERE fkidProductoActividad IN (SELECT idProductoActividad FROM ProductosActividades WHERE fkidConcepto = '$idConcepto') AND fkidCultivo = '$idCultivo'
+    
+    ''');
+    double suma = 0.0;
+    res.forEach((costo) {
+      print(costo);
+      //suma += costo[valorUnidad] * costo[cantidad];
+    });
+    print(res);
+    return suma;
   }
 }

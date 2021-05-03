@@ -8,7 +8,6 @@ import 'package:agrolibreta_v2/src/widgets/modelo_referencia_dropdown.dart';
 import 'package:flutter/material.dart';
 
 class SelectModeloReferencia extends StatefulWidget {
-  SelectModeloReferencia({Key key}) : super(key: key);
 
   @override
   _SelectModeloReferenciaState createState() => _SelectModeloReferenciaState();
@@ -22,16 +21,14 @@ class _SelectModeloReferenciaState extends State<SelectModeloReferencia> {
   //listas de solo los valores a mostrar en el listview.buider
   List conceptos = [];
   List valores = [];
-  int _control = 0;
   List<PorcentajeModel> porcentajes =
       []; //listado de porcentajes de ese nuevo modeloreferencia
   // ignore: unused_field
   ModeloReferenciaModel
       _selectedModeloReferencia; //modeloreferencia seleccionado en el dropdown
-  callback(selectedModeloReferencia, control) {
+  callback(selectedModeloReferencia) {
     setState(() {
       _selectedModeloReferencia = selectedModeloReferencia;
-      _control = control;
     });
   }
 
@@ -86,7 +83,6 @@ class _SelectModeloReferenciaState extends State<SelectModeloReferencia> {
             await conOper.getConceptoById(porcentaje.fk2idConcepto);
         conceptos.add(_concepTemp.nombreConcepto);
         valores.add(porcentaje.porcentaje);
-        _control = 1;
       });
     }
   }
@@ -104,7 +100,7 @@ class _SelectModeloReferenciaState extends State<SelectModeloReferencia> {
           future: modRefOper.consultarModelosReferencia(),
           builder: (context, snapshot) {
             return snapshot.hasData
-                ? ModeloReferenciaDropdowun(snapshot.data, _control, callback)
+                ? ModeloReferenciaDropdowun(snapshot.data, callback)
                 : Text('Usar por defecto');
           },
         ),
@@ -112,10 +108,6 @@ class _SelectModeloReferenciaState extends State<SelectModeloReferencia> {
             icon: Icon(Icons.visibility),
             color: Colors.black,
             onPressed: () {
-              if (_control == 0) {
-                _cargarData();
-              }
-              setState(() {});
             }),
       ],
     );

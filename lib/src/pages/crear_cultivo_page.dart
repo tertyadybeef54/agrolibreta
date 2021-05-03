@@ -1,10 +1,11 @@
+import 'package:agrolibreta_v2/src/widgets/modelo_referencia_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 //import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
-//import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
+import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
 //import 'package:agrolibreta_v2/src/modelos/producto_agricola_model.dart';
 
 import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
@@ -24,6 +25,7 @@ class CrearCultivoPage extends StatefulWidget {
 }
 
 class _CrearCultivoPageState extends State<CrearCultivoPage> {
+  ModelosReferenciaOperations modRefOper = new ModelosReferenciaOperations();
   CultivoOperations operacionCultivo = new CultivoOperations();
   UbicacionesOperations ubicacionesOperations = new UbicacionesOperations();
   EstadosOperations estadosOperations = new EstadosOperations();
@@ -36,6 +38,14 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
   callback(selectedUbicacion) {
     setState(() {
       _selectedUbicacion = selectedUbicacion;
+    });
+  }
+
+  ModeloReferenciaModel
+      _selectedModeloReferencia; //modeloreferencia seleccionado en el dropdown
+  callback2(selectedModeloReferencia) {
+    setState(() {
+      _selectedModeloReferencia = selectedModeloReferencia;
     });
   }
 
@@ -80,6 +90,12 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
         children: [
           SizedBox(height: 20.0),
           Text(
+            'Seleccione el modelo de referencia: ',
+            style: _style,
+          ),
+          _seleccioneMR(),
+          Divider(),
+          Text(
             'Seleccione la ubicacion para el cultivo: ',
             style: _style,
           ),
@@ -102,10 +118,27 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
     );
   }
 
+  //seleccionar modelo de referencia
+  Widget _seleccioneMR() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center, 
+      children: [
+      Icon(Icons.article, color: Colors.black45),
+      SizedBox(width: 30.0),
+      FutureBuilder<List<ModeloReferenciaModel>>(
+        future: modRefOper.consultarModelosReferencia(),
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? ModeloReferenciaDropdowun(snapshot.data, callback2)
+              : Text('Usar por defecto');
+        },
+      ),
+    ],);
+  }
+
   //##############################################################
   //Seleccionar la ubicacion para el cultivo
   Widget _seleccionarUbicacionCultivo() {
-    //DBProvider.db.database;
     return Row(
       children: [
         Icon(Icons.add_location),
@@ -315,7 +348,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
   }
 
   void _save(BuildContext context) {
-    final cultivosData = Provider.of<CultivosData>(context,listen: false);
+    final cultivosData = Provider.of<CultivosData>(context, listen: false);
     final cultivoTemp = new CultivoModel(
       fkidUbicacion: _selectedUbicacion.idUbicacion,
       fkidEstado: _idEstado,
