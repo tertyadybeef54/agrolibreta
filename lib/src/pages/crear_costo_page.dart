@@ -154,34 +154,32 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
           return AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Registrar producto o actividad'),
-            content: Container(
-              height: 155.0,
-              child: ListView(
-                children: [
-                  
-                  _seleccioneUnidadMedida(),
-                  Divider(),
-                  _inputI('', 'Nombre del prod...', 'Nombre', TextInputType.name, 3),
-                  _seleccioneConcepto(),
-                  
-                ],
-              ),
+            title: Text('Registrar'),
+            content: Column(
+              //se debe mejorar para mostrarlo mas estetico
+              children: [
+                _seleccioneUnidadMedida(),
+                Divider(),
+                _inputI(
+                    '', 'Nombre del prod...', 'Nombre', TextInputType.name, 3),
+                _seleccioneConcepto(),
+              ],
             ),
             actions: [
               TextButton(
-                  onPressed: () {
-                    setState(() {
-                      final productoActividad = new ProductoActividadModel(
-                        nombreProductoActividad: _nombreProductoActividad,
-                        fkidConcepto: _selectedConcepto.idConcepto,
-                        fkidUnidadMedida: _selectedUnidadMedida.idUnidadMedida,
-                      );
-                      proActOper.nuevoProductoActividad(productoActividad);
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: Text('Guardar')),
+                onPressed: () {
+                  setState(() {
+                    final productoActividad = new ProductoActividadModel(
+                      nombreProductoActividad: _nombreProductoActividad,
+                      fkidConcepto: 1,
+                      fkidUnidadMedida: _selectedUnidadMedida.idUnidadMedida,
+                    );
+                    proActOper.nuevoProductoActividad(productoActividad);
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text('Guardar'),
+              ),
             ],
           );
         });
@@ -190,12 +188,12 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   //2. segundo dropdown seleccionar el concepto
   Widget _seleccioneConcepto() {
     return FutureBuilder<List<ConceptoModel>>(
-          future: conOper.consultarConceptos(),
-          builder: (context, snapshot) {
-            return snapshot.hasData
-                ? ConceptoDropdown(snapshot.data, callback1) //selected concepto
-                : Text('sin conceptos');
-          },
+      future: conOper.consultarConceptos(),
+      builder: (context, snapshot) {
+        return snapshot.hasData
+            ? ConceptoDropdown(snapshot.data, callback1) //selected concepto
+            : Text('sin conceptos');
+      },
     );
   }
 
@@ -232,38 +230,39 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
 
   //registrar nueva unidad de medida si no existe
   void _registrarUnidadMedida(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: true,
-    builder: (context) {
-      return AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0)),
-        title: Text('Registrar unidad de medida'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _inputI('', 'kg', 'Ejemplo: kg', TextInputType.name, 4),
-            Divider(),
-            _inputI('', 'bolsas de kilo', 'Descripcion', TextInputType.name, 5),
-          ],
-        ),
-        actions: [
-          TextButton(
-              onPressed: () {
-                setState(() {
-                  final unidadMedida = new UnidadMedidaModel(
-                    nombreUnidadMedida: _nombreUnidadMedida,
-                    descripcion: _descripcionUnidadMedida,
-                  );
-                  uniMedOper.nuevoUnidadMedida(unidadMedida);
-                });
-                Navigator.pushNamed(context,'crearCosto');
-              },
-              child: Text('Guardar')),
-        ],
-      );
-    });
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            title: Text('Registrar unidad de medida'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _inputI('', 'kg', 'Ejemplo: kg', TextInputType.name, 4),
+                Divider(),
+                _inputI(
+                    '', 'bolsas de kilo', 'Descripcion', TextInputType.name, 5),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      final unidadMedida = new UnidadMedidaModel(
+                        nombreUnidadMedida: _nombreUnidadMedida,
+                        descripcion: _descripcionUnidadMedida,
+                      );
+                      uniMedOper.nuevoUnidadMedida(unidadMedida);
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: Text('Guardar')),
+            ],
+          );
+        });
   }
 
   //inputs
@@ -305,15 +304,14 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
 
   //calcular valor total
   Widget _valorTotal() {
-    setState(() {
-      
-    });
+    setState(() {});
     double total = _valorUnidad * _cantidad;
     return Text(
       'Total: ${total.toString()}',
       textAlign: TextAlign.right,
     );
   }
+
   //input internos
   Widget _inputI(String descripcion, String hilabel, String labeltext,
       TextInputType tipotext, int n) {
@@ -423,7 +421,11 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
       child: ElevatedButton(
-          onPressed: () => _save(context), child: Text('Guardar')),
+          child: Text('Guardar'),
+          onPressed: () {
+            _save(context);
+            Navigator.pop(context);
+          }),
     );
   }
 

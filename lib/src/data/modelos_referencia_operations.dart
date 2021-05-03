@@ -1,4 +1,5 @@
 import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
+export 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
 import 'package:agrolibreta_v2/src/providers/db_provider.dart';
 
 //CRUD PARA Ubicacaciones

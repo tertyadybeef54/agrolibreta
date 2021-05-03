@@ -47,10 +47,12 @@ class HomePage extends StatelessWidget {
       },
     );
   }
+
 //tarjerta que muestra la informacion de cada cultivo
 //MEJORAR: cambiar los ids por nombres, con if de manera provicional
 //          para el estado y el nombre del cultivo
-  Widget _crearCards(BuildContext context, CultivoModel cultivo) {     
+  Widget _crearCards(BuildContext context, CultivoModel cultivo) {
+    final _idCultivo = cultivo.idCultivo;
     final _nombre = cultivo.nombreDistintivo;
     final _producto = cultivo.fkidProductoAgricola;
     final _fecha = cultivo.fechaInicio;
@@ -59,6 +61,7 @@ class HomePage extends StatelessWidget {
     final _area = cultivo.areaSembrada.toString();
     final _presupuesto = cultivo.presupuesto.toString();
     final _precio = cultivo.precioVentaIdeal.toString();
+    final _mR = cultivo.fkidModeloReferencia;
     return Card(
         clipBehavior: Clip.antiAlias,
         elevation: 2.0,
@@ -85,16 +88,27 @@ class HomePage extends StatelessWidget {
                 Text('Área Sembrada: $_area'),
                 Text('Presupuesto: $_presupuesto'),
                 Text('Precio de Venta: $_precio'),
+                Text('MR: $_mR'),
                 SizedBox(height: 20.0),
                 //TextButton(onPressed: () {}, child: Text('Entrar')),
-                _botonEntrar(context),
+                _botonEntrar(context, _idCultivo),
               ],
             ),
           ],
         ));
   }
 
-//botton para añadir nuevo cultivo
+
+
+  Widget _botonEntrar(BuildContext context, int idCultivo) {
+    return TextButton(
+        onPressed: () {
+          //print(idCultivo.toString());
+          Navigator.pushNamed(context, 'resumenCostos', arguments: idCultivo);
+        },
+        child: Text('Entrar'));
+  }
+  //botton para añadir nuevo cultivo
   Widget _agregarCultivo(BuildContext context) {
     return FloatingActionButton(
       child: Icon(Icons.add),
@@ -102,13 +116,5 @@ class HomePage extends StatelessWidget {
         Navigator.pushNamed(context, 'crearCultivo');
       },
     );
-  }
-
-  Widget _botonEntrar(BuildContext context) {
-    return TextButton(
-        onPressed: () {
-          Navigator.pushNamed(context, 'resumenCostos');
-        },
-        child: Text('Entrar'));
   }
 }
