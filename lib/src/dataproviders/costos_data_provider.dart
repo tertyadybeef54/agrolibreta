@@ -2,7 +2,6 @@ import 'package:agrolibreta_v2/src/data/costo_operations.dart';
 import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
 import 'package:flutter/material.dart';
 
-import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 
 CostoOperations _culOper = new CostoOperations();
 

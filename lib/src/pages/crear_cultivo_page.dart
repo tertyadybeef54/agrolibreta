@@ -57,7 +57,6 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
 
   //variables por defecto al crear un registro de cultivo
   int _idEstado = 1; // activo por defecto.
-  int _idModeloReferencia = 1; // modelo por defecto.
   int _idProductoAgricola = 1; // arveja por defecto
   //valores para crear el cultivo, el id es automatico
   String _nombreDistintivo = 'nn'; //nn sin especificar
@@ -352,7 +351,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
     final cultivoTemp = new CultivoModel(
       fkidUbicacion: _selectedUbicacion.idUbicacion,
       fkidEstado: _idEstado,
-      fkidModeloReferencia: _idModeloReferencia,
+      fkidModeloReferencia: _selectedModeloReferencia.idModeloReferencia,
       fkidProductoAgricola: _idProductoAgricola,
       nombreDistintivo: _nombreDistintivo,
       areaSembrada: _areaSembrada,

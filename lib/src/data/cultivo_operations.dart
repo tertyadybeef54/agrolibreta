@@ -30,7 +30,7 @@ class CultivoOperations {
   Future<int> updateCultivos(CultivoModel nuevoCultivo) async {
     final db = await dbProvider.database;
     final res = await db.update('Cultivos', nuevoCultivo.toJson(),
-        where: 'id = ?', whereArgs: [nuevoCultivo.idCultivo]);
+        where: 'idCultivo = ?', whereArgs: [nuevoCultivo.idCultivo]);
     return res;
   }
 

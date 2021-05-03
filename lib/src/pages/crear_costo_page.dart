@@ -171,7 +171,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
                   setState(() {
                     final productoActividad = new ProductoActividadModel(
                       nombreProductoActividad: _nombreProductoActividad,
-                      fkidConcepto: 1,
+                      fkidConcepto: _selectedConcepto.idConcepto,
                       fkidUnidadMedida: _selectedUnidadMedida.idUnidadMedida,
                     );
                     proActOper.nuevoProductoActividad(productoActividad);

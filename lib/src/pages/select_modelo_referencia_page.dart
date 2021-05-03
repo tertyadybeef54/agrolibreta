@@ -1,7 +1,6 @@
 import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
 import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
 import 'package:agrolibreta_v2/src/data/porcentaje_operations.dart';
-import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
 import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
 import 'package:agrolibreta_v2/src/modelos/porcentaje_model.dart';
 import 'package:agrolibreta_v2/src/widgets/modelo_referencia_dropdown.dart';
@@ -24,11 +23,10 @@ class _SelectModeloReferenciaState extends State<SelectModeloReferencia> {
   List<PorcentajeModel> porcentajes =
       []; //listado de porcentajes de ese nuevo modeloreferencia
   // ignore: unused_field
-  ModeloReferenciaModel
-      _selectedModeloReferencia; //modeloreferencia seleccionado en el dropdown
+  //ModeloReferenciaModel_selectedModeloReferencia; //modeloreferencia seleccionado en el dropdown
   callback(selectedModeloReferencia) {
     setState(() {
-      _selectedModeloReferencia = selectedModeloReferencia;
+      //_selectedModeloReferencia = selectedModeloReferencia;
     });
   }
 
@@ -72,20 +70,20 @@ class _SelectModeloReferenciaState extends State<SelectModeloReferencia> {
 //##############################
 //
 
-  void _cargarData() async {
-    if (_selectedModeloReferencia != null) {
-      porcentajes = await porOper.consultarPorcentajesbyModeloReferencia(
-          _selectedModeloReferencia.idModeloReferencia.toString());
-      conceptos = [];
-      valores = [];
-      porcentajes.forEach((porcentaje) async {
-        final ConceptoModel _concepTemp =
-            await conOper.getConceptoById(porcentaje.fk2idConcepto);
-        conceptos.add(_concepTemp.nombreConcepto);
-        valores.add(porcentaje.porcentaje);
-      });
-    }
-  }
+  // void _cargarData() async {
+  //   if (_selectedModeloReferencia != null) {
+  //     porcentajes = await porOper.consultarPorcentajesbyModeloReferencia(
+  //         _selectedModeloReferencia.idModeloReferencia.toString());
+  //     conceptos = [];
+  //     valores = [];
+  //     porcentajes.forEach((porcentaje) async {
+  //       final ConceptoModel _concepTemp =
+  //           await conOper.getConceptoById(int.parse(porcentaje.fk2idConcepto));
+  //       conceptos.add(_concepTemp.nombreConcepto);
+  //       valores.add(porcentaje.porcentaje);
+  //     });
+  //   }
+  // }
 
 //
 //#############################

@@ -36,7 +36,7 @@ class ModelosReferenciaOperations {
     final db = await dbProvider.database;
     final res = await db.update(
         'ModelosReferencia', nuevoModeloReferencia.toJson(),
-        where: 'id = ?', whereArgs: [nuevoModeloReferencia.idModeloReferencia]);
+        where: 'idModeloReferencia = ?', whereArgs: [nuevoModeloReferencia.idModeloReferencia]);
     return res;
   }
 

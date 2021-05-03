@@ -31,7 +31,7 @@ class UbicacionesOperations {
   Future<int> updateUbicaciones(UbicacionModel nuevaUbicacion) async {
     final db = await dbProvider.database;
     final res = await db.update('Ubicaciones', nuevaUbicacion.toJson(),
-        where: 'id = ?', whereArgs: [nuevaUbicacion.idUbicacion]);
+        where: 'idUbicacion = ?', whereArgs: [nuevaUbicacion.idUbicacion]);
     return res;
   }
 
