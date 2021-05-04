@@ -30,7 +30,7 @@ class ConceptoOperations {
   Future<int> updateConceptos(ConceptoModel nuevoConcepto) async {
     final db = await dbProvider.database;
     final res = await db.update('Conceptos', nuevoConcepto.toJson(),
-        where: 'id = ?', whereArgs: [nuevoConcepto.idConcepto]);
+        where: 'idConcepto = ?', whereArgs: [nuevoConcepto.idConcepto]);
     return res;
   }
 

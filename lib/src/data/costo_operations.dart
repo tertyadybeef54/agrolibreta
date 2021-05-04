@@ -30,7 +30,7 @@ class CostoOperations {
   Future<int> updateCostos(CostoModel nuevoCosto) async {
     final db = await dbProvider.database;
     final res = await db.update('Costos', nuevoCosto.toJson(),
-        where: 'id = ?', whereArgs: [nuevoCosto.idCosto]);
+        where: 'idCostos = ?', whereArgs: [nuevoCosto.idCosto]);
     return res;
   }
 

@@ -30,7 +30,7 @@ class ProductoAgricolaOperations {
   Future<int> updateProductoAgricolas(ProductoAgricolaModel nuevaProductoAgricola) async {
     final db = await dbProvider.database;
     final res = await db.update('ProductosAgricolas', nuevaProductoAgricola.toJson(),
-        where: 'id = ?', whereArgs: [nuevaProductoAgricola.idProductoAgricola]);
+        where: 'idProductoAgricola = ?', whereArgs: [nuevaProductoAgricola.idProductoAgricola]);
     return res;
   }
 

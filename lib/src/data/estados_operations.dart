@@ -30,7 +30,7 @@ class EstadosOperations {
   Future<int> updateEstados(EstadoModel nuevoEstado) async {
     final db = await dbProvider.database;
     final res = await db.update('EstadosCultivo', nuevoEstado.toJson(),
-        where: 'id = ?', whereArgs: [nuevoEstado.idEstado]);
+        where: 'idEstadoCultivo = ?', whereArgs: [nuevoEstado.idEstado]);
     return res;
   }
 

@@ -30,7 +30,7 @@ class UnidadMedidaOperations {
   Future<int> updateUnidadesMedida(UnidadMedidaModel nuevoUnidadMedida) async {
     final db = await dbProvider.database;
     final res = await db.update('UnidadesMedida', nuevoUnidadMedida.toJson(),
-        where: 'id = ?', whereArgs: [nuevoUnidadMedida.idUnidadMedida]);
+        where: 'idUnidadMedida = ?', whereArgs: [nuevoUnidadMedida.idUnidadMedida]);
     return res;
   }
 

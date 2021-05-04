@@ -30,7 +30,7 @@ class RegistroFotograficoOperations {
   Future<int> updateRegistrosFotograficos(RegistroFotograficoModel nuevoRegistroFotografico) async {
     final db = await dbProvider.database;
     final res = await db.update('RegistrosFotograficos', nuevoRegistroFotografico.toJson(),
-        where: 'id = ?', whereArgs: [nuevoRegistroFotografico.idRegistroFotografico]);
+        where: 'idRegistroFotografico = ?', whereArgs: [nuevoRegistroFotografico.idRegistroFotografico]);
     return res;
   }
 

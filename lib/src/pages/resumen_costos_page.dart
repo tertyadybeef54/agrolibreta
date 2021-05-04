@@ -13,11 +13,6 @@ class ResumencostosPage extends StatelessWidget {
     'insumos',
     'otros',
   ];
-  final List<String> _conceptos2 = ['mano de obra', 'transporte', 'alguno'];
-  final List<double> _sumas = [100, 200, 300];
-  final List<double> _sumas2 = [300, 100, 100];
-  final List<double> _sugeridos = [110, 205, 400];
-  final List<double> _sugeridos2 = [400, 90, 100];
   final CostoOperations cosOper = new CostoOperations();
   @override
   Widget build(BuildContext context) {
@@ -67,6 +62,7 @@ class ResumencostosPage extends StatelessWidget {
   }
 
 //Metodo para crar cada uno de las cuatro clasificaciones de los gastos
+  // ignore: unused_element
   Widget _concepto(String concepto, double totalCosto, double totalSugerido,
       String concepto2, double totalCosto2, double totalSugerido2) {
     return Row(

@@ -1,3 +1,5 @@
+import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/porcentajes_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -18,6 +20,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => new CultivosData() ),
+        ChangeNotifierProvider(create: (context) => new ModeloReferenciaData() ),
+        ChangeNotifierProvider(create: (context) => new PorcentajeData() ),
+
       ],
 
         child: MaterialApp(
