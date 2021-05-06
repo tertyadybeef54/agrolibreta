@@ -1,10 +1,14 @@
+import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UtilidadesPage extends StatelessWidget {
  
 
   @override
   Widget build(BuildContext context) {
+    final modelosReferenciaData = Provider.of<ModeloReferenciaData>(context, listen: false);
+    modelosReferenciaData.obtenerByID();
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('Utilidades')),

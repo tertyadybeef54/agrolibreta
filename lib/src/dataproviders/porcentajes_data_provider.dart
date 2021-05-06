@@ -22,23 +22,35 @@ class PorcentajeData with ChangeNotifier {
   //anade a la lista para mostrar el porcentaje, el concepto y ademas
   //actualiza el valor de la suma del modelo de referencia
   //ya que será valido solo si su campo suma es de 100
-  anadirPorcentaje(PorcentajeModel porcentaje, ConceptoModel concepto) async {
-    final _resp = await _porOper.nuevoPorcentaje(porcentaje);
-    porcentaje.idPorcentaje = _resp;
-    this.porcentajes.add(porcentaje);
+  anadirPorcentaje(int fkMR, double valor,
+      ConceptoModel concepto,) async {
+    final nuevoPor = new PorcentajeModel(
+        fk2idConcepto: concepto.idConcepto.toString(),
+        fk2idModeloReferencia: fkMR.toString(),
+        porcentaje: valor);
+    final _resp = await _porOper.nuevoPorcentaje(nuevoPor);
+    //poner el id de la base de datos al porcentaje que ira a la lista
+    nuevoPor.idPorcentaje = _resp;
+    print('por creado idconcepto:${nuevoPor.fk2idConcepto}, idMR: ${nuevoPor.fk2idModeloReferencia}');
+    //se añaden a la lista correspondiente
+    this.porcentajes.add(nuevoPor);
     this.conceptos.add(concepto);
-    this.suma = this.suma + porcentaje.porcentaje;
+    this.suma = this.suma + valor;
     ModeloReferenciaModel tempModel =
-        new ModeloReferenciaModel(suma: this.suma);
+        new ModeloReferenciaModel(idModeloReferencia: fkMR, suma: this.suma);
+    //se actualiza el modelo de referencia
     _modOper.updateModelosReferencia(tempModel);
+    print('MR actualizado ${tempModel.idModeloReferencia}, suma: ${tempModel.suma} ');
+    
     notifyListeners();
   }
-  reset(){
+
+  reset() {
     this.suma = 0;
     this.conceptos = [];
     this.porcentajes = [];
   }
- 
+
   @override
   void dispose() {
     super.dispose();
