@@ -1,5 +1,4 @@
 import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
-import 'package:agrolibreta_v2/src/modelos/porcentaje_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,10 +11,12 @@ import 'package:agrolibreta_v2/src/dataproviders/porcentajes_data_provider.dart'
 class CrearModeloReferencia extends StatelessWidget {
   //operaciones CRUD porcentajes y conceptos
   final ConceptoOperations conOper = new ConceptoOperations();
-  //listas de solo los valores a mostrar en el listview.buider
+
   double _porcentaje = 0.0; // valor del porcentaje asignado
+
   //variables para crear nuevo concepto
   String _nombreConcepto = ''; //nombre asignado al concepto
+
   ConceptoModel _selectedConcepto; //concepto seleccionado en el dropdown
   callback(selectedConcepto) {
     _selectedConcepto = selectedConcepto;
@@ -24,6 +25,7 @@ class CrearModeloReferencia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final porcentajesData = Provider.of<PorcentajeData>(context);
+
     final porcentajes = porcentajesData.porcentajes;
     final conceptos = porcentajesData.conceptos;
     final suma = porcentajesData.suma;
@@ -76,8 +78,14 @@ class CrearModeloReferencia extends StatelessWidget {
       context: context,
       barrierDismissible: true,
       builder: (context) {
+//providers
+        final modelosReferenciaData =
+            Provider.of<ModeloReferenciaData>(context, listen: false);
+
         final porcentajesData =
             Provider.of<PorcentajeData>(context, listen: false);
+        print('ultimo MR creado: ${modelosReferenciaData.id.toString()}');
+
         return AlertDialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -93,13 +101,9 @@ class CrearModeloReferencia extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                PorcentajeModel porcentaje = new PorcentajeModel(
-                  fk2idConcepto: _selectedConcepto.idConcepto.toString(),
-                  fk2idModeloReferencia: porcentajesData.idModeloReferencia,
-                  porcentaje: _porcentaje,
-                );
-                porcentajesData.anadirPorcentaje(porcentaje, _selectedConcepto);
-                Navigator.pop(context, 'crearModeloReferencia');
+                porcentajesData.anadirPorcentaje(
+                    modelosReferenciaData.id, _porcentaje, _selectedConcepto);
+                Navigator.pop(context);
               },
               child: Text('Guardar'),
             ),
@@ -239,9 +243,14 @@ class CrearModeloReferencia extends StatelessWidget {
           ),
           ElevatedButton(
               onPressed: () {
-                final porcentajesData = Provider.of<PorcentajeData>(context, listen: false);
-                porcentajesData.reset();
+               final porcentajesData =
+                    Provider.of<PorcentajeData>(context, listen: false);                
+                final modData =
                 Provider.of<ModeloReferenciaData>(context, listen: false);
+                modData.nuevoConPorList(porcentajesData.conceptos, porcentajesData.porcentajes);
+ 
+                porcentajesData.reset();
+
                 Navigator.pop(context);
               },
               child: Text('Finalizar')),
