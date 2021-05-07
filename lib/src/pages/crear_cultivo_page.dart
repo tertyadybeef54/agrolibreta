@@ -1,3 +1,4 @@
+import 'package:agrolibreta_v2/src/dataproviders/ubicaciones_data.dart';
 import 'package:agrolibreta_v2/src/widgets/modelo_referencia_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -69,8 +70,6 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
   //variables para crear la ubicacion
   String _nombreUbicacion = 'nn';
   String _desUbicacion = 'nn';
-  int _estadoUbi = 1; //estado ubi activa, por defecto
-  // cuando crea una nueva ubicacion el estado es 1=activo
 
   @override
   Widget build(BuildContext context) {
@@ -120,19 +119,20 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
   //seleccionar modelo de referencia
   Widget _seleccioneMR() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center, 
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-      Icon(Icons.article, color: Colors.black45),
-      SizedBox(width: 30.0),
-      FutureBuilder<List<ModeloReferenciaModel>>(
-        future: modRefOper.consultarModelosReferencia(),
-        builder: (context, snapshot) {
-          return snapshot.hasData
-              ? ModeloReferenciaDropdowun(snapshot.data, callback2)
-              : Text('Usar por defecto');
-        },
-      ),
-    ],);
+        Icon(Icons.article, color: Colors.black45),
+        SizedBox(width: 30.0),
+        FutureBuilder<List<ModeloReferenciaModel>>(
+          future: modRefOper.consultarModelosReferencia(),
+          builder: (context, snapshot) {
+            return snapshot.hasData
+                ? ModeloReferenciaDropdowun(snapshot.data, callback2)
+                : Text('Usar por defecto');
+          },
+        ),
+      ],
+    );
   }
 
   //##############################################################
@@ -175,6 +175,8 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
         context: context,
         barrierDismissible: true,
         builder: (context) {
+          //provider de las ubicaciones para cuando se crea una
+          final ubiData = Provider.of<UbicacionesData>(context, listen: false);
           return AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
@@ -192,14 +194,9 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
             actions: [
               TextButton(
                   onPressed: () {
-                    setState(() {
-                      final ubicacion = new UbicacionModel(
-                        nombreUbicacion: _nombreUbicacion,
-                        descripcion: _desUbicacion,
-                        estado: _estadoUbi,
-                      );
-                      ubicacionesOperations.nuevaUbicacion(ubicacion);
-                    });
+                    ubiData.anadirUbicacion(_nombreUbicacion, _desUbicacion);
+                    /* setState(() {
+                    }); */
                     Navigator.pop(context);
                   },
                   child: Text('Guardar')),

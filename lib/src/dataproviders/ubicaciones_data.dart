@@ -7,14 +7,24 @@ UbicacionesOperations _ubiOper = new UbicacionesOperations();
 
 //provider que cambia el valor del index del botton navigator bar
 class UbicacionesData with ChangeNotifier {
-  List<UbicacionModel> _ubicaciones = [];
+  List<UbicacionModel> ubicaciones = [];
 
   UbicacionesData() {
     this.getUbicaciones();
   }
   getUbicaciones() async {
     final resp = await _ubiOper.consultarUbicaciones();
-    this._ubicaciones.addAll(resp);
+    this.ubicaciones = [...resp];
     notifyListeners();
   }
+
+  anadirUbicacion(String nombre, String descripcion) async {
+    final nuevaUbi = new UbicacionModel(nombreUbicacion: nombre, descripcion: descripcion, estado: 1); //por defecto estado 1 : activo
+    final _id = await _ubiOper.nuevaUbicacion(nuevaUbi);
+    //asignar el id de la base de datos al local
+    nuevaUbi.idUbicacion = _id;
+    this.ubicaciones.add(nuevaUbi);
+    notifyListeners();
+  }
+
 }
