@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:agrolibreta_v2/src/blocs/login_registro_bloc.dart';
+import 'package:agrolibreta_v2/src/providers/usuario_provider.dart';
+import 'package:agrolibreta_v2/src/blocs/provider.dart';
+import 'package:agrolibreta_v2/src/utils/utils.dart';
+
 class LoginPage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +83,17 @@ class Background extends StatelessWidget {
 }
 
 //Front end segunda pagina, creacion del fondo y el formulario para el login
-class Page2 extends StatelessWidget {
+class Page2 extends StatefulWidget {
+
+  @override
+  _Page2State createState() => _Page2State();
+}
+
+class _Page2State extends State<Page2> {
+
+  final usuarioProvider = new UsuarioProvider();
+  bool passwordVisible = true; 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,9 +144,12 @@ class Page2 extends StatelessWidget {
       ],
     );
   }
-//formulario de login, solicita corrreo y contraseña
+
   Widget _loginForm(BuildContext context) {
+
+    final bloc = Provider.of(context);
     final size = MediaQuery.of(context).size;
+    
     return SingleChildScrollView(
         child: Column(
       children: <Widget>[
@@ -142,7 +161,7 @@ class Page2 extends StatelessWidget {
         Container(
             width: size.width * 0.85,
             margin: EdgeInsets.symmetric(vertical: 30.0),
-            padding: EdgeInsets.symmetric(vertical: 30.0),
+            padding: EdgeInsets.only(left: 0.0, right: 0.0, top:30.0, bottom: 0.0),
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5.0),
@@ -156,69 +175,121 @@ class Page2 extends StatelessWidget {
                 ]),
             child: Column(
               children: <Widget>[
-                Text(
-                  'Iniciar Sesión',
-                  style: TextStyle(fontSize: 25.0),
-                ),
+                Text('Iniciar Sesión',style: TextStyle(fontSize: 25.0)),
                 SizedBox(height: 20.0),
-                _crearEmail(),
+                _crearEmail(bloc),
                 SizedBox(height: 30.0),
-                _crearPassword(),
+                _crearPassword(bloc),
                 SizedBox(height: 30.0),
-                _crearBoton(context),
+                _crearBoton(context, bloc),
+                TextButton(
+                  onPressed: (){Navigator.pushNamed(context, 'registrarUsuario');}, 
+                  child: Text('Registrarse', style: TextStyle(fontSize: 18.0))
+                ),
               ],
             )),
-        TextButton(onPressed: (){Navigator.pushNamed(context, 'restaurarPassword');}, child: Text('¿Olvido la contraseña?', style: TextStyle(fontSize: 18.0))),
-        SizedBox(height: 100.0),
+        
+        TextButton(
+          onPressed: (){Navigator.pushNamed(context, 'restaurarPassword');}, 
+          child: Text('¿Olvido la contraseña?', style: TextStyle(fontSize: 18.0))
+        ),
       ],
     ));
   }
-//input del correo
-  Widget _crearEmail() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
-        keyboardType: TextInputType.emailAddress,
-        style: TextStyle(fontSize: 20.0),
-        decoration: InputDecoration(
-          icon: Icon(Icons.email_outlined, color: Colors.brown),
-          hintText: 'ejemplo@correo.com',
-          hintStyle: TextStyle(fontSize: 20.0),
-          labelText: 'Correo electronico',
-          labelStyle: TextStyle(fontSize: 20.0),
-        ),
-      ),
+
+  Widget _crearEmail(LoginRegistroBloc bloc) {
+    
+    return StreamBuilder(
+      stream: bloc.emailStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot){
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: TextField(
+            keyboardType: TextInputType.emailAddress,
+            style: TextStyle(fontSize: 20.0),
+            decoration: InputDecoration(
+              icon: Icon(Icons.email_outlined, color: Colors.brown),
+              hintText: 'ejemplo@correo.com',
+              hintStyle: TextStyle(fontSize: 20.0),
+              labelText: 'Correo electronico',
+              labelStyle: TextStyle(fontSize: 20.0),
+              counterText: snapshot.data,
+              errorText: snapshot.error,
+            ),
+            onChanged: (value) => bloc.changeEmail(value),
+          ),
+        );
+      }
     );
   }
-//input del password
-  Widget _crearPassword() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
-        obscureText: true,
-        style: TextStyle(fontSize: 20.0),
-        decoration: InputDecoration(
-          icon: Icon(Icons.lock_outline, color: Colors.brown),
-          labelText: 'Contraseña',
-          labelStyle: TextStyle(fontSize: 20.0),
-        ),
-      ),
-    );
-  }
-//boton de ingrsar
-  Widget _crearBoton(BuildContext context) {
-    return ElevatedButton(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
-        child: Text(
-          'Ingresar',
-          style: TextStyle(fontSize: 20.0),
-        ),
-      ),
-      onPressed: () {
-        Navigator.pushReplacementNamed(context, 'taps');
+
+  Widget _crearPassword(LoginRegistroBloc bloc){
+
+    return StreamBuilder(
+      stream: bloc.passwordStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot){
+
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: TextField(
+            obscureText: passwordVisible,
+            style: TextStyle(fontSize: 20.0),
+            decoration: InputDecoration(
+              icon: Icon(Icons.lock_outline, color: Colors.brown),
+              labelText: 'Contraseña',
+              labelStyle: TextStyle(fontSize: 20.0),
+              counterText: snapshot.data,
+              errorText: snapshot.error,
+              suffixIcon: IconButton(
+                icon: Icon(passwordVisible ? Icons.visibility_off : Icons.visibility), 
+                onPressed: (){
+                  setState(() {
+                    passwordVisible = !passwordVisible;
+                    print(passwordVisible);
+                  });
+                }
+              )
+            ),
+            onChanged: bloc.changePassword,
+            
+          ),
+        );
       },
-      style: ElevatedButton.styleFrom(primary: Colors.brown),
     );
+  }
+
+  Widget _crearBoton(BuildContext context, LoginRegistroBloc bloc) {
+
+    return StreamBuilder(
+      stream: bloc.formValidStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot){
+        
+        return ElevatedButton(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
+            child: Text(
+              'Ingresar',
+              style: TextStyle(fontSize: 20.0),
+            ),
+          ),
+          onPressed: snapshot.hasData? () =>_login(context, bloc) : null,
+          style: ElevatedButton.styleFrom(primary: Colors.brown),
+        );
+      }
+    );
+    
+  }
+
+  _login(BuildContext context, LoginRegistroBloc bloc)async{
+
+    Map info = await usuarioProvider.login(bloc.email, bloc.password);
+    
+    if(info['ok']){
+      Navigator.pushReplacementNamed(context, 'taps'); 
+    }else{
+      mostrarAlerta(context, info['mensaje']);
+    }
+    print('Email: ${ bloc.email }');
+    print('Password: ${ bloc.password }');
   }
 }
