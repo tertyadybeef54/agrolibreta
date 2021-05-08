@@ -1,35 +1,103 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ModeloReferenciaList extends StatelessWidget {
+import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
+import 'package:agrolibreta_v2/src/modelos/porcentaje_model.dart';
+import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
 
-  const ModeloReferenciaList();
+import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
 
-   @override
+class ModeloReferenciaList extends StatefulWidget {
+  @override
+  _ModeloReferenciaListState createState() => _ModeloReferenciaListState();
+}
+
+class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
+  @override
   Widget build(BuildContext context) {
-    
+    final modelosReferenciaData =
+        Provider.of<ModeloReferenciaData>(context, listen: false);
+
+    final List<ModeloReferenciaModel> modelosReferencia =
+        modelosReferenciaData.modelosReferencia;
+    final List<List<PorcentajeModel>> porcentajesList =
+        modelosReferenciaData.porcentajesList;
+    final List<List<ConceptoModel>> conceptosList =
+        modelosReferenciaData.conceptosList;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('modelosReferencia'),
+        automaticallyImplyLeading: false,
+        title: Center(child: Text('Modelos de Referencia')),
       ),
-      body: _ubicacionTiles(context),
+      body: Stack(
+        children: [
+          _modeloReferenciaTiles(
+              context, modelosReferencia, porcentajesList, conceptosList),
+          _refrescar(context),
+        ],
+      ),
+      floatingActionButton: _crearMR(context),
     );
   }
-  Widget _ubicacionTiles(BuildContext context){
-    final modelosReferencia = [1, 2, 3];
+
+  Widget _modeloReferenciaTiles(
+      BuildContext context,
+      List<ModeloReferenciaModel> modelosReferencia,
+      List<List<PorcentajeModel>> porcentajesList,
+      List<List<ConceptoModel>> conceptosList) {
     return ListView.builder(
       itemCount: modelosReferencia.length,
-      itemBuilder: (_, i) => Dismissible(
-        key: UniqueKey(),
-        background: Container(
-          color: Colors.red,
+      itemBuilder: (_, i) => _listTile(modelosReferencia[i].idModeloReferencia,
+          porcentajesList[i], conceptosList[i]),
+    );
+  }
+
+  Widget _listTile(
+      int i, List<PorcentajeModel> porcentajes, List<ConceptoModel> conceptos) {
+    List<Widget> por = [];
+    por.add(Text('$i'));
+    if (porcentajes.length != 0) {
+      for (int i = 0; i < porcentajes.length; i++) {
+        final textTemp = Text(
+            '${conceptos[i].nombreConcepto}: ${porcentajes[i].porcentaje} %');
+        por.add(textTemp);
+      }
+    }
+    por.add(Divider());
+    return Column(
+      children: por,
+    );
+  }
+
+  Widget _crearMR(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      onPressed: () {
+        final modelosReferenciaData =
+            Provider.of<ModeloReferenciaData>(context, listen: false);
+        modelosReferenciaData.anadirModeloReferencia(0);
+        Navigator.pushNamed(context, 'crearModeloReferencia');
+      },
+    );
+  }
+
+  Widget _refrescar(BuildContext context) {
+    return Positioned(
+      top: 10.0,
+      right: 10.0,
+      child: Ink(
+        decoration: const ShapeDecoration(
+          color: Colors.lightBlue,
+          shape: CircleBorder(),
         ),
-        child: ListTile(
-          leading: Icon(
-            Icons.home_outlined,
-            color: Theme.of(context).primaryColor),
-          title: Text('1'),
-          subtitle: Text('1'),
-          onTap: () {},
+        child: IconButton(
+          icon: const Icon(Icons.refresh),
+          color: Colors.white,
+          onPressed: () {
+            setState(() {
+            });
+          },
         ),
       ),
     );

@@ -1,23 +1,23 @@
 import 'dart:ui';
 
+import 'package:agrolibreta_v2/src/data/costo_operations.dart';
 import 'package:flutter/material.dart';
 
 class ResumencostosPage extends StatelessWidget {
+/*   final int idCultivo;
+  ResumencostosPage({Key key, this.idCultivo}) : super(key: key); */
+
   final String _nombreCul = '        Arveja de abril';
   final List<String> _conceptos = [
     'semilla',
     'insumos',
     'otros',
   ];
-  final List<String> _conceptos2 = ['mano de obra', 'transporte', 'alguno'];
-  final List<double> _sumas = [100, 200, 300];
-  final List<double> _sumas2 = [300, 100, 100];
-  final List<double> _sugeridos = [110, 205, 400];
-  final List<double> _sugeridos2 = [400, 90, 100];
-
+  final CostoOperations cosOper = new CostoOperations();
   @override
   Widget build(BuildContext context) {
-    //final double mitad = MediaQuery.of(context).size.width / 2;
+    final idCultivo = ModalRoute.of(context).settings.arguments;
+    cosOper.sumaCostosByConcepto(idCultivo, '1');
     return Scaffold(
       appBar: _appBar(context),
       body: Stack(
@@ -27,13 +27,14 @@ class ResumencostosPage extends StatelessWidget {
                 EdgeInsets.only(left: 0.0, right: 0.0, top: 30.0, bottom: 20.0),
             itemCount: _conceptos.length,
             itemBuilder: (context, index) {
-              return _concepto(
+              return Text(idCultivo.toString());
+              /* _concepto(
                   _conceptos[index],
                   _sumas[index],
                   _sugeridos[index],
                   _conceptos2[index],
                   _sumas2[index],
-                  _sugeridos2[index]);
+                  _sugeridos2[index]); */
             },
           ),
         ],
@@ -50,20 +51,22 @@ class ResumencostosPage extends StatelessWidget {
       title: Center(
         child: Text(_nombreCul),
       ),
-        actions: <Widget>[
-          IconButton(
-            iconSize: 40.0,
-            icon: new Icon(Icons.settings),
-            onPressed: () => Navigator.pushNamed(context, 'configCultivo'),
-          ),
-        ],
+      actions: <Widget>[
+        IconButton(
+          iconSize: 40.0,
+          icon: new Icon(Icons.settings),
+          onPressed: () => Navigator.pushNamed(context, 'configCultivo'),
+        ),
+      ],
     );
   }
 
 //Metodo para crar cada uno de las cuatro clasificaciones de los gastos
+  // ignore: unused_element
   Widget _concepto(String concepto, double totalCosto, double totalSugerido,
       String concepto2, double totalCosto2, double totalSugerido2) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ClipRect(
           child: Container(

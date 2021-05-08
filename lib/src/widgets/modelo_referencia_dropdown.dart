@@ -5,13 +5,11 @@ import 'package:flutter/material.dart';
 // ignore: must_be_immutable
 class ModeloReferenciaDropdowun extends StatefulWidget {
   List<ModeloReferenciaModel> modelosReferencia;
-  int control;
 
-  Function(ModeloReferenciaModel, int) callback;
+  Function(ModeloReferenciaModel) callback;
 
   ModeloReferenciaDropdowun(
     this.modelosReferencia,
-    this.control,
     this.callback, {
     Key key,
   }) : super(key: key);
@@ -28,7 +26,7 @@ class _ModeloReferenciaDropdownState extends State<ModeloReferenciaDropdowun> {
       hint: Text(selected),
       onChanged: (ModeloReferenciaModel value) {
         setState(() {
-          widget.callback(value, 0);
+          widget.callback(value);
           selected = value.idModeloReferencia.toString();
         });
       },

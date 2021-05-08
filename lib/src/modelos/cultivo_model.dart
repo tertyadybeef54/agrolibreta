@@ -29,11 +29,11 @@ class CultivoModel {
     int fkidModeloReferencia;
     int fkidProductoAgricola;
     String nombreDistintivo;
-    int areaSembrada;
+    double areaSembrada;
     String fechaInicio;
     String fechaFinal;
     int presupuesto;
-    int precioVentaIdeal;
+    double precioVentaIdeal;
 
     factory CultivoModel.fromJson(Map<String, dynamic> json) => CultivoModel(
         idCultivo: json["idCultivo"],

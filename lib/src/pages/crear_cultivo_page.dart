@@ -1,14 +1,24 @@
-import 'package:agrolibreta_v2/src/data/estados_operations.dart';
-import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
-import 'package:agrolibreta_v2/src/data/producto_agricola_operations.dart';
-import 'package:agrolibreta_v2/src/widgets/ubicaciones_dropdown.dart';
+import 'package:agrolibreta_v2/src/dataproviders/ubicaciones_data.dart';
+import 'package:agrolibreta_v2/src/widgets/modelo_referencia_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
-import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
+//import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
+import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
-import 'package:agrolibreta_v2/src/providers/db_provider.dart';
+import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
+//import 'package:agrolibreta_v2/src/modelos/producto_agricola_model.dart';
+
+import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
+import 'package:agrolibreta_v2/src/data/estados_operations.dart';
+import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
+import 'package:agrolibreta_v2/src/data/producto_agricola_operations.dart';
+import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
+
+import 'package:agrolibreta_v2/src/widgets/ubicaciones_dropdown.dart';
+import 'package:provider/provider.dart';
+
+import 'package:agrolibreta_v2/src/dataproviders/cultivos_data.dart';
 
 class CrearCultivoPage extends StatefulWidget {
   @override
@@ -16,6 +26,8 @@ class CrearCultivoPage extends StatefulWidget {
 }
 
 class _CrearCultivoPageState extends State<CrearCultivoPage> {
+  ModelosReferenciaOperations modRefOper = new ModelosReferenciaOperations();
+  CultivoOperations operacionCultivo = new CultivoOperations();
   UbicacionesOperations ubicacionesOperations = new UbicacionesOperations();
   EstadosOperations estadosOperations = new EstadosOperations();
   ModelosReferenciaOperations modelosReferenciaOperations =
@@ -30,6 +42,14 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
     });
   }
 
+  ModeloReferenciaModel
+      _selectedModeloReferencia; //modeloreferencia seleccionado en el dropdown
+  callback2(selectedModeloReferencia) {
+    setState(() {
+      _selectedModeloReferencia = selectedModeloReferencia;
+    });
+  }
+
   //estilo de texto letra tamaño 20
   final _style = new TextStyle(
     fontSize: 20.0,
@@ -38,20 +58,18 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
 
   //variables por defecto al crear un registro de cultivo
   int _idEstado = 1; // activo por defecto.
-  int _idModeloReferencia = 1; // modelo por defecto.
   int _idProductoAgricola = 1; // arveja por defecto
-  //valores que ingresa el usuario
-  String _nombreDistintivo = 'a';
-  int _areaSembrada = 1;
-  String _fechaInicio = 'a';
-  String fechaFinal = 'a';
+  //valores para crear el cultivo, el id es automatico
+  String _nombreDistintivo = 'nn'; //nn sin especificar
+  double _areaSembrada = 1;
+  String _fechaInicio = 'nn';
+  // ignore: unused_field
+  String _fechaFinal = 'nn';
   int _presupuesto = 1;
-  int _precioVentaIdeal = 1;
+  double _precioVentaIdeal = 1;
   //variables para crear la ubicacion
-  String _desUbicacion = 'a';
-  String _nombreUbicacion = 'a';
-  int _estadoUbi = 1; //activa por defecto
-  // cuando crea una nueva ubicacion el estado es 1=activo
+  String _nombreUbicacion = 'nn';
+  String _desUbicacion = 'nn';
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +87,12 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
         padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 5.0),
         children: [
           SizedBox(height: 20.0),
+          Text(
+            'Seleccione el modelo de referencia: ',
+            style: _style,
+          ),
+          _seleccioneMR(),
+          Divider(),
           Text(
             'Seleccione la ubicacion para el cultivo: ',
             style: _style,
@@ -92,10 +116,28 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
     );
   }
 
+  //seleccionar modelo de referencia
+  Widget _seleccioneMR() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.article, color: Colors.black45),
+        SizedBox(width: 30.0),
+        FutureBuilder<List<ModeloReferenciaModel>>(
+          future: modRefOper.consultarModelosReferencia(),
+          builder: (context, snapshot) {
+            return snapshot.hasData
+                ? ModeloReferenciaDropdowun(snapshot.data, callback2)
+                : Text('Usar por defecto');
+          },
+        ),
+      ],
+    );
+  }
+
   //##############################################################
   //Seleccionar la ubicacion para el cultivo
   Widget _seleccionarUbicacionCultivo() {
-    //DBProvider.db.database;
     return Row(
       children: [
         Icon(Icons.add_location),
@@ -126,12 +168,15 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       ],
     );
   }
+
   // dialogo para registrar una nueva ubicacion
   void _registrarUbicacion(BuildContext context) {
     showDialog(
         context: context,
         barrierDismissible: true,
         builder: (context) {
+          //provider de las ubicaciones para cuando se crea una
+          final ubiData = Provider.of<UbicacionesData>(context, listen: false);
           return AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
@@ -139,29 +184,27 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _inputI('', 'llanito', 'Nombre de la ubicacion', TextInputType.name, 4),
+                _inputI('', 'llanito', 'Nombre de la ubicacion',
+                    TextInputType.name, 4),
                 Divider(),
-                _inputI('', 'llanito del norte', 'Descripcion', TextInputType.text, 5),
+                _inputI('', 'llanito del norte', 'Descripcion',
+                    TextInputType.text, 5),
               ],
             ),
             actions: [
               TextButton(
                   onPressed: () {
-                    setState(() {
-                      final ubicacion = new UbicacionModel(
-                        nombreUbicacion: _nombreUbicacion,
-                        descripcion: _desUbicacion,
-                        estado: _estadoUbi,
-                      );
-                      ubicacionesOperations.nuevaUbicacion(ubicacion);
-                    });
-                    Navigator.pushReplacementNamed(context, 'crearCultivo');
+                    ubiData.anadirUbicacion(_nombreUbicacion, _desUbicacion);
+                    /* setState(() {
+                    }); */
+                    Navigator.pop(context);
                   },
                   child: Text('Guardar')),
             ],
           );
         });
   }
+
   // ingresar 4. nombre ubicacion 5. descripcion ubicacion
   Widget _inputI(String descripcion, String hilabel, String labeltext,
       TextInputType tipotext, int n) {
@@ -192,7 +235,8 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       ),
     );
   }
-    // ingresar el 1.nombre distintivo, 2.area sembrada 3.presupuesto. descripcion ubicacion
+
+  // ingresar el 1.nombre distintivo, 2.area sembrada 3.presupuesto. descripcion ubicacion
   // Se debe agregar condicion de solo enteros para 2 y 3
   Widget _input(String descripcion, String hilabel, String labeltext,
       TextInputType tipotext, int n) {
@@ -216,7 +260,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
               _nombreDistintivo = valor;
             }
             if (n == 2) {
-              _areaSembrada = int.parse(valor);
+              _areaSembrada = double.parse(valor);
             }
             if (n == 3) {
               _presupuesto = int.parse(valor);
@@ -226,8 +270,6 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       ),
     );
   }
-
-
 
   // fecha
   Widget _fecha(BuildContext context) {
@@ -255,18 +297,18 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
 
   _selectDate(BuildContext context) async {
     //------------------------ para pruebas
-    final ModeloReferenciaModel modeloReferencia = new ModeloReferenciaModel(
-      suma: 100,
-    );
-    final EstadoModel estado = new EstadoModel(
-      nombreEstado: 'activo',
-    );
-    final productoagricola = new ProductoAgricolaModel(
-      nombreProducto: 'arveja',
-    );
-    modelosReferenciaOperations.nuevoModeloReferencia(modeloReferencia);
-    estadosOperations.nuevoEstado(estado);
-    productoAgricolaOperations.nuevoProductoAgricola(productoagricola);
+    // final ModeloReferenciaModel modeloReferencia = new ModeloReferenciaModel(
+    //   suma: 0,
+    // );
+    // final EstadoModel estado = new EstadoModel(
+    //   nombreEstado: 'activo',
+    // );
+    // final productoagricola = new ProductoAgricolaModel(
+    //   nombreProducto: 'arveja',
+    // );
+    // modelosReferenciaOperations.nuevoModeloReferencia(modeloReferencia);
+    // estadosOperations.nuevoEstado(estado);
+    // productoAgricolaOperations.nuevoProductoAgricola(productoagricola);
 
     //---------------------------
 
@@ -291,30 +333,30 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       child: Column(
         children: [
           ElevatedButton(
-                onPressed: () => _save(context), child: Text('Guardar')),
+              child: Text('Guardar'),
+              onPressed: () {
+                _save(context);
+                Navigator.pop(context);
+              }),
         ],
       ),
     );
   }
 
   void _save(BuildContext context) {
+    final cultivosData = Provider.of<CultivosData>(context, listen: false);
     final cultivoTemp = new CultivoModel(
       fkidUbicacion: _selectedUbicacion.idUbicacion,
       fkidEstado: _idEstado,
-      fkidModeloReferencia: _idModeloReferencia,
+      fkidModeloReferencia: _selectedModeloReferencia.idModeloReferencia,
       fkidProductoAgricola: _idProductoAgricola,
       nombreDistintivo: _nombreDistintivo,
       areaSembrada: _areaSembrada,
       fechaInicio: _fechaInicio,
-      fechaFinal: _fechaInicio,
+      fechaFinal: _fechaFinal,
       presupuesto: _presupuesto,
       precioVentaIdeal: _precioVentaIdeal,
     );
-    CultivoOperations operacionCultivo = new CultivoOperations();
-    operacionCultivo.nuevoCultivo(cultivoTemp);
+    cultivosData.anadirCultivo(cultivoTemp);
   }
-
-  
-  
-
 }

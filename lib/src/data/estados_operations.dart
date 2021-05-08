@@ -1,3 +1,4 @@
+import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
 import 'package:agrolibreta_v2/src/providers/db_provider.dart';
 
 class EstadosOperations {
@@ -10,6 +11,7 @@ class EstadosOperations {
     final db = await dbProvider.database;
     final res = await db.insert('EstadosCultivo', nuevoEstado.toJson());
     // Es el ID del último registro insertado;
+    print('est');
     print(res);
     return res;
   }
@@ -28,7 +30,7 @@ class EstadosOperations {
   Future<int> updateEstados(EstadoModel nuevoEstado) async {
     final db = await dbProvider.database;
     final res = await db.update('EstadosCultivo', nuevoEstado.toJson(),
-        where: 'id = ?', whereArgs: [nuevoEstado.idEstado]);
+        where: 'idEstadoCultivo = ?', whereArgs: [nuevoEstado.idEstado]);
     return res;
   }
 

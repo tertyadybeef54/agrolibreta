@@ -1,3 +1,5 @@
+import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
+export 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
 import 'package:agrolibreta_v2/src/providers/db_provider.dart';
 
 //CRUD PARA Ubicacaciones
@@ -13,6 +15,7 @@ class ModelosReferenciaOperations {
     final res =
         await db.insert('ModelosReferencia', nuevoModeloReferencia.toJson());
     // Es el ID del último registro insertado;
+    print('MR');
     print(res);
     return res;
   }
@@ -33,7 +36,7 @@ class ModelosReferenciaOperations {
     final db = await dbProvider.database;
     final res = await db.update(
         'ModelosReferencia', nuevoModeloReferencia.toJson(),
-        where: 'id = ?', whereArgs: [nuevoModeloReferencia.idModeloReferencia]);
+        where: 'idModeloReferencia = ?', whereArgs: [nuevoModeloReferencia.idModeloReferencia]);
     return res;
   }
 

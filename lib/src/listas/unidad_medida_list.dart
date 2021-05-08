@@ -1,4 +1,7 @@
+import 'package:agrolibreta_v2/src/dataproviders/unidades_medida_data_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:agrolibreta_v2/src/modelos/unidad_medida_model.dart';
+import 'package:provider/provider.dart';
 
 class UnidadMedidaList extends StatelessWidget {
 
@@ -6,32 +9,37 @@ class UnidadMedidaList extends StatelessWidget {
 
  @override
   Widget build(BuildContext context) {
-    
+    //provider de las unidades de medida
+    final unidadMedidaData =
+        Provider.of<UnidadesMedidaData>(context, listen: false);
+    final List<UnidadMedidaModel> unidadesMedida =
+        unidadMedidaData.unidadesMedida; //lista de ubicaciones
+
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('unidadesMedida'),
+        automaticallyImplyLeading: false,
+        title: Center(child: Text('Unidades de Medida')),
       ),
-      body: _ubicacionTiles(context),
+      body: _unidadesMedidaTiles(unidadesMedida),
     );
   }
-  Widget _ubicacionTiles(BuildContext context){
-    final unidadesMedida = [1, 2, 3];
+  Widget _unidadesMedidaTiles(List<UnidadMedidaModel> unidadesMedida){
     return ListView.builder(
       itemCount: unidadesMedida.length,
-      itemBuilder: (_, i) => Dismissible(
-        key: UniqueKey(),
-        background: Container(
-          color: Colors.red,
-        ),
-        child: ListTile(
-          leading: Icon(
-            Icons.home_outlined,
-            color: Theme.of(context).primaryColor),
-          title: Text('1'),
-          subtitle: Text('1'),
-          onTap: () {},
-        ),
-      ),
+      itemBuilder: (_, i) => _listTile(unidadesMedida[i]),
     );
+  }
+  Widget _listTile(UnidadMedidaModel unidadMedida)  {
+      return Column(
+        children: [
+          ListTile(
+          title: Text('${unidadMedida.idUnidadMedida.toString()}. ${unidadMedida.nombreUnidadMedida}'),
+          subtitle: Text('${unidadMedida.descripcion}'),
+             //onTap: () {},
+           ),
+          Divider(),
+        ],
+      );
   }
 }

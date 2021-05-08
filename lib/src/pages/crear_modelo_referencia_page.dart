@@ -1,65 +1,66 @@
-import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
-import 'package:agrolibreta_v2/src/data/porcentaje_operations.dart';
-import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
-import 'package:agrolibreta_v2/src/modelos/porcentaje_model.dart';
-import 'package:agrolibreta_v2/src/widgets/concepto_dropdown.dart';
-//import 'package:agrolibreta_v2/src/modelos/porcentaje_model.dart';
+import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class CrearModeloReferencia extends StatefulWidget {
-  CrearModeloReferencia({Key key}) : super(key: key);
+import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
+import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
+import 'package:agrolibreta_v2/src/widgets/concepto_dropdown.dart';
+import 'package:agrolibreta_v2/src/dataproviders/porcentajes_data_provider.dart';
 
-  @override
-  _CrearModeloReferenciaState createState() => _CrearModeloReferenciaState();
-}
-
-class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
+// ignore: must_be_immutable
+class CrearModeloReferencia extends StatelessWidget {
   //operaciones CRUD porcentajes y conceptos
-  PorcentajeOperations porOper = new PorcentajeOperations();
-  ConceptoOperations conOper = new ConceptoOperations();
-  //listas de solo los valores a mostrar en el listview.buider
-  List conceptos = [];
-  List valores = [];
+  final ConceptoOperations conOper = new ConceptoOperations();
 
-  List<PorcentajeModel> porcentajes =
-      []; //listado de porcentajes de ese nuevo modeloreferencia
   double _porcentaje = 0.0; // valor del porcentaje asignado
-  double _resto = 100; //total restante disponible del 100 %
-  double _suma = 0; //suma de todos los valores de los porcentajes creados
-  int _idModeloReferencia = 1;
+
   //variables para crear nuevo concepto
   String _nombreConcepto = ''; //nombre asignado al concepto
+
   ConceptoModel _selectedConcepto; //concepto seleccionado en el dropdown
   callback(selectedConcepto) {
-    setState(() {
-      _selectedConcepto = selectedConcepto;
-    });
+    _selectedConcepto = selectedConcepto;
   }
 
   @override
   Widget build(BuildContext context) {
+    final porcentajesData = Provider.of<PorcentajeData>(context);
+
+    final porcentajes = porcentajesData.porcentajes;
+    final conceptos = porcentajesData.conceptos;
+    final suma = porcentajesData.suma;
+
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Nuevo modelo de referencia')),
+        automaticallyImplyLeading: false,
+        title: Center(
+          child: Column(
+            children: [
+              Text('Nuevo modelo de referencia'),
+              Text('Cree sus porcentajes'),
+            ],
+          ),
+        ),
       ),
       body: Stack(
         children: [
           ListView.builder(
             padding: EdgeInsets.only(
                 left: 30.0, right: 30.0, top: 20.0, bottom: 90.0),
-            itemCount: valores.length,
+            itemCount: porcentajes.length,
             itemBuilder: (context, index) {
               return Card(
                 child: ListTile(
                   leading: Icon(Icons.grass_rounded),
-                  onTap: () {},
-                  title: Text('${conceptos[index]}:  ${valores[index]} %'),
-                  trailing: Icon(Icons.keyboard_arrow_right),
+                  onTap: () {}, //aca se pondra funcion para editar
+                  title: Text(
+                      '${conceptos[index].nombreConcepto}: ${porcentajes[index].porcentaje} %'),
+                  trailing: Icon(Icons.edit),
                 ),
               );
             },
           ),
-          _sumaBoton(),
+          _sumaBoton(context, suma),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -74,60 +75,49 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
 //Registrar un nuevo porcentaje
   void _crearItem(BuildContext context) {
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Registrar Porcentaje'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _seleccioneConcepto(),
-                Divider(),
-                _input('Volor del porcentaje', '10', '', TextInputType.number),
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () async {
-                    final nuevoPorcentaje = new PorcentajeModel(
-                        fk2idModeloReferencia: _idModeloReferencia,
-                        fk2idConcepto: _selectedConcepto.idConcepto,
-                        porcentaje: _porcentaje);
-                    await porOper.nuevoPorcentaje(nuevoPorcentaje);
-                    porcentajes =
-                        await porOper.consultarPorcentajesbyModeloReferencia(
-                            _idModeloReferencia.toString());
-                    _suma = 0;
-                    conceptos = [];
-                    valores = [];
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+//providers
+        final modelosReferenciaData =
+            Provider.of<ModeloReferenciaData>(context, listen: false);
 
-                    porcentajes.forEach((porcentaje) async {
-                      _suma = _suma + porcentaje.porcentaje;
-                      final ConceptoModel _concepTemp = await conOper
-                          .getConceptoById(porcentaje.fk2idConcepto);
-                      valores.add(porcentaje.porcentaje);
-                      conceptos.add(_concepTemp.nombreConcepto);
-                      setState(() {});
-                      _resto = 100 - _suma;
-                    });
-                    Navigator.pop(context, 'crearModeloReferencia');
-                  },
-                  child: Text('Guardar')),
+        final porcentajesData =
+            Provider.of<PorcentajeData>(context, listen: false);
+        print('ultimo MR creado: ${modelosReferenciaData.id.toString()}');
+
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          title: Text('Registrar Porcentaje'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _seleccioneConcepto(context),
+              Divider(),
+              _input('Valor del porcentaje', '10', '', TextInputType.number),
             ],
-          );
-        });
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                porcentajesData.anadirPorcentaje(
+                    modelosReferenciaData.id, _porcentaje, _selectedConcepto);
+                Navigator.pop(context);
+              },
+              child: Text('Guardar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   //##########################################
   //dropdown para seleccionar un concepto ya creado
-  Widget _seleccioneConcepto() {
+  Widget _seleccioneConcepto(BuildContext context) {
     return Row(
       children: [
-        Icon(Icons.list_alt, color: Colors.black45),
-        SizedBox(width: 30.0),
         FutureBuilder<List<ConceptoModel>>(
           future: conOper.consultarConceptos(),
           builder: (context, snapshot) {
@@ -179,13 +169,13 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
                       nombreConcepto: _nombreConcepto,
                     );
                     await conOper.nuevoConcepto(nuevoConcepto);
-                    setState(() {});
-                    Navigator.pushNamed(context, 'crearModeloReferencia');
+
+                    Navigator.pop(context, 'crearModeloReferencia');
                   },
                   child: Text('Guardar')),
             ],
           );
-        });
+        }).then((value) => Navigator.pop(context));
   }
 
   Widget _inputNombre(String descripcion, String hilabel, String labeltext,
@@ -208,9 +198,7 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
         textCapitalization: TextCapitalization.sentences,
         decoration: inputDecoration,
         onChanged: (valor) {
-          setState(() {
-            _nombreConcepto = valor;
-          });
+          _nombreConcepto = valor;
         },
       ),
     );
@@ -237,25 +225,35 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
         textCapitalization: TextCapitalization.sentences,
         decoration: inputDecoration,
         onChanged: (valor) {
-          setState(() {
-            _porcentaje = double.parse(valor);
-          });
+          _porcentaje = double.parse(valor);
         },
       ),
     );
   }
 
   // widges que muestra la suma restante y el boton
-  Widget _sumaBoton() {
+  Widget _sumaBoton(BuildContext context, double suma) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Text('suma restante: $_resto %'),
+          Text('debe ser 100 y lleva: ${suma.toString()} %'),
           SizedBox(
             height: 10.0,
           ),
-          ElevatedButton(onPressed: () {}, child: Text('Finalizar')),
+          ElevatedButton(
+              onPressed: () {
+               final porcentajesData =
+                    Provider.of<PorcentajeData>(context, listen: false);                
+                final modData =
+                Provider.of<ModeloReferenciaData>(context, listen: false);
+                modData.nuevoConPorList(porcentajesData.conceptos, porcentajesData.porcentajes);
+ 
+                porcentajesData.reset();
+
+                Navigator.pop(context);
+              },
+              child: Text('Finalizar')),
           SizedBox(
             height: 30.0,
           )

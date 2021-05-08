@@ -1,3 +1,6 @@
+import 'package:agrolibreta_v2/src/dataproviders/cultivos_data.dart';
+import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/porcentajes_data_provider.dart';
 import 'package:agrolibreta_v2/src/pages/costos_page.dart';
 import 'package:agrolibreta_v2/src/pages/galeria_registros_fotograficos_page.dart';
 import 'package:agrolibreta_v2/src/pages/home_page.dart';
@@ -19,7 +22,6 @@ class TapsPage extends StatelessWidget {
   }
 }
 
-
 class _Navegacion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -40,13 +42,18 @@ class _Navegacion extends StatelessWidget {
         onTap: (index) => navegacionModel.paginaActual = index);
   }
 }
+
 class _Paginas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navegacionModel = Provider.of<_NavegacionModel>(context);
+    Provider.of<CultivosData>(context, listen: false);
+    Provider.of<PorcentajeData>(context, listen: false);
+    Provider.of<ModeloReferenciaData>(context, listen: false);
+    //modelosReferenciaData.obtenerByID();
     return PageView(
       controller: navegacionModel.pageController,
-      physics: BouncingScrollPhysics(),
+      physics: NeverScrollableScrollPhysics(),
       children: <Widget>[
         HomePage(),
         UtilidadesPage(),
@@ -58,7 +65,6 @@ class _Paginas extends StatelessWidget {
   }
 }
 
-
 //provider que cambia el valor del index del botton navigator bar
 class _NavegacionModel with ChangeNotifier {
   int _paginaActual = 0;
@@ -69,7 +75,7 @@ class _NavegacionModel with ChangeNotifier {
     this._paginaActual = valor;
     notifyListeners();
     _pageController.animateToPage(valor,
-        duration: Duration(milliseconds: 250), curve: Curves.easeInOut);
+        duration: Duration(milliseconds: 700), curve: Curves.easeInOutCirc);
   }
 
   PageController get pageController => _pageController;
