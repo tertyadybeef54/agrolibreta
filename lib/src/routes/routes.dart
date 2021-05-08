@@ -1,5 +1,3 @@
-import 'package:agrolibreta_v2/src/pages/ver_modelo_referencia.dart';
-import 'package:agrolibreta_v2/src/widgets/barraNavegacion.dart';
 import 'package:flutter/material.dart';
 
 import 'package:agrolibreta_v2/src/pages/home_page.dart';
@@ -19,6 +17,9 @@ import 'package:agrolibreta_v2/src/pages/galeria_registros_fotograficos_page.dar
 import 'package:agrolibreta_v2/src/pages/nuevo_registro_fotografico_page.dart';
 import 'package:agrolibreta_v2/src/pages/detalle_registro_fotografico_page.dart';
 import 'package:agrolibreta_v2/src/pages/restaurar_password.dart';
+import 'package:agrolibreta_v2/src/pages/ver_modelo_referencia.dart';
+import 'package:agrolibreta_v2/src/widgets/barraNavegacion.dart';
+import 'package:agrolibreta_v2/src/pages/registrar_usuario_page.dart';
 
 Map<String, WidgetBuilder> getAplicationRoutes() {
   return <String, WidgetBuilder>{
@@ -45,5 +46,6 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
         DetalleRegistroFotograficoPage(),
     'restaurarPassword': (BuildContext context) => RestaurarPassword(),
     'verModelo': (BuildContext context) => VerModeloReferencia(),
+    'registrarUsuario' : (BuildContext context) => RegistrarUsuario(),
   };
 }
