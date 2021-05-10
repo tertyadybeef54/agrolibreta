@@ -195,8 +195,8 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
               TextButton(
                   onPressed: () {
                     ubiData.anadirUbicacion(_nombreUbicacion, _desUbicacion);
-                    /* setState(() {
-                    }); */
+                     setState(() {
+                    });
                     Navigator.pop(context);
                   },
                   child: Text('Guardar')),

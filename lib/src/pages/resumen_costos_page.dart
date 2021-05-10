@@ -1,40 +1,46 @@
-import 'dart:ui';
-
-import 'package:agrolibreta_v2/src/data/costo_operations.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 
 class ResumencostosPage extends StatelessWidget {
-/*   final int idCultivo;
-  ResumencostosPage({Key key, this.idCultivo}) : super(key: key); */
-
-  final String _nombreCul = '        Arveja de abril';
-  final List<String> _conceptos = [
-    'semilla',
-    'insumos',
-    'otros',
-  ];
-  final CostoOperations cosOper = new CostoOperations();
   @override
   Widget build(BuildContext context) {
-    final idCultivo = ModalRoute.of(context).settings.arguments;
-    cosOper.sumaCostosByConcepto(idCultivo, '1');
+    final String nombreCul = ModalRoute.of(context).settings.arguments;
+    final cosData = Provider.of<CostosData>(context, listen: false);
+
+    final _cultivos = cosData.cultivos;
+    final _sumasAll = cosData.sumasList;
+    final _conceptosAll = cosData.conceptosList;
+
+    _cultivos.forEach((element) {
+      print(element.idCultivo);
+    });
+    _sumasAll.forEach((element) {
+      print(element.toString());
+    });
+    _conceptosAll.forEach((element) {
+      element.forEach((e) {
+        print(e.nombreConcepto);
+      });
+    });
+
     return Scaffold(
-      appBar: _appBar(context),
+      appBar: _appBar(context, nombreCul),
       body: Stack(
         children: <Widget>[
           ListView.builder(
             padding:
                 EdgeInsets.only(left: 0.0, right: 0.0, top: 30.0, bottom: 20.0),
-            itemCount: _conceptos.length,
-            itemBuilder: (context, index) {
-              return Text(idCultivo.toString());
-              /* _concepto(
-                  _conceptos[index],
-                  _sumas[index],
-                  _sugeridos[index],
-                  _conceptos2[index],
-                  _sumas2[index],
-                  _sugeridos2[index]); */
+            itemCount: 4,
+            itemBuilder: (context, i) {
+              return _concepto(
+                _conceptosAll[0][i].nombreConcepto,
+                _sumasAll[0][i],
+                100,
+                _conceptosAll[0][4+i].nombreConcepto,
+                _sumasAll[0][4+i],
+                100);
             },
           ),
         ],
@@ -45,11 +51,11 @@ class ResumencostosPage extends StatelessWidget {
   }
 
   //metodo que crear el widget del appBar
-  Widget _appBar(BuildContext context) {
+  Widget _appBar(BuildContext context, String nombreCul) {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Center(
-        child: Text(_nombreCul),
+        child: Text(nombreCul),
       ),
       actions: <Widget>[
         IconButton(
@@ -62,9 +68,10 @@ class ResumencostosPage extends StatelessWidget {
   }
 
 //Metodo para crar cada uno de las cuatro clasificaciones de los gastos
+//como va por row debe recibir dos de cada costo, y dos de cada costosugerido
   // ignore: unused_element
-  Widget _concepto(String concepto, double totalCosto, double totalSugerido,
-      String concepto2, double totalCosto2, double totalSugerido2) {
+  Widget _concepto(String concepto, double totalCosto, double totalCostoSugerido,
+      String concepto2, double totalCosto2, double totalCostoSugerido2) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -88,7 +95,7 @@ class ResumencostosPage extends StatelessWidget {
                 SizedBox(height: 5.0),
                 Text(concepto),
                 Text('Total: ${totalCosto.toString()}'),
-                Text('Sugerido: ${totalSugerido.toString()}'),
+                Text('Sugerido: ${totalCostoSugerido.toString()}'),
                 SizedBox(height: 5.0)
               ],
             ),
@@ -114,7 +121,7 @@ class ResumencostosPage extends StatelessWidget {
                 SizedBox(height: 5.0),
                 Text(concepto2),
                 Text('Total: ${totalCosto2.toString()}'),
-                Text('Sugerido: ${totalSugerido2.toString()}'),
+                Text('Sugerido: ${totalCostoSugerido2.toString()}'),
                 SizedBox(height: 5.0)
               ],
             ),

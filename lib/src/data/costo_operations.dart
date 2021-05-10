@@ -59,12 +59,15 @@ class CostoOperations {
       SELECT * FROM Costos WHERE fkidProductoActividad IN (SELECT idProductoActividad FROM ProductosActividades WHERE fkidConcepto = '$idConcepto') AND fkidCultivo = '$idCultivo'
     
     ''');
-    double suma = 0.0;
-    res.forEach((costo) {
-      print(costo);
-      //suma += costo[valorUnidad] * costo[cantidad];
-    });
-    print(res);
+    double suma = 0;
+    if (res.isNotEmpty) {
+      final costos = res.map((s) => CostoModel.fromJson(s)).toList();
+      costos.forEach((costo) {
+        suma += costo.cantidad * costo.valorUnidad;
+      }
+
+      );
+    }
     return suma;
   }
 }

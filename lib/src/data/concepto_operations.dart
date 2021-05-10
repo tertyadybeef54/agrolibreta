@@ -46,7 +46,9 @@ class ConceptoOperations {
     final db = await dbProvider.database;
     final res =
         await db.query('Conceptos', where: 'idConcepto = ?', whereArgs: [id]);
-    print(res);
+    //print(res);
     return res.isNotEmpty ? ConceptoModel.fromJson(res.first) : null;
   }
+
+
 }

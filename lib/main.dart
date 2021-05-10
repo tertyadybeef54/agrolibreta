@@ -7,9 +7,11 @@ import 'package:agrolibreta_v2/src/pages/home_page.dart';
 
 import 'src/dataproviders/cultivos_data.dart';
 import 'package:agrolibreta_v2/src/dataproviders/ubicaciones_data.dart';
+import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/porcentajes_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/unidades_medida_data_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/productos_actividades_data_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,6 +28,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => new PorcentajeData() ),
         ChangeNotifierProvider(create: (context) => new UbicacionesData() ),
         ChangeNotifierProvider(create: (context) => new UnidadesMedidaData() ),
+        ChangeNotifierProvider(create: (context) => new ProductoActividadData() ),
+        ChangeNotifierProvider(create: (context) => new CostosData() ),
+
       ],
 
         child: MaterialApp(

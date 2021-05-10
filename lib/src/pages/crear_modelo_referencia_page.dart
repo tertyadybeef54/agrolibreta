@@ -15,7 +15,7 @@ class CrearModeloReferencia extends StatelessWidget {
   double _porcentaje = 0.0; // valor del porcentaje asignado
 
   //variables para crear nuevo concepto
-  String _nombreConcepto = ''; //nombre asignado al concepto
+  //String _nombreConcepto = ''; //nombre asignado al concepto
 
   ConceptoModel _selectedConcepto; //concepto seleccionado en el dropdown
   callback(selectedConcepto) {
@@ -126,7 +126,9 @@ class CrearModeloReferencia extends StatelessWidget {
                 : Text('sin conceptos');
           },
         ),
-        Stack(
+
+//se deja el codigo para futuras versiones permitir crear conceptos
+/*         Stack(
           children: [
             Container(
               margin: EdgeInsets.symmetric(horizontal: 9.0, vertical: 8.8),
@@ -140,14 +142,14 @@ class CrearModeloReferencia extends StatelessWidget {
               onPressed: () => _registrarConcepto(context),
             ),
           ],
-        ),
+        ), */
       ],
     );
   }
 
 //###################################################
-//registro de un nuevo concepto con su funcion de input
-  void _registrarConcepto(BuildContext context) {
+//registro de un nuevo concepto con su funcion de input, futuras versiones
+/*   void _registrarConcepto(BuildContext context) {
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -176,9 +178,9 @@ class CrearModeloReferencia extends StatelessWidget {
             ],
           );
         }).then((value) => Navigator.pop(context));
-  }
-
-  Widget _inputNombre(String descripcion, String hilabel, String labeltext,
+  } */
+//input del nombre del concepto para futuras versiones
+/*   Widget _inputNombre(String descripcion, String hilabel, String labeltext,
       TextInputType tipotext) {
     var inputDecoration = InputDecoration(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
@@ -202,7 +204,7 @@ class CrearModeloReferencia extends StatelessWidget {
         },
       ),
     );
-  }
+  } */
 
   //#######################################################
   //input para el porcentaje
