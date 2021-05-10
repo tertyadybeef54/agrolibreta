@@ -1,3 +1,4 @@
+import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,10 +16,10 @@ class HomePage extends StatelessWidget {
   final double precioVenta = 0;
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
     final cultivosData = Provider.of<CultivosData>(context);
     final List<CultivoModel> cultivos = cultivosData.cultivos;
-
+    final cosData = Provider.of<CostosData>(context, listen: false);
+    cosData.obtenerCostosByConceptos();
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('        Mis Cultivos')),
@@ -52,7 +53,7 @@ class HomePage extends StatelessWidget {
 //MEJORAR: cambiar los ids por nombres, con if de manera provicional
 //          para el estado y el nombre del cultivo
   Widget _crearCards(BuildContext context, CultivoModel cultivo) {
-    final _idCultivo = cultivo.idCultivo;
+    //final _idCultivo = cultivo.idCultivo;
     final _nombre = cultivo.nombreDistintivo;
     final _producto = cultivo.fkidProductoAgricola;
     final _fecha = cultivo.fechaInicio;
@@ -91,23 +92,23 @@ class HomePage extends StatelessWidget {
                 Text('MR: $_mR'),
                 SizedBox(height: 20.0),
                 //TextButton(onPressed: () {}, child: Text('Entrar')),
-                _botonEntrar(context, _idCultivo),
+                _botonEntrar(context, _nombre),
               ],
             ),
           ],
         ));
   }
 
-
-
-  Widget _botonEntrar(BuildContext context, int idCultivo) {
+  Widget _botonEntrar(BuildContext context, String nombreCultivo) {
     return TextButton(
         onPressed: () {
           //print(idCultivo.toString());
-          Navigator.pushNamed(context, 'resumenCostos', arguments: idCultivo);
+          Navigator.pushNamed(context, 'resumenCostos',
+              arguments: nombreCultivo);
         },
         child: Text('Entrar'));
   }
+
   //botton para añadir nuevo cultivo
   Widget _agregarCultivo(BuildContext context) {
     return FloatingActionButton(

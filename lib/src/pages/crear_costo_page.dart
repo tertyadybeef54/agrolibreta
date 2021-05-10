@@ -188,6 +188,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   //2. segundo dropdown seleccionar el concepto
   Widget _seleccioneConcepto() {
     return FutureBuilder<List<ConceptoModel>>(
+      //debe consultar solo los conceptos que estan relacionados con ese cultivo
       future: conOper.consultarConceptos(),
       builder: (context, snapshot) {
         return snapshot.hasData

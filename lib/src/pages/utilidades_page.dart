@@ -1,3 +1,4 @@
+import 'package:agrolibreta_v2/src/dataproviders/productos_actividades_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,10 +10,13 @@ class UtilidadesPage extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
+    //provider para listar los datos de las utilidades
     final modelosReferenciaData = Provider.of<ModeloReferenciaData>(context, listen: false);
     modelosReferenciaData.obtenerByID();
     Provider.of<UbicacionesData>(context, listen: false);
     Provider.of<UnidadesMedidaData>(context, listen: false);
+    Provider.of<ProductoActividadData>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('Utilidades')),

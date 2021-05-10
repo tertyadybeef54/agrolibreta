@@ -8,9 +8,11 @@ import 'package:agrolibreta_v2/src/routes/routes.dart';
 import 'package:agrolibreta_v2/src/pages/home_page.dart';
 import 'src/dataproviders/cultivos_data.dart';
 import 'package:agrolibreta_v2/src/dataproviders/ubicaciones_data.dart';
+import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/porcentajes_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/unidades_medida_data_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/productos_actividades_data_provider.dart';
 
 
 void main() async{
@@ -24,6 +26,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
    
    final prefs = new PreferenciasUsuario();
    print(prefs.token);

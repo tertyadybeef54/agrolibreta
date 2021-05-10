@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
+import 'package:agrolibreta_v2/src/dataproviders/productos_actividades_data_provider.dart';
 
 class ProductoActividadList extends StatelessWidget {
 
@@ -6,37 +10,35 @@ class ProductoActividadList extends StatelessWidget {
 
  @override
   Widget build(BuildContext context) {
-    
+    //provider de datos
+    final productoActividadData =
+        Provider.of<ProductoActividadData>(context, listen: false);
+    final List<ProductoActividadModel> productosActividades =
+        productoActividadData.productosActividades; 
+
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Center(child: Text('Productos y Actividades')),
+        title: Center(child: Text('Productos y actividades')),
       ),
-      body: _productoActividadTiles(context),
+      body: _unidadesMedidaTiles(productosActividades),
     );
   }
-  Widget _productoActividadTiles(BuildContext context){
-    final ubicaciones = [1, 2, 3];
+  Widget _unidadesMedidaTiles(List<ProductoActividadModel> productosActividades){
     return ListView.builder(
-      itemCount: ubicaciones.length,
-      itemBuilder: (_, i) => _listTile(i+1),
+      itemCount: productosActividades.length,
+      itemBuilder: (_, i) => _listTile(productosActividades[i]),
     );
   }
-  Widget _listTile(int i)  {
+  Widget _listTile(ProductoActividadModel productoActividad) {
       return Column(
         children: [
           ListTile(
-             title: Text('$i. nombre: triple 15'),
-             subtitle: Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 Text('concepto: fertilizantes'),
-                 Text('unidad: kg'),
-               ],
-             ),
-             onTap: () {},
+          title: Text('${productoActividad.idProductoActividad.toString()}. ${productoActividad.nombreProductoActividad}'),
+          subtitle: Text('${productoActividad.fkidUnidadMedida}'),
+             //onTap: () {},
            ),
-           
           Divider(),
         ],
       );
