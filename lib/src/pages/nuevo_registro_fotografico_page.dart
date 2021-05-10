@@ -47,7 +47,6 @@ class _NuevoRegistroFotograficoPageState extends State<NuevoRegistroFotograficoP
           padding:EdgeInsets.all(15.0),
           child: Column(
             children:[
-              
               mostrarImagen(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
