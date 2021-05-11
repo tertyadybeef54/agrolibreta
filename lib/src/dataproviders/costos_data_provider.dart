@@ -35,10 +35,27 @@ class CostosData with ChangeNotifier {
     notifyListeners();
   }
 
-  anadirCosto(CostoModel costo) async {
-    final _resp = await _cosOper.nuevoCosto(costo);
-    costo.idCosto = _resp;
-    this.costos.add(costo);
+  anadirCultivo(
+      String fkidUbicacion,
+      String fkidModeloReferencia,
+      String nombreDistintivo,
+      double areaSembrada,
+      String fechaInicio,
+      int presupuesto) async {
+    final CultivoModel cultivo = new CultivoModel(
+        fkidUbicacion: fkidUbicacion,
+        fkidEstado: '1',
+        fkidModeloReferencia: fkidModeloReferencia,
+        fkidProductoAgricola: '1',
+        nombreDistintivo: nombreDistintivo,
+        areaSembrada: areaSembrada,
+        fechaInicio: fechaInicio,
+        fechaFinal: '.',
+        presupuesto: presupuesto,
+        precioVentaIdeal: 1.0);
+    final resp = await _culOper.nuevoCultivo(cultivo);
+    cultivo.idCultivo = resp;
+    cultivos.add(cultivo);
     notifyListeners();
   }
 
@@ -47,9 +64,8 @@ class CostosData with ChangeNotifier {
 //y removerlo.
 
   obtenerCostosByConceptos() {
-    if (conceptosList.length==0) {
-      this.cultivos.forEach((e) { 
-
+    if (conceptosList.length == 0) {
+      this.cultivos.forEach((e) {
         print(e.nombreDistintivo);
 
         final List<double> sumTemp = [];

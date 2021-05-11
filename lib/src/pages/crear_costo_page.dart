@@ -1,7 +1,9 @@
+import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+
+import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/widgets/concepto_dropdown.dart';
 import 'package:agrolibreta_v2/src/widgets/unidad_medida_dropdown.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
 import 'package:agrolibreta_v2/src/data/costo_operations.dart';
@@ -15,6 +17,7 @@ import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
 import 'package:agrolibreta_v2/src/modelos/unidad_medida_model.dart';
 
 import 'package:agrolibreta_v2/src/widgets/producto_actividad_dropdown.dart';
+import 'package:provider/provider.dart';
 
 class CrearCostoPage extends StatefulWidget {
   @override
@@ -171,8 +174,9 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
                   setState(() {
                     final productoActividad = new ProductoActividadModel(
                       nombreProductoActividad: _nombreProductoActividad,
-                      fkidConcepto: _selectedConcepto.idConcepto,
-                      fkidUnidadMedida: _selectedUnidadMedida.idUnidadMedida,
+                      fkidConcepto: _selectedConcepto.idConcepto.toString(),
+                      fkidUnidadMedida:
+                          _selectedUnidadMedida.idUnidadMedida.toString(),
                     );
                     proActOper.nuevoProductoActividad(productoActividad);
                   });
@@ -432,13 +436,18 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
 
   void _save(BuildContext context) {
     final costoTemp = new CostoModel(
-      fkidProductoActividad: _selectedProductoActividad.idProductoActividad,
-      fkidCultivo: _fkidCultivo,
-      fkidRegistroFotografico: 1,
+      fkidProductoActividad:
+          _selectedProductoActividad.idProductoActividad.toString(),
+      fkidCultivo: _fkidCultivo.toString(),
+      fkidRegistroFotografico: "1",
       cantidad: _cantidad,
       valorUnidad: _valorUnidad,
       fecha: _fechaC,
     );
     cosOper.nuevoCosto(costoTemp);
+    final cosData = Provider.of<CostosData>(context, listen: false);
+    cosData.conceptosList = [];
+    cosData.sumasList = [];
+    cosData.obtenerCostosByConceptos();
   }
 }

@@ -1,5 +1,5 @@
 import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
-import 'package:agrolibreta_v2/src/dataproviders/cultivos_data.dart';
+//import 'package:agrolibreta_v2/src/dataproviders/cultivos_data.dart';
 import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/porcentajes_data_provider.dart';
 import 'package:agrolibreta_v2/src/pages/costos_page.dart';
@@ -48,7 +48,7 @@ class _Paginas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navegacionModel = Provider.of<_NavegacionModel>(context);
-    Provider.of<CultivosData>(context, listen: false);
+    //Provider.of<CultivosData>(context, listen: false);
     Provider.of<PorcentajeData>(context, listen: false);
     Provider.of<ModeloReferenciaData>(context, listen: false);
     Provider.of<CostosData>(context, listen: false);

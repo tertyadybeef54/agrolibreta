@@ -1,12 +1,20 @@
+import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 
-class ResumencostosPage extends StatelessWidget {
+class ResumencostosPage extends StatefulWidget {
+  @override
+  _ResumencostosPageState createState() => _ResumencostosPageState();
+}
+
+class _ResumencostosPageState extends State<ResumencostosPage> {
   @override
   Widget build(BuildContext context) {
-    final String nombreCul = ModalRoute.of(context).settings.arguments;
+    final CultivoModel cultivoArg = ModalRoute.of(context).settings.arguments;
+    final nombreCul = cultivoArg.nombreDistintivo;
+    final idCul = cultivoArg.idCultivo;
     final cosData = Provider.of<CostosData>(context, listen: false);
 
     final _cultivos = cosData.cultivos;
@@ -35,14 +43,15 @@ class ResumencostosPage extends StatelessWidget {
             itemCount: 4,
             itemBuilder: (context, i) {
               return _concepto(
-                _conceptosAll[0][i].nombreConcepto,
-                _sumasAll[0][i],
-                100,
-                _conceptosAll[0][4+i].nombreConcepto,
-                _sumasAll[0][4+i],
-                100);
+                  _conceptosAll[idCul-1][i].nombreConcepto,
+                  _sumasAll[idCul-1][i],
+                  100,
+                  _conceptosAll[idCul-1][4 + i].nombreConcepto,
+                  _sumasAll[idCul-1][4 + i],
+                  100);
             },
           ),
+          _refrescar(context),
         ],
       ),
       floatingActionButton: _botonNuevoGasto(context),
@@ -50,7 +59,6 @@ class ResumencostosPage extends StatelessWidget {
     );
   }
 
-  //metodo que crear el widget del appBar
   Widget _appBar(BuildContext context, String nombreCul) {
     return AppBar(
       automaticallyImplyLeading: false,
@@ -67,11 +75,13 @@ class ResumencostosPage extends StatelessWidget {
     );
   }
 
-//Metodo para crar cada uno de las cuatro clasificaciones de los gastos
-//como va por row debe recibir dos de cada costo, y dos de cada costosugerido
-  // ignore: unused_element
-  Widget _concepto(String concepto, double totalCosto, double totalCostoSugerido,
-      String concepto2, double totalCosto2, double totalCostoSugerido2) {
+  Widget _concepto(
+      String concepto,
+      double totalCosto,
+      double totalCostoSugerido,
+      String concepto2,
+      double totalCosto2,
+      double totalCostoSugerido2) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -135,6 +145,29 @@ class ResumencostosPage extends StatelessWidget {
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () => Navigator.pushNamed(context, 'crearCosto'),
+    );
+  }
+
+  Widget _refrescar(BuildContext context) {
+    return Positioned(
+      top: 2.0,
+      right: 2.0,
+      width: 40.0,
+      height: 40.0,
+      child: Ink(
+        decoration: const ShapeDecoration(
+          color: Colors.red,
+          shape: CircleBorder(),
+        ),
+        child: IconButton(
+          icon: const Icon(Icons.refresh),
+          color: Colors.white,
+          onPressed: () {
+            setState(() {
+            });
+          },
+        ),
+      ),
     );
   }
 }
