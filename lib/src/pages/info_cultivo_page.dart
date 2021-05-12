@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 
 import 'package:agrolibreta_v2/src/dataproviders/cultivo_data.dart';
+import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 
 class InformacionCultivo extends StatefulWidget {
   @override
@@ -15,12 +16,15 @@ class InformacionCultivo extends StatefulWidget {
 class _InformacionCultivoState extends State<InformacionCultivo> {
   TextEditingController _inputFieldDateController = new TextEditingController();
   CultivoModel culTemp = new CultivoModel();
+  //variables para calcular el valor de venta ideal
+  double cantidad;
 
   @override
   Widget build(BuildContext context) {
     //final int idCulArg = ModalRoute.of(context).settings.arguments;
     final culData = Provider.of<CultivoData>(context, listen: false);
     final CultivoModel cultivo = culData.cultivo;
+    final costosTotales = culData.costosTotales;
     culTemp = cultivo;
 
     return Scaffold(
@@ -28,11 +32,12 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
         automaticallyImplyLeading: false,
         title: Center(child: Text('Informacion Genaral del Cultivo')),
       ),
-      body: listaInfoCultivo(context, cultivo),
+      body: listaInfoCultivo(context, culTemp, costosTotales),
     );
   }
 
-  ListView listaInfoCultivo(BuildContext context, CultivoModel cultivo) {
+  ListView listaInfoCultivo(
+      BuildContext context, CultivoModel cultivo, double costosTotales) {
     return ListView(padding: EdgeInsets.all(20.0), children: <Widget>[
       Icon(Icons.info, size: 80.0),
       SizedBox(height: 20.0),
@@ -53,7 +58,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () => _editnumberAlert(
-                  context, 'Área Sembrada m^2', TextInputType.number),
+                  context, 'Área Sembrada m^2', TextInputType.number, 1),
             )
           ]),
           Divider(height: 10.0),
@@ -61,7 +66,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             Text('  Fecha de Inicio: ${cultivo.fechaInicio}'),
             IconButton(
               icon: Icon(Icons.edit),
-              onPressed: () => _editFechaAlert(context, 'Fecha de Inicio'),
+              onPressed: () => _editFechaAlert(context, 'Fecha de Inicio', 1),
             )
           ]),
           Divider(height: 10.0),
@@ -69,7 +74,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             Text('  Fecha de finalización: ${cultivo.fechaFinal}'),
             IconButton(
               icon: Icon(Icons.edit),
-              onPressed: () => _editFechaAlert(context, 'Fecha Final'),
+              onPressed: () => _editFechaAlert(context, 'Fecha Final', 2),
             )
           ]),
           Divider(height: 10.0),
@@ -78,7 +83,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () => _editnumberAlert(
-                  context, 'Presupuesto', TextInputType.number),
+                  context, 'Presupuesto', TextInputType.number, 2),
             )
           ]),
           Divider(height: 10.0),
@@ -86,7 +91,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             Text('  Precio de venta sugerido: ${cultivo.precioVentaIdeal}'),
             IconButton(
               icon: Icon(Icons.edit),
-              onPressed: () => _editPrecioVentaAlert(context),
+              onPressed: () => _editPrecioVentaAlert(context, costosTotales),
             )
           ]),
           Divider(height: 10.0),
@@ -95,10 +100,11 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
     ]);
   }
 
+//editar nombre
   void _editnameAlert(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (contex) {
         return AlertDialog(
           title: Text(
@@ -121,7 +127,10 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
                     labelText: 'Nombre Distintivo',
                     icon: Icon(Icons.drive_file_rename_outline),
                   ),
-                  onChanged: (value){},
+                  onChanged: (value) {
+                    setState(() {});
+                    culTemp.nombreDistintivo = value;
+                  },
                 ),
               ),
             ],
@@ -133,12 +142,23 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             ),
             TextButton(
               child: Text('Guardar'),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => actualizar(),
             )
           ],
         );
       },
     );
+  }
+
+//funcion que actualiza
+  void actualizar() {
+    setState(() {
+      final culData = Provider.of<CultivoData>(context, listen: false);
+      culData.actualizarData(culTemp);
+      final cosData = Provider.of<CostosData>(context, listen: false);
+      cosData.actualizarCultivos();
+      Navigator.of(context).pop();
+    });
   }
 
   /* void _editLocationAlert(BuildContext context) {
@@ -198,11 +218,12 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
     );
   }
  */
+//alerta del area y del presupuesto
   void _editnumberAlert(
-      BuildContext context, String titulo, TextInputType tipotext) {
+      BuildContext context, String titulo, TextInputType tipotext, int n) {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (contex) {
         return AlertDialog(
           title: Text(
@@ -212,10 +233,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              _input(
-                '$titulo',
-                tipotext,
-              ),
+              _input('$titulo', tipotext, n),
             ],
           ),
           actions: <Widget>[
@@ -225,7 +243,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             ),
             TextButton(
               child: Text('Guardar'),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => actualizar(),
             )
           ],
         );
@@ -233,7 +251,8 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
     );
   }
 
-  Widget _input(String titulo, TextInputType tipotext) {
+//input de area y del presupuesto
+  Widget _input(String titulo, TextInputType tipotext, n) {
     return Container(
       padding: EdgeInsets.only(bottom: 10.0),
       height: 60.0,
@@ -246,14 +265,24 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
           labelText: '$titulo',
           icon: Icon(Icons.drive_file_rename_outline),
         ),
+        onChanged: (value) {
+          if (n == 1) {
+            culTemp.areaSembrada = double.parse(value);
+          }
+          if (n == 2) {
+            culTemp.presupuesto = int.parse(value);
+          }
+          setState(() {});
+        },
       ),
     );
   }
 
-  void _editFechaAlert(BuildContext context, String titulo) {
+//alerta de fecha de inicial Y final
+  void _editFechaAlert(BuildContext context, String titulo, int n) {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (contex) {
         return AlertDialog(
           title: Text(
@@ -263,7 +292,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              _input2('$titulo'),
+              _input2('$titulo', n),
             ],
           ),
           actions: <Widget>[
@@ -273,7 +302,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             ),
             TextButton(
               child: Text('Guardar', style: TextStyle(fontSize: 17.0)),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => actualizar(),
             )
           ],
         );
@@ -281,29 +310,29 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
     );
   }
 
-  Widget _input2(String titulo) {
+//inputs de las fechas inicial y final
+  Widget _input2(String titulo, int n) {
     return Container(
       padding: EdgeInsets.only(bottom: 10.0),
       height: 60.0,
       child: TextField(
-        enableInteractiveSelection: false,
-        controller: _inputFieldDateController,
-        style: TextStyle(fontSize: 20.0),
-        decoration: InputDecoration(
-          border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
-          labelText: '$titulo',
-          icon: Icon(Icons.calendar_today),
-        ),
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          _selectDate(context);
-        }
-      ),
+          enableInteractiveSelection: false,
+          controller: _inputFieldDateController,
+          style: TextStyle(fontSize: 20.0),
+          decoration: InputDecoration(
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
+            labelText: '$titulo',
+            icon: Icon(Icons.calendar_today),
+          ),
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+            _selectDate(context, n);
+          }),
     );
   }
 
-  _selectDate(BuildContext context) async {
+  _selectDate(BuildContext context, int n) async {
     DateTime picked = await showDatePicker(
       context: context,
       initialDate: new DateTime.now(),
@@ -313,16 +342,23 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
 
     if (picked != null) {
       setState(() {
-        culTemp.fechaInicio = DateFormat('dd-MM-yyyy').format(picked);
-        _inputFieldDateController.text = culTemp.fechaInicio;
+        if (n == 1) {
+          culTemp.fechaInicio = DateFormat('dd-MM-yyyy').format(picked);
+          _inputFieldDateController.text = culTemp.fechaInicio;
+        }
+        if (n == 2) {
+          culTemp.fechaFinal = DateFormat('dd-MM-yyyy').format(picked);
+          _inputFieldDateController.text = culTemp.fechaFinal;
+        }
       });
     }
   }
 
-  void _editPrecioVentaAlert(BuildContext context) {
+//dialogo del precio de venta
+  void _editPrecioVentaAlert(BuildContext context, double costosTotales) {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (contex) {
         return AlertDialog(
           title: Text(
@@ -342,6 +378,9 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
                   labelText: 'Cantidad de Unidades',
                   icon: Icon(Icons.drive_file_rename_outline),
                 ),
+                onChanged: (value) {
+                  cantidad = double.parse(value);
+                },
               ),
             ),
             Container(
@@ -357,6 +396,12 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
                   labelText: 'Porcentaje de Ganancia',
                   icon: Icon(Icons.drive_file_rename_outline),
                 ),
+                onChanged: (value) {
+                  final double porcentaje = double.parse(value);
+                  final n = (porcentaje * 0.01 + 1) * costosTotales / cantidad;
+
+                  culTemp.precioVentaIdeal = num.parse(n.toStringAsFixed(2));
+                },
               ),
             ),
           ]),
@@ -367,7 +412,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             ),
             TextButton(
               child: Text('Guardar'),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => actualizar(),
             )
           ],
         );

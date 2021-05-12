@@ -21,8 +21,8 @@ class ConfigCultivoPage extends StatelessWidget {
     final int idCulArg = ModalRoute.of(context).settings.arguments;
     //provider para acceder a los datos del cultivo
     final culData = Provider.of<CultivoData>(context, listen: false);
-    culData.getCultivo(idCulArg); //asignar el cultivo 
-
+    culData.getCultivo(idCulArg); //asignar el cultivo
+    culData.calcularCostosTotales(idCulArg);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,

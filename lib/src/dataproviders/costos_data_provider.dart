@@ -87,8 +87,7 @@ class CostosData with ChangeNotifier {
           conTemp.add(e2);
           sugTemp.add(sug);
 
-          print(
-              ' ${e2.nombreConcepto}: ${resp.toString()} sugerido: ${sug.toString()}');
+          //print(              ' ${e2.nombreConcepto}: ${resp.toString()} sugerido: ${sug.toString()}');
         });
         /* if (sumTemp != []) {
         } */
@@ -97,6 +96,14 @@ class CostosData with ChangeNotifier {
         this.sugeridosList.add(sugTemp);
       });
     }
+  }
+
+  actualizarCultivos() async {
+    print('provider costos actualizar cultivo');
+    this.cultivos = [];
+    final cul = await _culOper.consultarCultivos();
+    this.cultivos = [...cul];
+    notifyListeners();
   }
 /* 
   List<ModeloReferenciaModel> modelosReferencia = []; //se almacenan MRs

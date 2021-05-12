@@ -48,4 +48,5 @@ class CultivoOperations {
 
     return res.isNotEmpty ? CultivoModel.fromJson(res.first) : null;
   }
+  
 }
