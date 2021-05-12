@@ -73,6 +73,7 @@ class PorcentajeOperations {
     if(res.isNotEmpty){
       final porcentaje = PorcentajeModel.fromJson(res.first);
       valor = porcentaje.porcentaje * presupuesto * 0.01;
+      valor = num.parse(valor.toStringAsFixed(1));
     }
 
     return valor;

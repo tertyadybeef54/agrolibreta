@@ -1,3 +1,4 @@
+import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/cultivo_data.dart';
 import 'package:agrolibreta_v2/src/widgets/estados_cultivo_dropdown.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'package:provider/provider.dart';
 class ConfigCultivoPage extends StatelessWidget {
   EstadosOperations estOper = new EstadosOperations();
 
-  // ignore: unused_field
   EstadoModel _selectedEstado;
   callback(selectedEstado) {
     _selectedEstado = selectedEstado;
@@ -47,21 +47,22 @@ class ConfigCultivoPage extends StatelessWidget {
               title: Text('Modelo de Referencia'),
               leading: Icon(Icons.article),
               trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: () => Navigator.pushNamed(context, 'verModelo'),
+              onTap: () => Navigator.pushNamed(context, 'verModelo',
+                  arguments: idCulArg),
             ),
             Divider(height: 10.0),
             ListTile(
               title: Text('Cambiar Estado'),
               leading: Icon(Icons.drag_indicator),
               trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: () => _cambiarEstadoAlert(context),
+              onTap: () => _cambiarEstadoAlert(context, idCulArg),
             ),
             Divider(height: 10.0),
           ]),
     );
   }
 
-  void _cambiarEstadoAlert(BuildContext context) {
+  void _cambiarEstadoAlert(BuildContext context, int idCul) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -79,9 +80,14 @@ class ConfigCultivoPage extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              child: Text('Guardar', style: TextStyle(fontSize: 17.0)),
-              onPressed: () => Navigator.of(context).pop(),
-            )
+                child: Text('Guardar', style: TextStyle(fontSize: 17.0)),
+                onPressed: () {
+                final culData = Provider.of<CultivoData>(context, listen: false);
+                culData.actualizarEstadoCul(idCul, _selectedEstado.idEstado);
+                final cosData = Provider.of<CostosData>(context, listen: false);
+                cosData.actualizarCultivos();
+                Navigator.of(context).pop();
+                })
           ],
         );
       },

@@ -81,10 +81,11 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text('  Presupuesto: ${cultivo.presupuesto}'),
             IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () => _editnumberAlert(
-                  context, 'Presupuesto', TextInputType.number, 2),
-            )
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  _editnumberAlert(
+                      context, 'Presupuesto', TextInputType.number, 2);
+                })
           ]),
           Divider(height: 10.0),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -157,6 +158,19 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
       culData.actualizarData(culTemp);
       final cosData = Provider.of<CostosData>(context, listen: false);
       cosData.actualizarCultivos();
+      Navigator.of(context).pop();
+    });
+  }
+  void actualizar2(){
+    setState(() {
+      final culData = Provider.of<CultivoData>(context, listen: false);
+      culData.actualizarData(culTemp);
+      final cosData = Provider.of<CostosData>(context, listen: false);
+      cosData.actualizarCultivos();
+      cosData.conceptosList = [];
+      cosData.sumasList = [];
+      cosData.sugeridosList = [];
+      cosData.obtenerCostosByConceptos();
       Navigator.of(context).pop();
     });
   }
@@ -243,7 +257,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             ),
             TextButton(
               child: Text('Guardar'),
-              onPressed: () => actualizar(),
+              onPressed: () => actualizar2(),
             )
           ],
         );

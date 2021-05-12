@@ -1,3 +1,4 @@
+import 'package:agrolibreta_v2/src/dataproviders/cultivo_data.dart';
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,12 +18,15 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     final nombreCul = cultivoArg.nombreDistintivo;
     final idCul = cultivoArg.idCultivo;
 
-    final cosData = Provider.of<CostosData>(context, listen: false);
+    final cosData = Provider.of<CostosData>(context, listen: true);
     final _sumasAll = cosData.sumasList;
     final _conceptosAll = cosData.conceptosList;
     final _sugeridos = cosData.sugeridosList;
+    final culData = Provider.of<CultivoData>(context, listen: false);
+    //culData.getCultivo(cultivoArg.idCultivo); //asignar el cultivo
+    culData.consultarMR(cultivoArg.fkidModeloReferencia);
 
- /*    _cultivos.forEach((element) {
+    /*    _cultivos.forEach((element) {
       print(element.idCultivo);
     });
     _sumasAll.forEach((element) {
@@ -46,13 +50,18 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
                 EdgeInsets.only(left: 0.0, right: 0.0, top: 25.0, bottom: 20.0),
             itemCount: 4,
             itemBuilder: (context, i) {
-              return _concepto(
-                  _conceptosAll[idCul - 1][i].nombreConcepto,
-                  _sumasAll[idCul - 1][i],
-                  _sugeridos[idCul - 1][i],
-                  _conceptosAll[idCul - 1][4 + i].nombreConcepto,
-                  _sumasAll[idCul - 1][4 + i],
-                  _sugeridos[idCul - 1][4 + i]);
+              if (_conceptosAll.length > 2) {
+                return _concepto(
+                    _conceptosAll[idCul - 1][i].nombreConcepto,
+                    _sumasAll[idCul - 1][i],
+                    _sugeridos[idCul - 1][i],
+                    _conceptosAll[idCul - 1][4 + i].nombreConcepto,
+                    _sumasAll[idCul - 1][4 + i],
+                    _sugeridos[idCul - 1][4 + i]);
+              } else
+                return Center(
+                  child: Text('Actualizar'),
+                );
             },
           ),
           _refrescar(context),
@@ -73,7 +82,8 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
         IconButton(
           iconSize: 40.0,
           icon: new Icon(Icons.settings),
-          onPressed: () => Navigator.pushNamed(context, 'configCultivo', arguments: idCul),
+          onPressed: () =>
+              Navigator.pushNamed(context, 'configCultivo', arguments: idCul),
         ),
       ],
     );
@@ -86,6 +96,22 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
       String concepto2,
       double totalCosto2,
       double totalCostoSugerido2) {
+    //colores, verde si esta bajo el presupuesto y rojo caso contrario
+    TextStyle color1;
+    TextStyle color2;
+
+    if (totalCosto > totalCostoSugerido) {
+      color1 = new TextStyle(color: Colors.red);
+    } else {
+      color1 = new TextStyle(color: Colors.black);
+    }
+
+    if (totalCosto2 > totalCostoSugerido2) {
+      color2 = new TextStyle(color: Colors.red);
+    } else {
+      color2 = new TextStyle(color: Colors.black);
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -108,8 +134,8 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
                 ),
                 SizedBox(height: 5.0),
                 Text(concepto),
-                Text('Total: ${totalCosto.toString()}'),
-                Text('Sugerido: ${totalCostoSugerido.toString()}'),
+                Text('Total: ${totalCosto.toString()}', style: color1),
+                Text('Limite: ${totalCostoSugerido.toString()}'),
                 SizedBox(height: 5.0)
               ],
             ),
@@ -134,8 +160,8 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
                 ),
                 SizedBox(height: 5.0),
                 Text(concepto2),
-                Text('Total: ${totalCosto2.toString()}'),
-                Text('Sugerido: ${totalCostoSugerido2.toString()}'),
+                Text('Total: ${totalCosto2.toString()}', style: color2),
+                Text('Limite: ${totalCostoSugerido2.toString()}'),
                 SizedBox(height: 5.0)
               ],
             ),

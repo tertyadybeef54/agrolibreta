@@ -68,34 +68,38 @@ class CostosData with ChangeNotifier {
 
   obtenerCostosByConceptos() {
     if (conceptosList.length == 0) {
-      this.cultivos.forEach((e) {
-        print(e.nombreDistintivo);
+      if(cultivos.length>0){
 
-        final List<double> sumTemp = [];
-        final List<ConceptoModel> conTemp = [];
-        final List<double> sugTemp = [];
+        this.cultivos.forEach((e) {
+          //print(e.nombreDistintivo);
 
-        this.conceptos.forEach((e2) async {
-          final double resp = await _cosOper.sumaCostosByConcepto(
-              e.idCultivo, e2.idConcepto.toString());
-          //if (resp != -1.0) {}//aca se puede aplicar condicional para modelos de referencia con cantidad de conceptos variable, para este prototipo siempre seran 8 conceptos fijos
-          //print('entró al if');
-          final double sug = await _porOper.getPorcenByMRyConcep(
-              e.fkidModeloReferencia, e2.idConcepto.toString(), e.presupuesto);
+          final List<double> sumTemp = [];
+          final List<ConceptoModel> conTemp = [];
+          final List<double> sugTemp = [];
 
-          sumTemp.add(resp);
-          conTemp.add(e2);
-          sugTemp.add(sug);
+          this.conceptos.forEach((e2) async {
+            final double resp = await _cosOper.sumaCostosByConcepto(
+                e.idCultivo, e2.idConcepto.toString());
+            //if (resp != -1.0) {}//aca se puede aplicar condicional para modelos de referencia con cantidad de conceptos variable, para este prototipo siempre seran 8 conceptos fijos
+            //print('entró al if');
+            final double sug = await _porOper.getPorcenByMRyConcep(
+                e.fkidModeloReferencia, e2.idConcepto.toString(), e.presupuesto);
 
-          //print(              ' ${e2.nombreConcepto}: ${resp.toString()} sugerido: ${sug.toString()}');
+            sumTemp.add(resp);
+            conTemp.add(e2);
+            sugTemp.add(sug);
+
+            //print(              ' ${e2.nombreConcepto}: ${resp.toString()} sugerido: ${sug.toString()}');
+          });
+          /* if (sumTemp != []) {
+          } */
+          this.conceptosList.add(conTemp);
+          this.sumasList.add(sumTemp);
+          this.sugeridosList.add(sugTemp);
         });
-        /* if (sumTemp != []) {
-        } */
-        this.conceptosList.add(conTemp);
-        this.sumasList.add(sumTemp);
-        this.sugeridosList.add(sugTemp);
-      });
+      }
     }
+    print('provider costos data, carga data');
   }
 
   actualizarCultivos() async {

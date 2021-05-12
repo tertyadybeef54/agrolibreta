@@ -96,7 +96,6 @@ class HomePage extends StatelessWidget {
   Widget _botonEntrar(BuildContext context, CultivoModel cultivo) {
     return TextButton(
         onPressed: () {
-          //print(idCultivo.toString());
           Navigator.pushNamed(context, 'resumenCostos',
               arguments: cultivo);
         },
