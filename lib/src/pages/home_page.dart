@@ -3,23 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
-import 'package:agrolibreta_v2/src/dataproviders/cultivos_data.dart';
 
 class HomePage extends StatelessWidget {
-  //final String nombre = '';
-  final String cultivo = '';
-  final String fecha = '';
-  final String ubicacion = '';
-  final String estado = '';
-  final int areaSembrada = 0;
-  final int presupuesto = 0;
-  final double precioVenta = 0;
+
+
   @override
   Widget build(BuildContext context) {
-    final cultivosData = Provider.of<CultivosData>(context);
-    final List<CultivoModel> cultivos = cultivosData.cultivos;
-    final cosData = Provider.of<CostosData>(context, listen: false);
+    final cosData = Provider.of<CostosData>(context);
+
+    final List<CultivoModel> cultivos = cosData.cultivos;
     cosData.obtenerCostosByConceptos();
+
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('        Mis Cultivos')),
@@ -92,19 +86,18 @@ class HomePage extends StatelessWidget {
                 Text('MR: $_mR'),
                 SizedBox(height: 20.0),
                 //TextButton(onPressed: () {}, child: Text('Entrar')),
-                _botonEntrar(context, _nombre),
+                _botonEntrar(context, cultivo),
               ],
             ),
           ],
         ));
   }
 
-  Widget _botonEntrar(BuildContext context, String nombreCultivo) {
+  Widget _botonEntrar(BuildContext context, CultivoModel cultivo) {
     return TextButton(
         onPressed: () {
-          //print(idCultivo.toString());
           Navigator.pushNamed(context, 'resumenCostos',
-              arguments: nombreCultivo);
+              arguments: cultivo);
         },
         child: Text('Entrar'));
   }

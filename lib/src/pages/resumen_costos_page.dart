@@ -1,19 +1,32 @@
+import 'package:agrolibreta_v2/src/dataproviders/cultivo_data.dart';
+import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 
-class ResumencostosPage extends StatelessWidget {
+class ResumencostosPage extends StatefulWidget {
+  @override
+  _ResumencostosPageState createState() => _ResumencostosPageState();
+}
+
+class _ResumencostosPageState extends State<ResumencostosPage> {
   @override
   Widget build(BuildContext context) {
-    final String nombreCul = ModalRoute.of(context).settings.arguments;
-    final cosData = Provider.of<CostosData>(context, listen: false);
+    final CultivoModel cultivoArg = ModalRoute.of(context).settings.arguments;
 
-    final _cultivos = cosData.cultivos;
+    final nombreCul = cultivoArg.nombreDistintivo;
+    final idCul = cultivoArg.idCultivo;
+
+    final cosData = Provider.of<CostosData>(context, listen: true);
     final _sumasAll = cosData.sumasList;
     final _conceptosAll = cosData.conceptosList;
+    final _sugeridos = cosData.sugeridosList;
+    final culData = Provider.of<CultivoData>(context, listen: false);
+    //culData.getCultivo(cultivoArg.idCultivo); //asignar el cultivo
+    culData.consultarMR(cultivoArg.fkidModeloReferencia);
 
-    _cultivos.forEach((element) {
+    /*    _cultivos.forEach((element) {
       print(element.idCultivo);
     });
     _sumasAll.forEach((element) {
@@ -24,34 +37,42 @@ class ResumencostosPage extends StatelessWidget {
         print(e.nombreConcepto);
       });
     });
+    _sugeridos.forEach((element) {
+      print(element.toString());
+    }); */
 
     return Scaffold(
-      appBar: _appBar(context, nombreCul),
+      appBar: _appBar(context, nombreCul, idCul),
       body: Stack(
         children: <Widget>[
           ListView.builder(
             padding:
-                EdgeInsets.only(left: 0.0, right: 0.0, top: 30.0, bottom: 20.0),
+                EdgeInsets.only(left: 0.0, right: 0.0, top: 25.0, bottom: 20.0),
             itemCount: 4,
             itemBuilder: (context, i) {
-              return _concepto(
-                _conceptosAll[0][i].nombreConcepto,
-                _sumasAll[0][i],
-                100,
-                _conceptosAll[0][4+i].nombreConcepto,
-                _sumasAll[0][4+i],
-                100);
+              if (_conceptosAll.length > 2) {
+                return _concepto(
+                    _conceptosAll[idCul - 1][i].nombreConcepto,
+                    _sumasAll[idCul - 1][i],
+                    _sugeridos[idCul - 1][i],
+                    _conceptosAll[idCul - 1][4 + i].nombreConcepto,
+                    _sumasAll[idCul - 1][4 + i],
+                    _sugeridos[idCul - 1][4 + i]);
+              } else
+                return Center(
+                  child: Text('Actualizar'),
+                );
             },
           ),
+          _refrescar(context),
         ],
       ),
-      floatingActionButton: _botonNuevoGasto(context),
+      floatingActionButton: _botonNuevoCosto(context, idCul),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  //metodo que crear el widget del appBar
-  Widget _appBar(BuildContext context, String nombreCul) {
+  Widget _appBar(BuildContext context, String nombreCul, int idCul) {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Center(
@@ -61,17 +82,36 @@ class ResumencostosPage extends StatelessWidget {
         IconButton(
           iconSize: 40.0,
           icon: new Icon(Icons.settings),
-          onPressed: () => Navigator.pushNamed(context, 'configCultivo'),
+          onPressed: () =>
+              Navigator.pushNamed(context, 'configCultivo', arguments: idCul),
         ),
       ],
     );
   }
 
-//Metodo para crar cada uno de las cuatro clasificaciones de los gastos
-//como va por row debe recibir dos de cada costo, y dos de cada costosugerido
-  // ignore: unused_element
-  Widget _concepto(String concepto, double totalCosto, double totalCostoSugerido,
-      String concepto2, double totalCosto2, double totalCostoSugerido2) {
+  Widget _concepto(
+      String concepto,
+      double totalCosto,
+      double totalCostoSugerido,
+      String concepto2,
+      double totalCosto2,
+      double totalCostoSugerido2) {
+    //colores, verde si esta bajo el presupuesto y rojo caso contrario
+    TextStyle color1;
+    TextStyle color2;
+
+    if (totalCosto > totalCostoSugerido) {
+      color1 = new TextStyle(color: Colors.red);
+    } else {
+      color1 = new TextStyle(color: Colors.black);
+    }
+
+    if (totalCosto2 > totalCostoSugerido2) {
+      color2 = new TextStyle(color: Colors.red);
+    } else {
+      color2 = new TextStyle(color: Colors.black);
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -94,8 +134,8 @@ class ResumencostosPage extends StatelessWidget {
                 ),
                 SizedBox(height: 5.0),
                 Text(concepto),
-                Text('Total: ${totalCosto.toString()}'),
-                Text('Sugerido: ${totalCostoSugerido.toString()}'),
+                Text('Total: ${totalCosto.toString()}', style: color1),
+                Text('Limite: ${totalCostoSugerido.toString()}'),
                 SizedBox(height: 5.0)
               ],
             ),
@@ -120,8 +160,8 @@ class ResumencostosPage extends StatelessWidget {
                 ),
                 SizedBox(height: 5.0),
                 Text(concepto2),
-                Text('Total: ${totalCosto2.toString()}'),
-                Text('Sugerido: ${totalCostoSugerido2.toString()}'),
+                Text('Total: ${totalCosto2.toString()}', style: color2),
+                Text('Limite: ${totalCostoSugerido2.toString()}'),
                 SizedBox(height: 5.0)
               ],
             ),
@@ -131,10 +171,37 @@ class ResumencostosPage extends StatelessWidget {
     );
   }
 
-  Widget _botonNuevoGasto(BuildContext context) {
+  Widget _botonNuevoCosto(BuildContext context, int idCul) {
     return FloatingActionButton(
       child: Icon(Icons.add),
-      onPressed: () => Navigator.pushNamed(context, 'crearCosto'),
+      onPressed: () => Navigator.pushNamed(context, 'crearCosto',
+          arguments: idCul.toString()),
+    );
+  }
+
+  Widget _refrescar(BuildContext context) {
+    return Positioned(
+      top: 0.0,
+      right: 0.0,
+      width: 40.0,
+      height: 40.0,
+      child: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
+            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
+          ),
+          IconButton(
+            icon: Icon(Icons.refresh),
+            color: Colors.white,
+            onPressed: () {
+              setState(() {});
+            },
+          ),
+        ],
+      ),
     );
   }
 }

@@ -64,9 +64,22 @@ class CostoOperations {
       final costos = res.map((s) => CostoModel.fromJson(s)).toList();
       costos.forEach((costo) {
         suma += costo.cantidad * costo.valorUnidad;
-      }
+      });
+    }
+    return suma;
+  }
 
-      );
+  Future<double> getCostoTotalByCultivo(String fkidCultivo) async {
+    final db = await dbProvider.database;
+    final res = await db
+        .query('Costos', where: 'fkidCultivo = ?', whereArgs: [fkidCultivo]);
+
+    double suma = 0.0;
+    if(res.isNotEmpty){
+      final List<CostoModel> costos = res.map((s) => CostoModel.fromJson(s)).toList();
+      costos.forEach((element) { 
+        suma += element.valorUnidad*element.cantidad;
+       });
     }
     return suma;
   }

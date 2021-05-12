@@ -7,15 +7,18 @@ import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
 import 'package:agrolibreta_v2/src/data/costo_operations.dart';
 import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
 import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
+import 'package:agrolibreta_v2/src/data/porcentaje_operations.dart';
 
 final CostoOperations _cosOper = new CostoOperations();
 final ConceptoOperations _conOper = new ConceptoOperations();
 final CultivoOperations _culOper = new CultivoOperations();
+final PorcentajeOperations _porOper = new PorcentajeOperations();
 
 //provider para manejar los datos relacionados a los costos
 class CostosData with ChangeNotifier {
   List<List<double>> sumasList = [];
   List<List<ConceptoModel>> conceptosList = [];
+  List<List<double>> sugeridosList = [];
 
   List<CultivoModel> cultivos = [];
   List<CostoModel> costos = [];
@@ -26,8 +29,8 @@ class CostosData with ChangeNotifier {
     //this.getModelosReferencia();
   }
   getCostos() async {
-    final _resp = await _cosOper.consultarCostos();
-    this.costos = [..._resp];
+    final resp = await _cosOper.consultarCostos();
+    this.costos = [...resp];
     final res = await _conOper.consultarConceptos();
     this.conceptos = [...res];
     final cul = await _culOper.consultarCultivos();
@@ -35,10 +38,27 @@ class CostosData with ChangeNotifier {
     notifyListeners();
   }
 
-  anadirCosto(CostoModel costo) async {
-    final _resp = await _cosOper.nuevoCosto(costo);
-    costo.idCosto = _resp;
-    this.costos.add(costo);
+  anadirCultivo(
+      String fkidUbicacion,
+      String fkidModeloReferencia,
+      String nombreDistintivo,
+      double areaSembrada,
+      String fechaInicio,
+      int presupuesto) async {
+    final CultivoModel cultivo = new CultivoModel(
+        fkidUbicacion: fkidUbicacion,
+        fkidEstado: '1',
+        fkidModeloReferencia: fkidModeloReferencia,
+        fkidProductoAgricola: '1',
+        nombreDistintivo: nombreDistintivo,
+        areaSembrada: areaSembrada,
+        fechaInicio: fechaInicio,
+        fechaFinal: '.',
+        presupuesto: presupuesto,
+        precioVentaIdeal: 1.0);
+    final resp = await _culOper.nuevoCultivo(cultivo);
+    cultivo.idCultivo = resp;
+    cultivos.add(cultivo);
     notifyListeners();
   }
 
@@ -47,28 +67,47 @@ class CostosData with ChangeNotifier {
 //y removerlo.
 
   obtenerCostosByConceptos() {
-    if (conceptosList.length==0) {
-      this.cultivos.forEach((e) { 
+    if (conceptosList.length == 0) {
+      if(cultivos.length>0){
 
-        print(e.nombreDistintivo);
+        this.cultivos.forEach((e) {
+          //print(e.nombreDistintivo);
 
-        final List<double> sumTemp = [];
-        final List<ConceptoModel> conTemp = [];
-        this.conceptos.forEach((e2) async {
-          final resp = await _cosOper.sumaCostosByConcepto(
-              e.idCultivo, e2.idConcepto.toString());
-          //if (resp != -1.0) {}//aca se puede aplicar condicional para modelos de referencia con cantidad de conceptos variable, para este prototipo siempre seran 8 conceptos fijos
-          //print('entró al if');
-          sumTemp.add(resp);
-          conTemp.add(e2);
-          print('${e2.nombreConcepto}: ${resp.toString()}');
+          final List<double> sumTemp = [];
+          final List<ConceptoModel> conTemp = [];
+          final List<double> sugTemp = [];
+
+          this.conceptos.forEach((e2) async {
+            final double resp = await _cosOper.sumaCostosByConcepto(
+                e.idCultivo, e2.idConcepto.toString());
+            //if (resp != -1.0) {}//aca se puede aplicar condicional para modelos de referencia con cantidad de conceptos variable, para este prototipo siempre seran 8 conceptos fijos
+            //print('entró al if');
+            final double sug = await _porOper.getPorcenByMRyConcep(
+                e.fkidModeloReferencia, e2.idConcepto.toString(), e.presupuesto);
+
+            sumTemp.add(resp);
+            conTemp.add(e2);
+            sugTemp.add(sug);
+
+            //print(              ' ${e2.nombreConcepto}: ${resp.toString()} sugerido: ${sug.toString()}');
+          });
+          /* if (sumTemp != []) {
+          } */
+          this.conceptosList.add(conTemp);
+          this.sumasList.add(sumTemp);
+          this.sugeridosList.add(sugTemp);
         });
-        /* if (sumTemp != []) {
-        } */
-        this.conceptosList.add(conTemp);
-        this.sumasList.add(sumTemp);
-      });
+      }
     }
+    print('provider costos data, carga data');
+  }
+
+  actualizarCultivos() async {
+    print('provider costos actualizar cultivo');
+    this.cultivos = [];
+    final cul = await _culOper.consultarCultivos();
+    this.cultivos = [...cul];
+    notifyListeners();
   }
 /* 
   List<ModeloReferenciaModel> modelosReferencia = []; //se almacenan MRs

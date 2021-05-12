@@ -1,13 +1,12 @@
+import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:agrolibreta_v2/src/dataproviders/ubicaciones_data.dart';
 import 'package:agrolibreta_v2/src/widgets/modelo_referencia_dropdown.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
-//import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
-import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
 import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
-//import 'package:agrolibreta_v2/src/modelos/producto_agricola_model.dart';
 
 import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
 import 'package:agrolibreta_v2/src/data/estados_operations.dart';
@@ -16,9 +15,8 @@ import 'package:agrolibreta_v2/src/data/producto_agricola_operations.dart';
 import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
 
 import 'package:agrolibreta_v2/src/widgets/ubicaciones_dropdown.dart';
-import 'package:provider/provider.dart';
 
-import 'package:agrolibreta_v2/src/dataproviders/cultivos_data.dart';
+import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 
 class CrearCultivoPage extends StatefulWidget {
   @override
@@ -56,17 +54,11 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
   );
   TextEditingController controlFecha = new TextEditingController();
 
-  //variables por defecto al crear un registro de cultivo
-  int _idEstado = 1; // activo por defecto.
-  int _idProductoAgricola = 1; // arveja por defecto
   //valores para crear el cultivo, el id es automatico
   String _nombreDistintivo = 'nn'; //nn sin especificar
   double _areaSembrada = 1;
   String _fechaInicio = 'nn';
-  // ignore: unused_field
-  String _fechaFinal = 'nn';
   int _presupuesto = 1;
-  double _precioVentaIdeal = 1;
   //variables para crear la ubicacion
   String _nombreUbicacion = 'nn';
   String _desUbicacion = 'nn';
@@ -195,8 +187,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
               TextButton(
                   onPressed: () {
                     ubiData.anadirUbicacion(_nombreUbicacion, _desUbicacion);
-                     setState(() {
-                    });
+                    setState(() {});
                     Navigator.pop(context);
                   },
                   child: Text('Guardar')),
@@ -344,19 +335,17 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
   }
 
   void _save(BuildContext context) {
-    final cultivosData = Provider.of<CultivosData>(context, listen: false);
-    final cultivoTemp = new CultivoModel(
-      fkidUbicacion: _selectedUbicacion.idUbicacion,
-      fkidEstado: _idEstado,
-      fkidModeloReferencia: _selectedModeloReferencia.idModeloReferencia,
-      fkidProductoAgricola: _idProductoAgricola,
-      nombreDistintivo: _nombreDistintivo,
-      areaSembrada: _areaSembrada,
-      fechaInicio: _fechaInicio,
-      fechaFinal: _fechaFinal,
-      presupuesto: _presupuesto,
-      precioVentaIdeal: _precioVentaIdeal,
+    final cosData = Provider.of<CostosData>(context, listen: false);
+    cosData.conceptosList = [];
+    cosData.sumasList = [];
+    cosData.sugeridosList = [];
+    cosData.anadirCultivo(
+      _selectedUbicacion.idUbicacion.toString(),
+      _selectedModeloReferencia.idModeloReferencia.toString(),
+      _nombreDistintivo,
+      _areaSembrada,
+      _fechaInicio,
+      _presupuesto
     );
-    cultivosData.anadirCultivo(cultivoTemp);
   }
 }

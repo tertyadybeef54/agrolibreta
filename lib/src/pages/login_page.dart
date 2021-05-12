@@ -147,7 +147,7 @@ class _Page2State extends State<Page2> {
 
   Widget _loginForm(BuildContext context) {
 
-    final bloc = Provider.of(context);
+    final bloc = BlocProvider.of(context);
     final size = MediaQuery.of(context).size;
     
     return SingleChildScrollView(
