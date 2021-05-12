@@ -17,14 +17,14 @@ class PorcentajeModel {
     });
 
     int idPorcentaje;
-    int fk2idModeloReferencia;
-    int fk2idConcepto;
+    String fk2idModeloReferencia;
+    String fk2idConcepto;
     double porcentaje;
 
     factory PorcentajeModel.fromJson(Map<String, dynamic> json) => PorcentajeModel(
         idPorcentaje: json["idPorcentaje"],
-        fk2idModeloReferencia: json["fk2idModeloReferencia"],
-        fk2idConcepto: json["fk2idConcepto"],
+        fk2idModeloReferencia: json["fk2idModeloReferencia"].toString(),
+        fk2idConcepto: json["fk2idConcepto"].toString(),
         porcentaje: json["porcentaje"].toDouble(),
     );
 

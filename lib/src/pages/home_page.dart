@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
+import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
+import 'package:agrolibreta_v2/src/dataproviders/cultivos_data.dart';
 
-class _HomePageState extends State<HomePage> {
-  String nombre = '';
-  String cultivo = '';
-  String fecha = '';
-  String ubicacion = '';
-  String estado = '';
-  double areaSembrada = 0;
-  int presupuesto = 0;
-  double precioVenta = 0;
-
+class HomePage extends StatelessWidget {
+  //final String nombre = '';
+  final String cultivo = '';
+  final String fecha = '';
+  final String ubicacion = '';
+  final String estado = '';
+  final int areaSembrada = 0;
+  final int presupuesto = 0;
+  final double precioVenta = 0;
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final cultivosData = Provider.of<CultivosData>(context);
+    final List<CultivoModel> cultivos = cultivosData.cultivos;
+
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('        Mis Cultivos')),
@@ -28,20 +30,38 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: _crearListaDeCultivo(),
-      floatingActionButton: _agregarCultivo(),
+      body: _crearListaDeCultivo(context, cultivos),
+      floatingActionButton: _agregarCultivo(context),
     );
   }
 
-  ListView _crearListaDeCultivo() {
-    return ListView(padding: EdgeInsets.all(20.0), children: [
-      _crearCards(),
-      _crearCards(),
-      _crearCards(),
-    ]);
+  Widget _crearListaDeCultivo(
+      BuildContext context, List<CultivoModel> cultivos) {
+    return ListView.builder(
+      itemCount: cultivos.length,
+      itemBuilder: (context, index) {
+        return _crearCards(
+          context,
+          cultivos[index],
+        );
+      },
+    );
   }
 
-  Widget _crearCards() {
+//tarjerta que muestra la informacion de cada cultivo
+//MEJORAR: cambiar los ids por nombres, con if de manera provicional
+//          para el estado y el nombre del cultivo
+  Widget _crearCards(BuildContext context, CultivoModel cultivo) {
+    final _idCultivo = cultivo.idCultivo;
+    final _nombre = cultivo.nombreDistintivo;
+    final _producto = cultivo.fkidProductoAgricola;
+    final _fecha = cultivo.fechaInicio;
+    final _ubicacion = cultivo.fkidUbicacion;
+    final _estado = cultivo.fkidEstado;
+    final _area = cultivo.areaSembrada.toString();
+    final _presupuesto = cultivo.presupuesto.toString();
+    final _precio = cultivo.precioVentaIdeal.toString();
+    final _mR = cultivo.fkidModeloReferencia;
     return Card(
         clipBehavior: Clip.antiAlias,
         elevation: 2.0,
@@ -60,38 +80,41 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 10.0),
-                Text('Nombre: $nombre'),
-                Text('Cultivo de: $cultivo'),
-                Text('Fecha: $fecha'),
-                Text('Ubicación: $ubicacion'),
-                Text('Estado: $estado'),
-                Text('Área Sembrada: $areaSembrada'),
-                Text('Presupuesto: $presupuesto'),
-                Text('Precio de Venta: $precioVenta'),
+                Text('Nombre: $_nombre'),
+                Text('Cultivo de: $_producto'),
+                Text('Fecha: $_fecha'),
+                Text('Ubicación: $_ubicacion'),
+                Text('Estado: $_estado'),
+                Text('Área Sembrada: $_area'),
+                Text('Presupuesto: $_presupuesto'),
+                Text('Precio de Venta: $_precio'),
+                Text('MR: $_mR'),
                 SizedBox(height: 20.0),
                 //TextButton(onPressed: () {}, child: Text('Entrar')),
-                _botonEntrar(context),
+                _botonEntrar(context, _idCultivo),
               ],
             ),
           ],
         ));
   }
 
-//botton para añadir nuevo cultivo
-  Widget _agregarCultivo() {
+
+
+  Widget _botonEntrar(BuildContext context, int idCultivo) {
+    return TextButton(
+        onPressed: () {
+          //print(idCultivo.toString());
+          Navigator.pushNamed(context, 'resumenCostos', arguments: idCultivo);
+        },
+        child: Text('Entrar'));
+  }
+  //botton para añadir nuevo cultivo
+  Widget _agregarCultivo(BuildContext context) {
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
         Navigator.pushNamed(context, 'crearCultivo');
       },
     );
-  }
-
-  Widget _botonEntrar(BuildContext context) {
-    return TextButton(
-        onPressed: () {
-          Navigator.pushNamed(context, 'resumenCostos');
-        },
-        child: Text('Entrar'));
   }
 }

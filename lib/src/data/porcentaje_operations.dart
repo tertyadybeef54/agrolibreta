@@ -11,6 +11,7 @@ class PorcentajeOperations {
     final db = await dbProvider.database;
     final res = await db.insert('Porcentajes', nuevoPorcentaje.toJson());
     // Es el ID del último registro insertado;
+    print('por');
     print(res);
     return res;
   }
@@ -29,7 +30,7 @@ class PorcentajeOperations {
   Future<int> updatePorcentajes(PorcentajeModel nuevoPorcentaje) async {
     final db = await dbProvider.database;
     final res = await db.update('Porcentajes', nuevoPorcentaje.toJson(),
-        where: 'id = ?', whereArgs: [nuevoPorcentaje.idPorcentaje]);
+        where: 'idPorcentaje = ?', whereArgs: [nuevoPorcentaje.idPorcentaje]);
     return res;
   }
 

@@ -11,8 +11,8 @@ class ProductoActividadOperations {
     final db = await dbProvider.database;
     final res = await db.insert('ProductosActividades', nuevoProductoActividad.toJson());
     // Es el ID del último registro insertado;
-    print(res);
     print('proAct creada');
+    print(res);
     return res;
   }
 
@@ -30,7 +30,7 @@ class ProductoActividadOperations {
   Future<int> updateProductosActividades(ProductoActividadModel nuevoProductoActividad) async {
     final db = await dbProvider.database;
     final res = await db.update('ProductosActividades', nuevoProductoActividad.toJson(),
-        where: 'id = ?', whereArgs: [nuevoProductoActividad.idProductoActividad]);
+        where: 'idProductoActividade = ?', whereArgs: [nuevoProductoActividad.idProductoActividad]);
     return res;
   }
 

@@ -30,22 +30,23 @@ class ConceptoOperations {
   Future<int> updateConceptos(ConceptoModel nuevoConcepto) async {
     final db = await dbProvider.database;
     final res = await db.update('Conceptos', nuevoConcepto.toJson(),
-        where: 'id = ?', whereArgs: [nuevoConcepto.idConcepto]);
+        where: 'idConcepto = ?', whereArgs: [nuevoConcepto.idConcepto]);
     return res;
   }
 
 //D - borrar un registro
   Future<int> deleteConcepto(int id) async {
     final db = await dbProvider.database;
-    final res = await db
-        .delete('Conceptos', where: 'idConcepto = ?', whereArgs: [id]);
+    final res =
+        await db.delete('Conceptos', where: 'idConcepto = ?', whereArgs: [id]);
     return res;
   }
 
   Future<ConceptoModel> getConceptoById(int id) async {
     final db = await dbProvider.database;
-    final res = await db.query('Conceptos', where: 'idConcepto = ?', whereArgs: [id]);
-
+    final res =
+        await db.query('Conceptos', where: 'idConcepto = ?', whereArgs: [id]);
+    print(res);
     return res.isNotEmpty ? ConceptoModel.fromJson(res.first) : null;
   }
 }

@@ -18,7 +18,7 @@ class ConceptoDropdown extends StatefulWidget {
 }
 
 class _ConceptoDropdownState extends State<ConceptoDropdown> {
-  String selected = 'Seleccione concepto';
+  String selected = 'Concepto';
   @override
   Widget build(BuildContext context) {
     
