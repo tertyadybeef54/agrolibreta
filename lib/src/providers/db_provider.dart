@@ -102,7 +102,7 @@ class DBProvider {
       db.execute('''
         CREATE TABLE RegistrosFotograficos(
           idRegistroFotografico INTEGER PRIMARY KEY,
-          pathFoto STRING
+          pathFoto TEXT
         )
       ''');
       db.execute('''
