@@ -40,7 +40,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
   @override
   Widget build(BuildContext context) {
 
-    final bloc = Provider.of(context);
+    final bloc = BlocProvider.of(context);
 
     return Scaffold(
       key: scaffolKey,

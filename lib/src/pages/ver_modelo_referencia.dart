@@ -1,52 +1,40 @@
-import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
-import 'package:agrolibreta_v2/src/data/porcentaje_operations.dart';
-import 'package:agrolibreta_v2/src/modelos/porcentaje_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class VerModeloReferencia extends StatefulWidget {
-  VerModeloReferencia({Key key}) : super(key: key);
+import 'package:agrolibreta_v2/src/dataproviders/cultivo_data.dart';
 
-  @override
-  _VerModeloReferenciaState createState() => _VerModeloReferenciaState();
-}
-
-class _VerModeloReferenciaState extends State<VerModeloReferencia> {
-  //operaciones CRUD porcentajes y conceptos
-  PorcentajeOperations porOper = new PorcentajeOperations();
-  ConceptoOperations conOper = new ConceptoOperations();
-  //listas de solo los valores a mostrar en el listview.buider
-  List conceptos = ['semilla','mano de obra'];
-  List valores = [5,95];
-
-  List<PorcentajeModel> porcentajes =
-      []; //listado de porcentajes de ese nuevo modeloreferencia
-  double _resto = 000; //total restante disponible del 100 %
-
+class VerModeloReferencia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final culData = Provider.of<CultivoData>(context, listen: false);
+    final conceptos = culData.conceptos;
+    final porcentajes = culData.porcentajes;
+    final idMr = culData.idMr;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Center(child: Text('Modelo de referencia')),
+        title: Center(child: Text('Modelo de referencia: $idMr')),
       ),
       body: Stack(
         children: [
           ListView.builder(
             padding: EdgeInsets.only(
                 left: 30.0, right: 30.0, top: 20.0, bottom: 90.0),
-            itemCount: valores.length,
+            itemCount: conceptos.length,
             itemBuilder: (context, index) {
               return Card(
                 child: ListTile(
                   leading: Icon(Icons.grass_rounded),
                   onTap: () {},
-                  title: Text('${conceptos[index]}:  ${valores[index]} %'),
+                  title: Text(
+                      '${conceptos[index].nombreConcepto}:  ${porcentajes[index].porcentaje} %'),
                   trailing: Icon(Icons.keyboard_arrow_right),
                 ),
               );
             },
           ),
-          _sumaBoton(),
+          //_sumaBoton(),
         ],
       ),
     );
@@ -56,7 +44,7 @@ class _VerModeloReferenciaState extends State<VerModeloReferencia> {
 
   //#######################################################
   // widges que muestra la suma restante y el boton
-  Widget _sumaBoton() {
+/*   Widget _sumaBoton() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -72,5 +60,5 @@ class _VerModeloReferenciaState extends State<VerModeloReferencia> {
         ],
       ),
     );
-  }
+  } */
 }

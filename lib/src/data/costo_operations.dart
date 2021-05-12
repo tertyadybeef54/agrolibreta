@@ -59,12 +59,28 @@ class CostoOperations {
       SELECT * FROM Costos WHERE fkidProductoActividad IN (SELECT idProductoActividad FROM ProductosActividades WHERE fkidConcepto = '$idConcepto') AND fkidCultivo = '$idCultivo'
     
     ''');
+    double suma = 0;
+    if (res.isNotEmpty) {
+      final costos = res.map((s) => CostoModel.fromJson(s)).toList();
+      costos.forEach((costo) {
+        suma += costo.cantidad * costo.valorUnidad;
+      });
+    }
+    return suma;
+  }
+
+  Future<double> getCostoTotalByCultivo(String fkidCultivo) async {
+    final db = await dbProvider.database;
+    final res = await db
+        .query('Costos', where: 'fkidCultivo = ?', whereArgs: [fkidCultivo]);
+
     double suma = 0.0;
-    res.forEach((costo) {
-      print(costo);
-      //suma += costo[valorUnidad] * costo[cantidad];
-    });
-    print(res);
+    if(res.isNotEmpty){
+      final List<CostoModel> costos = res.map((s) => CostoModel.fromJson(s)).toList();
+      costos.forEach((element) { 
+        suma += element.valorUnidad*element.cantidad;
+       });
+    }
     return suma;
   }
 }

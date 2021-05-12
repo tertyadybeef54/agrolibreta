@@ -20,18 +20,18 @@ class CostoModel {
     });
 
     int idCosto;
-    int fkidProductoActividad;
-    int fkidCultivo;
-    int fkidRegistroFotografico;
+    String fkidProductoActividad;
+    String fkidCultivo;
+    String fkidRegistroFotografico;
     double cantidad;
     double valorUnidad;
     String fecha;
 
     factory CostoModel.fromJson(Map<String, dynamic> json) => CostoModel(
         idCosto: json["idCosto"],
-        fkidProductoActividad: json["fkidProductoActividad"],
-        fkidCultivo: json["fkidCultivo"],
-        fkidRegistroFotografico: json["fkidRegistroFotografico"],
+        fkidProductoActividad: json["fkidProductoActividad"].toString(),
+        fkidCultivo: json["fkidCultivo"].toString(),
+        fkidRegistroFotografico: json["fkidRegistroFotografico"].toString(),
         cantidad: json["cantidad"],
         valorUnidad: json["valorUnidad"].toDouble(),
         fecha: json["fecha"],
