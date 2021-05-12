@@ -7,15 +7,18 @@ import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
 import 'package:agrolibreta_v2/src/data/costo_operations.dart';
 import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
 import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
+import 'package:agrolibreta_v2/src/data/porcentaje_operations.dart';
 
 final CostoOperations _cosOper = new CostoOperations();
 final ConceptoOperations _conOper = new ConceptoOperations();
 final CultivoOperations _culOper = new CultivoOperations();
+final PorcentajeOperations _porOper = new PorcentajeOperations();
 
 //provider para manejar los datos relacionados a los costos
 class CostosData with ChangeNotifier {
   List<List<double>> sumasList = [];
   List<List<ConceptoModel>> conceptosList = [];
+  List<List<double>> sugeridosList = [];
 
   List<CultivoModel> cultivos = [];
   List<CostoModel> costos = [];
@@ -26,8 +29,8 @@ class CostosData with ChangeNotifier {
     //this.getModelosReferencia();
   }
   getCostos() async {
-    final _resp = await _cosOper.consultarCostos();
-    this.costos = [..._resp];
+    final resp = await _cosOper.consultarCostos();
+    this.costos = [...resp];
     final res = await _conOper.consultarConceptos();
     this.conceptos = [...res];
     final cul = await _culOper.consultarCultivos();
@@ -70,19 +73,28 @@ class CostosData with ChangeNotifier {
 
         final List<double> sumTemp = [];
         final List<ConceptoModel> conTemp = [];
+        final List<double> sugTemp = [];
+
         this.conceptos.forEach((e2) async {
-          final resp = await _cosOper.sumaCostosByConcepto(
+          final double resp = await _cosOper.sumaCostosByConcepto(
               e.idCultivo, e2.idConcepto.toString());
           //if (resp != -1.0) {}//aca se puede aplicar condicional para modelos de referencia con cantidad de conceptos variable, para este prototipo siempre seran 8 conceptos fijos
           //print('entró al if');
+          final double sug = await _porOper.getPorcenByMRyConcep(
+              e.fkidModeloReferencia, e2.idConcepto.toString(), e.presupuesto);
+
           sumTemp.add(resp);
           conTemp.add(e2);
-          print('${e2.nombreConcepto}: ${resp.toString()}');
+          sugTemp.add(sug);
+
+          print(
+              ' ${e2.nombreConcepto}: ${resp.toString()} sugerido: ${sug.toString()}');
         });
         /* if (sumTemp != []) {
         } */
         this.conceptosList.add(conTemp);
         this.sumasList.add(sumTemp);
+        this.sugeridosList.add(sugTemp);
       });
     }
   }

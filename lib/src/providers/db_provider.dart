@@ -213,7 +213,7 @@ class DBProvider {
         INSERT INTO Porcentajes(fk2idModeloReferencia, fk2idConcepto, porcentaje) VALUES("1", "7", 1.5)
       ''');
       await db.rawInsert('''
-        INSERT INTO Porcentajes(fk2idModeloReferencia, fk2idConcepto, porcentaje) VALUES("1", "8", 5.7)
+        INSERT INTO Porcentajes(fk2idModeloReferencia, fk2idConcepto, porcentaje) VALUES("1", "8", 5.5)
       ''');
 //#################
       await db.rawInsert('''

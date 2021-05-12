@@ -41,19 +41,40 @@ class PorcentajeOperations {
         .delete('Porcentajes', where: 'idPorcentaje = ?', whereArgs: [id]);
     return res;
   }
+
 //otros R otras consultas
   Future<PorcentajeModel> getPorcentajeById(int id) async {
     final db = await dbProvider.database;
-    final res = await db.query('Porcentajes', where: 'idPorcentaje = ?', whereArgs: [id]);
+    final res = await db
+        .query('Porcentajes', where: 'idPorcentaje = ?', whereArgs: [id]);
 
     return res.isNotEmpty ? PorcentajeModel.fromJson(res.first) : null;
   }
-  Future<List<PorcentajeModel>> consultarPorcentajesbyModeloReferencia(String idModeloReferencia) async {
+
+  Future<List<PorcentajeModel>> consultarPorcentajesbyModeloReferencia(
+      String idModeloReferencia) async {
     final db = await dbProvider.database;
-    final res = await db.query('Porcentajes', where: 'fk2idModeloReferencia = ?', whereArgs: [idModeloReferencia]);
+    final res = await db.query('Porcentajes',
+        where: 'fk2idModeloReferencia = ?', whereArgs: [idModeloReferencia]);
 
     return res.isNotEmpty
         ? res.map((s) => PorcentajeModel.fromJson(s)).toList()
         : [];
+  }
+
+  Future<double> getPorcenByMRyConcep(
+      String fkidMR, String fkidCon, int presupuesto) async {
+    final db = await dbProvider.database;
+    final res = await db.rawQuery('''
+      SELECT * FROM Porcentajes WHERE fk2idModeloReferencia == $fkidMR AND fk2idConcepto == $fkidCon
+    ''');
+    double valor = 0.0;
+    
+    if(res.isNotEmpty){
+      final porcentaje = PorcentajeModel.fromJson(res.first);
+      valor = porcentaje.porcentaje * presupuesto * 0.01;
+    }
+
+    return valor;
   }
 }

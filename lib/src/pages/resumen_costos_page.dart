@@ -13,15 +13,16 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
   @override
   Widget build(BuildContext context) {
     final CultivoModel cultivoArg = ModalRoute.of(context).settings.arguments;
+
     final nombreCul = cultivoArg.nombreDistintivo;
     final idCul = cultivoArg.idCultivo;
-    final cosData = Provider.of<CostosData>(context, listen: false);
 
-    final _cultivos = cosData.cultivos;
+    final cosData = Provider.of<CostosData>(context, listen: false);
     final _sumasAll = cosData.sumasList;
     final _conceptosAll = cosData.conceptosList;
+    final _sugeridos = cosData.sugeridosList;
 
-    _cultivos.forEach((element) {
+ /*    _cultivos.forEach((element) {
       print(element.idCultivo);
     });
     _sumasAll.forEach((element) {
@@ -32,34 +33,37 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
         print(e.nombreConcepto);
       });
     });
+    _sugeridos.forEach((element) {
+      print(element.toString());
+    }); */
 
     return Scaffold(
-      appBar: _appBar(context, nombreCul),
+      appBar: _appBar(context, nombreCul, idCul),
       body: Stack(
         children: <Widget>[
           ListView.builder(
             padding:
-                EdgeInsets.only(left: 0.0, right: 0.0, top: 30.0, bottom: 20.0),
+                EdgeInsets.only(left: 0.0, right: 0.0, top: 25.0, bottom: 20.0),
             itemCount: 4,
             itemBuilder: (context, i) {
               return _concepto(
-                  _conceptosAll[idCul-1][i].nombreConcepto,
-                  _sumasAll[idCul-1][i],
-                  100,
-                  _conceptosAll[idCul-1][4 + i].nombreConcepto,
-                  _sumasAll[idCul-1][4 + i],
-                  100);
+                  _conceptosAll[idCul - 1][i].nombreConcepto,
+                  _sumasAll[idCul - 1][i],
+                  _sugeridos[idCul - 1][i],
+                  _conceptosAll[idCul - 1][4 + i].nombreConcepto,
+                  _sumasAll[idCul - 1][4 + i],
+                  _sugeridos[idCul - 1][4 + i]);
             },
           ),
           _refrescar(context),
         ],
       ),
-      floatingActionButton: _botonNuevoGasto(context),
+      floatingActionButton: _botonNuevoCosto(context, idCul),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  Widget _appBar(BuildContext context, String nombreCul) {
+  Widget _appBar(BuildContext context, String nombreCul, int idCul) {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Center(
@@ -69,7 +73,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
         IconButton(
           iconSize: 40.0,
           icon: new Icon(Icons.settings),
-          onPressed: () => Navigator.pushNamed(context, 'configCultivo'),
+          onPressed: () => Navigator.pushNamed(context, 'configCultivo', arguments: idCul),
         ),
       ],
     );
@@ -141,32 +145,36 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     );
   }
 
-  Widget _botonNuevoGasto(BuildContext context) {
+  Widget _botonNuevoCosto(BuildContext context, int idCul) {
     return FloatingActionButton(
       child: Icon(Icons.add),
-      onPressed: () => Navigator.pushNamed(context, 'crearCosto'),
+      onPressed: () => Navigator.pushNamed(context, 'crearCosto',
+          arguments: idCul.toString()),
     );
   }
 
   Widget _refrescar(BuildContext context) {
     return Positioned(
-      top: 2.0,
-      right: 2.0,
+      top: 0.0,
+      right: 0.0,
       width: 40.0,
       height: 40.0,
-      child: Ink(
-        decoration: const ShapeDecoration(
-          color: Colors.red,
-          shape: CircleBorder(),
-        ),
-        child: IconButton(
-          icon: const Icon(Icons.refresh),
-          color: Colors.white,
-          onPressed: () {
-            setState(() {
-            });
-          },
-        ),
+      child: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
+            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
+          ),
+          IconButton(
+            icon: Icon(Icons.refresh),
+            color: Colors.white,
+            onPressed: () {
+              setState(() {});
+            },
+          ),
+        ],
       ),
     );
   }

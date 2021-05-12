@@ -338,12 +338,14 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
     final cosData = Provider.of<CostosData>(context, listen: false);
     cosData.conceptosList = [];
     cosData.sumasList = [];
+    cosData.sugeridosList = [];
     cosData.anadirCultivo(
       _selectedUbicacion.idUbicacion.toString(),
       _selectedModeloReferencia.idModeloReferencia.toString(),
       _nombreDistintivo,
       _areaSembrada,
       _fechaInicio,
-      _presupuesto);
-}
+      _presupuesto
+    );
+  }
 }

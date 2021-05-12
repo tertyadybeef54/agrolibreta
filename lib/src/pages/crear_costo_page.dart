@@ -62,7 +62,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   TextEditingController controlFecha = new TextEditingController();
 
   //variables para crear un registro de costo
-  int _fkidCultivo = 1;
+  //int _fkidCultivo = 1;
   double _cantidad = 1;
   double _valorUnidad = 0;
   String _fechaC;
@@ -79,6 +79,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final String fkidCultivo = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -107,7 +108,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
           Divider(),
           _fecha(context),
           Divider(),
-          _guardar(context),
+          _guardar(context, fkidCultivo),
         ],
       ),
     );
@@ -422,23 +423,23 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   //guardar
   //###############################################
   //boton _guardar y guardar en la base de datos el registro del cultivo
-  Widget _guardar(BuildContext context) {
+  Widget _guardar(BuildContext context, String fkidCultivo) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
       child: ElevatedButton(
           child: Text('Guardar'),
           onPressed: () {
-            _save(context);
+            _save(context, fkidCultivo);
             Navigator.pop(context);
           }),
     );
   }
 
-  void _save(BuildContext context) {
+  void _save(BuildContext context, String fkidCultivo) {
     final costoTemp = new CostoModel(
       fkidProductoActividad:
           _selectedProductoActividad.idProductoActividad.toString(),
-      fkidCultivo: _fkidCultivo.toString(),
+      fkidCultivo: fkidCultivo,
       fkidRegistroFotografico: "1",
       cantidad: _cantidad,
       valorUnidad: _valorUnidad,
@@ -448,6 +449,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     final cosData = Provider.of<CostosData>(context, listen: false);
     cosData.conceptosList = [];
     cosData.sumasList = [];
+    cosData.sugeridosList = [];
     cosData.obtenerCostosByConceptos();
   }
 }
