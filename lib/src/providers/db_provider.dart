@@ -97,7 +97,7 @@ class DBProvider {
       await db.execute('''
         CREATE TABLE RegistrosFotograficos(
           idRegistroFotografico INTEGER PRIMARY KEY,
-          pathFoto STRING
+          pathFoto TEXT
         )
       ''');
       await db.execute('''
