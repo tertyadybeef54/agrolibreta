@@ -147,64 +147,7 @@ class CrearModeloReferencia extends StatelessWidget {
     );
   }
 
-//###################################################
-//registro de un nuevo concepto con su funcion de input, futuras versiones
-/*   void _registrarConcepto(BuildContext context) {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Registrar concepto'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _inputNombre('Nombre', '', '', TextInputType.name),
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () async {
-                    final nuevoConcepto = new ConceptoModel(
-                      nombreConcepto: _nombreConcepto,
-                    );
-                    await conOper.nuevoConcepto(nuevoConcepto);
 
-                    Navigator.pop(context, 'crearModeloReferencia');
-                  },
-                  child: Text('Guardar')),
-            ],
-          );
-        }).then((value) => Navigator.pop(context));
-  } */
-//input del nombre del concepto para futuras versiones
-/*   Widget _inputNombre(String descripcion, String hilabel, String labeltext,
-      TextInputType tipotext) {
-    var inputDecoration = InputDecoration(
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-      hintText: hilabel,
-      labelText: labeltext,
-      helperText: descripcion,
-      icon: Icon(Icons.drive_file_rename_outline),
-      //suffixIcon: Icon(Icons.touch_app),
-    );
-    return Container(
-      padding: EdgeInsets.only(bottom: 5.0),
-      height: 60.0,
-      width: double.infinity,
-      child: TextField(
-        textAlignVertical: TextAlignVertical.bottom,
-        keyboardType: tipotext,
-        textCapitalization: TextCapitalization.sentences,
-        decoration: inputDecoration,
-        onChanged: (valor) {
-          _nombreConcepto = valor;
-        },
-      ),
-    );
-  } */
 
   //#######################################################
   //input para el porcentaje
@@ -264,3 +207,61 @@ class CrearModeloReferencia extends StatelessWidget {
     );
   }
 }
+//###################################################
+//registro de un nuevo concepto con su funcion de input, futuras versiones
+/*   void _registrarConcepto(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            title: Text('Registrar concepto'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _inputNombre('Nombre', '', '', TextInputType.name),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () async {
+                    final nuevoConcepto = new ConceptoModel(
+                      nombreConcepto: _nombreConcepto,
+                    );
+                    await conOper.nuevoConcepto(nuevoConcepto);
+
+                    Navigator.pop(context, 'crearModeloReferencia');
+                  },
+                  child: Text('Guardar')),
+            ],
+          );
+        }).then((value) => Navigator.pop(context));
+  } */
+//input del nombre del concepto para futuras versiones
+/*   Widget _inputNombre(String descripcion, String hilabel, String labeltext,
+      TextInputType tipotext) {
+    var inputDecoration = InputDecoration(
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+      hintText: hilabel,
+      labelText: labeltext,
+      helperText: descripcion,
+      icon: Icon(Icons.drive_file_rename_outline),
+      //suffixIcon: Icon(Icons.touch_app),
+    );
+    return Container(
+      padding: EdgeInsets.only(bottom: 5.0),
+      height: 60.0,
+      width: double.infinity,
+      child: TextField(
+        textAlignVertical: TextAlignVertical.bottom,
+        keyboardType: tipotext,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: inputDecoration,
+        onChanged: (valor) {
+          _nombreConcepto = valor;
+        },
+      ),
+    );
+  } */

@@ -41,6 +41,7 @@ class CultivoData with ChangeNotifier {
   }
 
   consultarMR(String idMR) async {
+    
     this.idMr = idMR;
     final _resp = await _porOper.consultarPorcentajesbyModeloReferencia(idMR);
 

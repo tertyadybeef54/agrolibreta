@@ -16,7 +16,7 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
   @override
   Widget build(BuildContext context) {
     final modelosReferenciaData =
-        Provider.of<ModeloReferenciaData>(context, listen: false);
+        Provider.of<ModeloReferenciaData>(context, listen: true);
 
     final List<ModeloReferenciaModel> modelosReferencia =
         modelosReferenciaData.modelosReferencia;
@@ -24,6 +24,11 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
         modelosReferenciaData.porcentajesList;
     final List<List<ConceptoModel>> conceptosList =
         modelosReferenciaData.conceptosList;
+    conceptosList.forEach((element) {
+      element.forEach((e) {
+        print(e.idConcepto);
+      });
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -47,7 +52,7 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
       List<List<PorcentajeModel>> porcentajesList,
       List<List<ConceptoModel>> conceptosList) {
     return ListView.builder(
-      itemCount: modelosReferencia.length,
+      itemCount: porcentajesList.length,
       itemBuilder: (_, i) => _listTile(modelosReferencia[i].idModeloReferencia,
           porcentajesList[i], conceptosList[i]),
     );
@@ -95,8 +100,7 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
           icon: const Icon(Icons.refresh),
           color: Colors.white,
           onPressed: () {
-            setState(() {
-            });
+            setState(() {});
           },
         ),
       ),

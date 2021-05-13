@@ -50,9 +50,4 @@ class PorcentajeData with ChangeNotifier {
     this.conceptos = [];
     this.porcentajes = [];
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }
