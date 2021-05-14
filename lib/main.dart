@@ -1,4 +1,5 @@
 import 'package:agrolibreta_v2/src/dataproviders/cultivo_data.dart';
+import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,6 +15,9 @@ import 'package:agrolibreta_v2/src/dataproviders/unidades_medida_data_provider.d
 import 'package:agrolibreta_v2/src/dataproviders/productos_actividades_data_provider.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = new PreferenciasUsuario();
+  await prefs.initPrefs();
   runApp(MyApp());
 }
 
@@ -21,8 +25,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => new CultivoData()),
@@ -46,7 +48,7 @@ class MyApp extends StatelessWidget {
           const Locale('es', 'ES'), // *See Advanced Locales below*
         ],
         title: 'AgroLibreta',
-        initialRoute: 'taps',
+        initialRoute: 'login',
         routes: getAplicationRoutes(),
         onGenerateRoute: (RouteSettings settings) {
           return MaterialPageRoute(
