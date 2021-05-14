@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:agrolibreta_v2/src/blocs/login_registro_bloc.dart';
-import 'package:agrolibreta_v2/src/providers/usuario_provider.dart';
+//import 'package:agrolibreta_v2/src/providers/usuario_provider.dart';
 import 'package:agrolibreta_v2/src/blocs/provider.dart';
-import 'package:agrolibreta_v2/src/utils/utils.dart';
+//import 'package:agrolibreta_v2/src/utils/utils.dart';
 
 class LoginPage extends StatelessWidget {
 
@@ -94,7 +94,7 @@ class Page2 extends StatefulWidget {
 
 class _Page2State extends State<Page2> {
 
-  final usuarioProvider = new UsuarioProvider();
+  //final usuarioProvider = new UsuarioProvider();
   bool passwordVisible = true; 
 
   @override
@@ -276,7 +276,7 @@ class _Page2State extends State<Page2> {
               style: TextStyle(fontSize: 20.0),
             ),
           ),
-          onPressed: snapshot.hasData? () =>_login(context, bloc) : null,
+          onPressed: (){},//snapshot.hasData? () =>_login(context, bloc) : null,
           style: ElevatedButton.styleFrom(primary: Colors.brown),
         );
       }
@@ -284,16 +284,16 @@ class _Page2State extends State<Page2> {
     
   }
 
-  _login(BuildContext context, LoginRegistroBloc bloc)async{
+  // _login(BuildContext context, LoginRegistroBloc bloc)async{
 
-    Map info = await usuarioProvider.login(bloc.email, bloc.password);
+  //   //Map info = await usuarioProvider.login(bloc.email, bloc.password);
     
-    if(info['ok']){
-      Navigator.pushReplacementNamed(context, 'taps'); 
-    }else{
-      mostrarAlerta(context, info['mensaje']);
-    }
-    print('Email: ${ bloc.email }');
-    print('Password: ${ bloc.password }');
-  }
+  //   if(info['ok']){
+  //     Navigator.pushReplacementNamed(context, 'taps'); 
+  //   }else{
+  //     mostrarAlerta(context, info['mensaje']);
+  //   }
+  //   print('Email: ${ bloc.email }');
+  //   print('Password: ${ bloc.password }');
+  // }
 }
