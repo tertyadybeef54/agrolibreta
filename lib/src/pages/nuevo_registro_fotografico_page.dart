@@ -1,13 +1,14 @@
 
-import 'dart:convert';
+//import 'dart:convert';
 
-import 'package:agrolibreta_v2/src/data/registro_fotografico_operations.dart';
-import 'package:agrolibreta_v2/src/modelos/registro_fotografico_model.dart';
+import 'package:agrolibreta_v2/src/dataproviders/registro_fotograficos_data.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 //import 'dart:convert';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 class NuevoRegistroFotograficoPage extends StatefulWidget {
 
@@ -17,11 +18,12 @@ class NuevoRegistroFotograficoPage extends StatefulWidget {
 
 class _NuevoRegistroFotograficoPageState extends State<NuevoRegistroFotograficoPage> {
 
-  File _imagen;
+  File imagenFile;
   final _picker = ImagePicker();
   String imagenRuta = '';
   final _lista = ['cultivo_1','cultivo_2','cultivo_3',];
   var _vista = 'Seleccione un cultivo';
+  
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +60,9 @@ class _NuevoRegistroFotograficoPageState extends State<NuevoRegistroFotograficoP
               width: double.infinity,
               height: 274.0,
               color: Colors.white,
-              child: _imagen == null 
+              child: imagenFile == null 
                   ? Image.asset('assets/no-image.png', height: 300.0)
-                  : Image.file(_imagen),
+                  : Image.file(imagenFile),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -92,50 +94,50 @@ class _NuevoRegistroFotograficoPageState extends State<NuevoRegistroFotograficoP
   }
   void _getImagen() async{
     final imagen = await _picker.getImage(source:ImageSource.camera);
-    
     setState(() {
       if(imagen != null){
-      _imagen = File(imagen.path);
-
-      final bytes = _imagen.readAsBytesSync();
-      final imagenNow = base64Encode(bytes);
-
-      imagenRuta = imagenNow;
-      print('String Imagen $imagenRuta');
+      imagenFile = File(imagen.path);
+        
+      //_imagen = localImage;
+      // final bytes = _imagen.readAsBytesSync();
+      // final imagenNow = base64Encode(bytes);
+      //imagenRuta = pathRuta;
+      //print('String Imagen $imagenRuta');
     }else{
       print('No Image Selected');
     }
     });
   }
-
   Widget _crearBoton() {
     return ElevatedButton(
       child: Text('Guardar', style: TextStyle(fontSize: 20.0),),
-      onPressed: (){
-        setState(() {
-          _guardarImagen();
-        });
-      }
+      onPressed: _guardarImagen,
       
     );
   }
-  void _guardarImagen(){
-    final imagenTemp = new RegistroFotograficoModel(
-      pathFoto: imagenRuta,
-    );
-    RegistroFotograficoOperations operacionImagen = new RegistroFotograficoOperations();
-    operacionImagen.nuevoRegistroFotografico(imagenTemp);
-   
-    mostrarSnackbar('Imagen guardada');
-    Navigator.pop(context);
+  void _guardarImagen()async{
+    final String pathRuta = (await getTemporaryDirectory()).path+'${DateTime.now()}.png';
+    final File localImage = await imagenFile.copy('$pathRuta');
+      imagenFile = localImage;
+      imagenRuta = pathRuta;
+    // setState(()async {
+    //   final File localImage = await imagenFile.copy('$pathRuta');
+    //   imagenFile = localImage;
+    //   imagenRuta = pathRuta;
+    // });
+    final regFotData = Provider.of<RegistrosFotograficosData>(context, listen: false);
+    regFotData.nuevoRegFotografico(imagenRuta);
+    print(imagenRuta);
+    //mostrarSnackbar('Imagen guardada');
+    //Navigator.pop(context);
   }
   // metodo para crear el aviso de 'imagen guardada'         
-  void mostrarSnackbar(String mensaje){
-    final snackbar = SnackBar(
-      content: Text(mensaje),
-      duration: Duration(milliseconds:2500),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-  }
+  // void mostrarSnackbar(String mensaje){
+  //   final snackbar = SnackBar(
+  //     content: Text(mensaje),
+  //     duration: Duration(milliseconds:2500),
+  //   );
+  //   ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  // }
 }
 

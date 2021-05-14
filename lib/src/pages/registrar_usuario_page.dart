@@ -6,7 +6,7 @@ import 'package:agrolibreta_v2/src/utils/utils.dart' as utils ;
 import 'package:agrolibreta_v2/src/modelos/registro_usuarios_model.dart';
 import 'package:agrolibreta_v2/src/providers/registro_usuarios_provider.dart';
 import 'package:agrolibreta_v2/src/blocs/provider.dart';
-import 'package:agrolibreta_v2/src/providers/usuario_provider.dart';
+//import 'package:agrolibreta_v2/src/providers/usuario_provider.dart';
 
 
 class RegistrarUsuario extends StatefulWidget {
@@ -19,7 +19,7 @@ class RegistrarUsuario extends StatefulWidget {
 
 class _RegistrarUsuarioState extends State<RegistrarUsuario> {
 
-  final usuarioProvider = new UsuarioProvider();
+  //final usuarioProvider = new UsuarioProvider();
 
  
   TextEditingController _inputFieldDateController = new TextEditingController();//para crear fecha
@@ -313,41 +313,41 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
           child: ElevatedButton(
             child: Text('Registrarse', style: TextStyle(fontSize: 20.0),),
             onPressed: snapshot.hasData? (){
-              _registrer(bloc, context);
+              //_registrer(bloc, context);
             } : null
           ),
         );
       }
     );
   }
-  _registrer(LoginRegistroBloc bloc, BuildContext context) async{
+  // _registrer(LoginRegistroBloc bloc, BuildContext context) async{
 
     
-    if (formKey.currentState.validate() ){
-      formKey.currentState.save();
-      final info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
+  //   if (formKey.currentState.validate() ){
+  //     formKey.currentState.save();
+  //     //final info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
       
-      if(info['ok']){
-        registroUsuariosProvider.crearUsuario(registro);
-        Navigator.pushReplacementNamed(context, 'taps'); 
-        mostrarSnackbar('Usuario guardado');
-        Navigator.pop(context);
+  //     if(info['ok']){
+  //       registroUsuariosProvider.crearUsuario(registro);
+  //       Navigator.pushReplacementNamed(context, 'taps'); 
+  //       mostrarSnackbar('Usuario guardado');
+  //       Navigator.pop(context);
 
-      }else{
-        utils.mostrarAlerta(context, info['mensaje']);
+  //     }else{
+  //       utils.mostrarAlerta(context, info['mensaje']);
 
-      }
+  //     }
       
 
-      // print('TODO OK');
-      // print(registro.nombres);
-      // print(registro.apellidos);
-      // print(registro.documento);
-      // print(registro.fechaNacimiento);
-      // print(registro.email);
-      // print(registro.password);
-    }else{return;}
-  }
+  //     // print('TODO OK');
+  //     // print(registro.nombres);
+  //     // print(registro.apellidos);
+  //     // print(registro.documento);
+  //     // print(registro.fechaNacimiento);
+  //     // print(registro.email);
+  //     // print(registro.password);
+  //   }else{return;}
+  // }
 
 // metodo para crear el aviso de 'usuario guardado'         
   void mostrarSnackbar(String mensaje){
