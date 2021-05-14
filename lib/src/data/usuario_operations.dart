@@ -9,7 +9,7 @@ class UsuarioOperations {
 //C - crear
    Future<int> nuevoUsuario(RegistroUsuariosModel nuevoUsuario) async {
     final db = await dbProvider.database;
-    final res = await db.insert('Usuarios', nuevoUsuario.toJson());
+    final res = await db.insert('Usuario', nuevoUsuario.toJson());
     // Es el ID del último registro insertado;
     print(res);
     print('Usuario creado');
@@ -19,7 +19,7 @@ class UsuarioOperations {
 //R - leer
   Future<List<RegistroUsuariosModel>> consultarUsuario() async {
     final db = await dbProvider.database;
-    final res = await db.query('Usuarios');
+    final res = await db.query('Usuario');
 
     return res.isNotEmpty
         ? res.map((s) => RegistroUsuariosModel.fromJson(s)).toList()
@@ -29,7 +29,7 @@ class UsuarioOperations {
 //U - actualizar
   Future<int> updateUsuarios(RegistroUsuariosModel nuevoUsuario) async {
     final db = await dbProvider.database;
-    final res = await db.update('Usuarios', nuevoUsuario.toJson(),
+    final res = await db.update('Usuario', nuevoUsuario.toJson(),
         where: 'idUsuario = ?', whereArgs: [nuevoUsuario.idUsuario]);
     return res;
   }
@@ -38,14 +38,14 @@ class UsuarioOperations {
   Future<int> deleteUsuario(int id) async {
     final db = await dbProvider.database;
     final res =
-        await db.delete('Usuarios', where: 'idUsuario = ?', whereArgs: [id]);
+        await db.delete('Usuario', where: 'idUsuario = ?', whereArgs: [id]);
     return res;
   }
 
   Future<RegistroUsuariosModel> getUsuarioById(int id) async {
     final db = await dbProvider.database;
     final res =
-        await db.query('Usuarios', where: 'idUsuario = ?', whereArgs: [id]);
+        await db.query('Usuario', where: 'idUsuario = ?', whereArgs: [id]);
     print(res);
     return res.isNotEmpty ? RegistroUsuariosModel.fromJson(res.first) : null;
   }

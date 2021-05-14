@@ -11,13 +11,14 @@ class PerfilUsuarioPage extends StatefulWidget {
 
 class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
   RegistroUsuariosModel usuario = new RegistroUsuariosModel();
-
+  bool passOk = false;
+  String nuevoPassword;
   TextEditingController _inputFieldDateController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    //final usuarioData = Provider.of<UsuarioProvider>(context, listen: false);
-    //usuario = usuarioData.usuarios[0];
+    final usuarioData = Provider.of<UsuarioProvider>(context, listen: false);
+    usuario = usuarioData.usuarios[0];
 
     return Scaffold(
       appBar: AppBar(
@@ -53,7 +54,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () =>
-                  _editInfoAlert(context, 'Nombres', TextInputType.name),
+                  _editInfoAlert(context, 'Nombres', TextInputType.name, 1),
             )
           ]),
           Divider(height: 10.0),
@@ -62,7 +63,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () =>
-                  _editInfoAlert(context, 'Apellidos', TextInputType.name),
+                  _editInfoAlert(context, 'Apellidos', TextInputType.name, 2),
             )
           ]),
           Divider(height: 10.0),
@@ -71,7 +72,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () => _editInfoAlert(
-                  context, 'Número de documento', TextInputType.number),
+                  context, 'Número de documento', TextInputType.number, 3),
             )
           ]),
           Divider(height: 10.0),
@@ -104,7 +105,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
   }
 
 //funcion que actualiza
-  void actualizar() {
+  void _actualizar() {
     setState(() {
       final usuarioData = Provider.of<UsuarioProvider>(context, listen: false);
       usuarioData.actualizarData(usuario);
@@ -126,7 +127,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
   }
 
   void _editInfoAlert(
-      BuildContext context, String titulo, TextInputType tipotext) {
+      BuildContext context, String titulo, TextInputType tipotext, int n) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -139,16 +140,13 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              _input(
-                '$titulo',
-                tipotext,
-              ),
+              _input('$titulo', tipotext, n),
             ],
           ),
           actions: <Widget>[
             TextButton(
               child: Text('Cancelar'),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => _actualizar(),
             ),
             TextButton(
               child: Text('Guardar'),
@@ -160,7 +158,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
     );
   }
 
-  Widget _input(String titulo, TextInputType tipotext) {
+  Widget _input(String titulo, TextInputType tipotext, int n) {
     return Container(
       padding: EdgeInsets.only(bottom: 10.0),
       height: 60.0,
@@ -173,6 +171,17 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
           labelText: '$titulo',
           icon: Icon(Icons.drive_file_rename_outline),
         ),
+        onChanged: (value) {
+          if (n == 1) {
+            usuario.nombres = value;
+          }
+          if (n == 2) {
+            usuario.apellidos = value;
+          }
+          if (n == 3) {
+            usuario.documento = int.parse(value);
+          }
+        },
       ),
     );
   }
@@ -216,7 +225,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
             ),
             TextButton(
               child: Text('Guardar', style: TextStyle(fontSize: 17.0)),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => _actualizar(),
             )
           ],
         );
@@ -264,6 +273,11 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
                       labelText: 'password Actual',
                       icon: Icon(Icons.lock_open_outlined),
                     ),
+                    onChanged: (value) {
+                      if (usuario.password == value) {
+                        passOk = true;
+                      }
+                    },
                   ),
                 ),
                 SizedBox(height: 5.0),
@@ -279,6 +293,9 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
                       labelText: 'Nuevo password',
                       icon: Icon(Icons.lock_outline_rounded),
                     ),
+                    onChanged: (value) {
+                      nuevoPassword = value;
+                    },
                   ),
                 ),
                 SizedBox(height: 10.0),
@@ -294,6 +311,11 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
                       labelText: 'Repetir password',
                       icon: Icon(Icons.lock_outline_rounded),
                     ),
+                    onChanged: (value) {
+                      if (value == nuevoPassword && passOk==true) {
+                        usuario.password = value;
+                      }
+                    },
                   ),
                 ),
               ],
@@ -306,7 +328,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
             ),
             TextButton(
               child: Text('Guardar', style: TextStyle(fontSize: 17.0)),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => _actualizar(),
             )
           ],
         );
