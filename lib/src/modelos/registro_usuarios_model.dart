@@ -4,46 +4,53 @@
 
 import 'dart:convert';
 
-RegistroUsuariosModel registroUsuariosModelFromJson(String str) => RegistroUsuariosModel.fromJson(json.decode(str));
+RegistroUsuariosModel registroUsuariosModelFromJson(String str) =>
+    RegistroUsuariosModel.fromJson(json.decode(str));
 
-String registroUsuariosModelToJson(RegistroUsuariosModel data) => json.encode(data.toJson());
+String registroUsuariosModelToJson(RegistroUsuariosModel data) =>
+    json.encode(data.toJson());
 
 class RegistroUsuariosModel {
-    RegistroUsuariosModel({
-        this.id,
-        this.nombres   = '',
-        this.apellidos = '',
-        this.documento =123,     
-        this.email     = '',
-        this.fechaNacimiento = '00-00-0000',
-        this.password  = '',
-    });
+  RegistroUsuariosModel({
+    this.idUsuario,
+    this.nombres = '',
+    this.apellidos = '',
+    this.documento = 123,
+    this.email = '',
+    this.fechaNacimiento = '00-00-0000',
+    this.password = '',
+    this.fechaUltimaSincro = '',
+  });
 
-    String id;
-    String nombres;
-    String apellidos;
-    int documento;
-    String email;
-    String fechaNacimiento;
-    String password;
+  String idUsuario;
+  String nombres;
+  String apellidos;
+  int documento;
+  String email;
+  String fechaNacimiento;
+  String password;
+  String fechaUltimaSincro;
 
-    factory RegistroUsuariosModel.fromJson(Map<String, dynamic> json) => RegistroUsuariosModel(
-        id               : json["id"],
-        nombres          : json["nombres"],
-        apellidos        : json["apellidos"],
-        documento        : json["documento"],
-        email            : json["email"],
-        fechaNacimiento  : json["fechaNacimiento"],
-        password         : json["password"],
-    );
+  factory RegistroUsuariosModel.fromJson(Map<String, dynamic> json) =>
+      RegistroUsuariosModel(
+        idUsuario: json["idUsuario"],
+        nombres: json["nombres"],
+        apellidos: json["apellidos"],
+        documento: json["documento"],
+        email: json["email"],
+        fechaNacimiento: json["fechaNacimiento"],
+        password: json["password"],
+        fechaUltimaSincro: json["fechaUltimaSincro"]
+      );
 
-    Map<String, dynamic> toJson() => {
-        "id"              : id,
-        "nombres"         : nombres,
-        "apellidos"       : apellidos,
-        "documento"       : documento,
-        "email"           : email,
-        "fechaNacimiento" : fechaNacimiento,
-        "password"        : password,
-    };
+  Map<String, dynamic> toJson() => {
+        "idUsuario": idUsuario,
+        "nombres": nombres,
+        "apellidos": apellidos,
+        "documento": documento,
+        "email": email,
+        "fechaNacimiento": fechaNacimiento,
+        "password": password,
+        "fechaUltimaSincro": fechaUltimaSincro,
+      };
 }

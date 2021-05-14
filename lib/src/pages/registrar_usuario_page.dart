@@ -40,7 +40,8 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
   @override
   Widget build(BuildContext context) {
 
-    final bloc = BlocProvider.of(context);
+    final bloc = ModalRoute.of(context).settings.arguments;
+    //final bloc = BlocProvider.of(context);
 
     return Scaffold(
       key: scaffolKey,
@@ -210,7 +211,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
         return TextFormField(
           keyboardType: TextInputType.emailAddress,
           textAlignVertical: TextAlignVertical.bottom,
-          style: TextStyle(fontSize: 20.0),
+          style: TextStyle(fontSize: 15.0),
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15.0)

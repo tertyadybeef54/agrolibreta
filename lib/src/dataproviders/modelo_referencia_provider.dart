@@ -16,8 +16,8 @@ class ModeloReferenciaData with ChangeNotifier {
   List<ModeloReferenciaModel> modelosReferencia = []; //se almacenan MRs
   //List<ConceptoModel> conceptos = [];  // almacena conceptos
   List<List<ConceptoModel>> conceptosList = []; //almacena listas de conceptos
-  List<List<PorcentajeModel>> porcentajesList =
-      []; //almacena listas de porcentajes
+  //almacena listas de porcentajes
+  List<List<PorcentajeModel>> porcentajesList = [];
   int id; //para controlar el ultimo modelo de referencia creado
 
   ModeloReferenciaData() {
@@ -55,6 +55,7 @@ class ModeloReferenciaData with ChangeNotifier {
         this.porcentajesList.add(_resp); //añade la lista de porcentajes
       },
     );
+    print('provider modelo referencia');
   }
 
   nuevoConPorList(

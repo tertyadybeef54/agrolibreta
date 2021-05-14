@@ -24,11 +24,11 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     final _sugeridos = cosData.sugeridosList;
     final culData = Provider.of<CultivoData>(context, listen: false);
     //culData.getCultivo(cultivoArg.idCultivo); //asignar el cultivo
+    culData.conceptos = [];
+    culData.porcentajes = [];
     culData.consultarMR(cultivoArg.fkidModeloReferencia);
 
-    /*    _cultivos.forEach((element) {
-      print(element.idCultivo);
-    });
+
     _sumasAll.forEach((element) {
       print(element.toString());
     });
@@ -39,7 +39,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     });
     _sugeridos.forEach((element) {
       print(element.toString());
-    }); */
+    }); 
 
     return Scaffold(
       appBar: _appBar(context, nombreCul, idCul),
@@ -50,7 +50,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
                 EdgeInsets.only(left: 0.0, right: 0.0, top: 25.0, bottom: 20.0),
             itemCount: 4,
             itemBuilder: (context, i) {
-              if (_conceptosAll.length > 2) {
+              if (_conceptosAll.length > 0) {
                 return _concepto(
                     _conceptosAll[idCul - 1][i].nombreConcepto,
                     _sumasAll[idCul - 1][i],
