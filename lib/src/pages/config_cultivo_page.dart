@@ -1,19 +1,16 @@
-import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/cultivo_data.dart';
-import 'package:agrolibreta_v2/src/widgets/estados_cultivo_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:agrolibreta_v2/src/data/estados_operations.dart';
-import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class ConfigCultivoPage extends StatelessWidget {
   EstadosOperations estOper = new EstadosOperations();
 
-  EstadoModel _selectedEstado;
+/*   EstadoModel _selectedEstado;
   callback(selectedEstado) {
     _selectedEstado = selectedEstado;
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -51,18 +48,18 @@ class ConfigCultivoPage extends StatelessWidget {
                   arguments: idCulArg),
             ),
             Divider(height: 10.0),
-            ListTile(
+            /* ListTile(
               title: Text('Cambiar Estado'),
               leading: Icon(Icons.drag_indicator),
               trailing: Icon(Icons.keyboard_arrow_right),
               onTap: () => _cambiarEstadoAlert(context, idCulArg),
             ),
-            Divider(height: 10.0),
+            Divider(height: 10.0), */
           ]),
     );
   }
 
-  void _cambiarEstadoAlert(BuildContext context, int idCul) {
+/*   void _cambiarEstadoAlert(BuildContext context, int idCul) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -83,7 +80,7 @@ class ConfigCultivoPage extends StatelessWidget {
                 child: Text('Guardar', style: TextStyle(fontSize: 17.0)),
                 onPressed: () {
                 final culData = Provider.of<CultivoData>(context, listen: false);
-                culData.actualizarEstadoCul(idCul, _selectedEstado.idEstado);
+                culData.actualizarEstadoCul(idCul, _selectedEstado.idEstado); 
                 final cosData = Provider.of<CostosData>(context, listen: false);
                 cosData.actualizarCultivos();
                 Navigator.of(context).pop();
@@ -92,17 +89,7 @@ class ConfigCultivoPage extends StatelessWidget {
         );
       },
     );
-  }
+  } */
 
-//dropdown para seleccionar el estado del cultivo
-  Widget _seleccioneConcepto() {
-    return FutureBuilder<List<EstadoModel>>(
-      future: estOper.consultarEstados(),
-      builder: (context, snapshot) {
-        return snapshot.hasData
-            ? EstadoDropdown(snapshot.data, callback) //selected concepto
-            : Text('sin conceptos');
-      },
-    );
-  }
+
 }

@@ -1,4 +1,7 @@
 import 'dart:ui';
+import 'package:agrolibreta_v2/src/data/estados_operations.dart';
+import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
+import 'package:agrolibreta_v2/src/widgets/estados_cultivo_dropdown.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +21,14 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
   CultivoModel culTemp = new CultivoModel();
   //variables para calcular el valor de venta ideal
   double cantidad;
+
+  final EstadosOperations _estOper = new EstadosOperations();
+
+  EstadoModel _selectedEstado;
+  callback(selectedEstado) {
+    _selectedEstado = selectedEstado;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +107,17 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             )
           ]),
           Divider(height: 10.0),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text('  Estado: ${cultivo.fkidEstado}'),
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () => _cambiarEstadoAlert(context),
+            )
+          ]),
+          Divider(height: 10.0),
+
+
+
         ],
       )
     ]);
@@ -158,7 +180,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
       culData.actualizarData(culTemp);
       final cosData = Provider.of<CostosData>(context, listen: false);
       cosData.actualizarCultivos();
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(); 
     });
   }
   void actualizar2(){
@@ -433,4 +455,49 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
       },
     );
   }
+
+  void _cambiarEstadoAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (contex) {
+        return AlertDialog(
+          title: Center(
+              child: Text('Cambiar estado del cultivo',
+                  style: TextStyle(fontSize: 18.0))),
+          content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            _seleccioneEstado(),
+          ]),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancelar', style: TextStyle(fontSize: 17.0)),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+                child: Text('Guardar', style: TextStyle(fontSize: 17.0)),
+                onPressed: () {
+                  if(_selectedEstado!=null){
+                    culTemp.fkidEstado = _selectedEstado.idEstado.toString(); 
+                    actualizar();
+                  }
+                })
+          ],
+        );
+      },
+    );
+  } 
+//dropdown para seleccionar el estado del cultivo
+  Widget _seleccioneEstado() {
+    return FutureBuilder<List<EstadoModel>>(
+      future: _estOper.consultarEstados(),
+      builder: (context, snapshot) {
+        return snapshot.hasData
+            ? EstadoDropdown(snapshot.data, callback) //selected concepto
+            : Text('sin conceptos');
+      },
+    );
+  }
+
+
+
 }

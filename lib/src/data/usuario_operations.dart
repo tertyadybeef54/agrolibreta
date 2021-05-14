@@ -1,3 +1,4 @@
+import 'package:agrolibreta_v2/src/modelos/registro_usuarios_model.dart';
 import 'package:agrolibreta_v2/src/providers/db_provider.dart';
 
 class UsuarioOperations {
@@ -6,27 +7,27 @@ class UsuarioOperations {
   final dbProvider = DBProvider.db;
 
 //C - crear
-/*   Future<int> nuevoUsuario(UsuarioModel nuevoUsuario) async {
+   Future<int> nuevoUsuario(RegistroUsuariosModel nuevoUsuario) async {
     final db = await dbProvider.database;
     final res = await db.insert('Usuarios', nuevoUsuario.toJson());
     // Es el ID del último registro insertado;
     print(res);
-    print('concepto creado');
+    print('Usuario creado');
     return res;
   }
 
 //R - leer
-  Future<List<UsuarioModel>> consultarConceptos() async {
+  Future<List<RegistroUsuariosModel>> consultarUsuario() async {
     final db = await dbProvider.database;
     final res = await db.query('Usuarios');
 
     return res.isNotEmpty
-        ? res.map((s) => UsuarioModel.fromJson(s)).toList()
+        ? res.map((s) => RegistroUsuariosModel.fromJson(s)).toList()
         : [];
   }
 
 //U - actualizar
-  Future<int> updateConceptos(UsuarioModel nuevoUsuario) async {
+  Future<int> updateUsuarios(RegistroUsuariosModel nuevoUsuario) async {
     final db = await dbProvider.database;
     final res = await db.update('Usuarios', nuevoUsuario.toJson(),
         where: 'idUsuario = ?', whereArgs: [nuevoUsuario.idUsuario]);
@@ -34,18 +35,18 @@ class UsuarioOperations {
   }
 
 //D - borrar un registro
-  Future<int> deleteConcepto(int id) async {
+  Future<int> deleteUsuario(int id) async {
     final db = await dbProvider.database;
     final res =
         await db.delete('Usuarios', where: 'idUsuario = ?', whereArgs: [id]);
     return res;
   }
 
-  Future<UsuarioModel> getConceptoById(int id) async {
+  Future<RegistroUsuariosModel> getUsuarioById(int id) async {
     final db = await dbProvider.database;
     final res =
         await db.query('Usuarios', where: 'idUsuario = ?', whereArgs: [id]);
     print(res);
-    return res.isNotEmpty ? UsuarioModel.fromJson(res.first) : null;
-  } */
+    return res.isNotEmpty ? RegistroUsuariosModel.fromJson(res.first) : null;
+  }
 }

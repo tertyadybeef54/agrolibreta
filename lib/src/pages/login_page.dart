@@ -9,14 +9,17 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: PageView(
-      scrollDirection: Axis.vertical,
-      children: [
-        Page1(),
-        Page2(),
-      ],
-    ));
+
+    return BlocProvider(
+          child: Scaffold(
+          body: PageView(
+        scrollDirection: Axis.vertical,
+        children: [
+          Page1(),
+          Page2(),
+        ],
+      )),
+    );
   }
 }
 
@@ -42,7 +45,7 @@ class MainContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 280),
+            SizedBox(height: 200),
             Text('AgroLibreta',
                 style: TextStyle(
                     fontSize: 60,
@@ -71,7 +74,7 @@ class Background extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Image.asset('assets/login.jpg'),
-      height: double.infinity,
+     
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(
           gradient: LinearGradient(colors: <Color>[
@@ -97,10 +100,11 @@ class _Page2State extends State<Page2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(children: <Widget>[
-      _crearFondo(context),
-      _loginForm(context),
-    ]));
+          body: Stack(children: <Widget>[
+        _crearFondo(context),
+        _loginForm(context),
+      ])
+    );
   }
 
   Widget _crearFondo(BuildContext context) {
@@ -183,7 +187,7 @@ class _Page2State extends State<Page2> {
                 SizedBox(height: 30.0),
                 _crearBoton(context, bloc),
                 TextButton(
-                  onPressed: (){Navigator.pushNamed(context, 'registrarUsuario');}, 
+                  onPressed: (){Navigator.pushNamed(context, 'registrarUsuario', arguments: bloc);}, 
                   child: Text('Registrarse', style: TextStyle(fontSize: 18.0))
                 ),
               ],
