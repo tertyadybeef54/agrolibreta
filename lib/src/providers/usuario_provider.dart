@@ -1,65 +1,65 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+// import 'dart:convert';
+// import 'package:http/http.dart' as http;
 
-import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
+// //import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
 
-class UsuarioProvider{
+// class UsuarioProvider{
 
-  final String _firebaseToken = 'AIzaSyBBG_M9eHHmqnNsfRilGTLSAVflwSd_YNs';
-  final _prefs = new PreferenciasUsuario();
+//   final String _firebaseToken = 'AIzaSyBBG_M9eHHmqnNsfRilGTLSAVflwSd_YNs';
+//   //final _prefs = new PreferenciasUsuario();
 
-    Future<Map<String, dynamic>> login(String email, String password) async {
+//     Future<Map<String, dynamic>> login(String email, String password) async {
       
-      final authData = {
-      'email'    : email,
-      'password' : password,
-      'returnSecureToken' : true,
-      };
+//       final authData = {
+//       'email'    : email,
+//       'password' : password,
+//       'returnSecureToken' : true,
+//       };
 
-      final resp = await http.post(
-        Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$_firebaseToken') ,
-        body: json.encode(authData)
-      );
+//       final resp = await http.post(
+//         Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$_firebaseToken') ,
+//         body: json.encode(authData)
+//       );
 
-      Map<String, dynamic> decodedResp = json.decode(resp.body);
+//       Map<String, dynamic> decodedResp = json.decode(resp.body);
 
-      print(decodedResp);
+//       print(decodedResp);
 
-      if(decodedResp.containsKey('idToken')){
+//       if(decodedResp.containsKey('idToken')){
 
-        _prefs.token = decodedResp['idToken'];
-        //TODOO: Salvar el token en el storage
-        return {'ok' : true, 'token': decodedResp['idToken']};
-      }else{
-        return {'ok': false, 'mensaje': decodedResp['error']['message']};
-      }
-    }
+//         _prefs.token = decodedResp['idToken'];
+//         //TODOO: Salvar el token en el storage
+//         return {'ok' : true, 'token': decodedResp['idToken']};
+//       }else{
+//         return {'ok': false, 'mensaje': decodedResp['error']['message']};
+//       }
+//     }
 
   
-  Future<Map<String, dynamic>> nuevoUsuario(String email, String password) async {
+//   Future<Map<String, dynamic>> nuevoUsuario(String email, String password) async {
 
-    final authData = {
-      'email'    : email,
-      'password' : password,
-      'returnSecureToken' : true,
-    };
+//     final authData = {
+//       'email'    : email,
+//       'password' : password,
+//       'returnSecureToken' : true,
+//     };
 
-    final resp = await http.post(
-      Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$_firebaseToken') ,
-      body: json.encode(authData)
-    );
+//     final resp = await http.post(
+//       Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$_firebaseToken') ,
+//       body: json.encode(authData)
+//     );
 
-    Map<String, dynamic> decodedResp = json.decode(resp.body);
+//     Map<String, dynamic> decodedResp = json.decode(resp.body);
 
-    print(decodedResp);
+//     print(decodedResp);
 
-    if(decodedResp.containsKey('idToken')){
+//     if(decodedResp.containsKey('idToken')){
 
-      _prefs.token = decodedResp['idToken'];
-      //TODOO: Salvar el token en el storage
-      return {'ok' : true, 'token': decodedResp['idToken']};
-    }else{
-      return {'ok': false, 'mensaje': decodedResp['error']['message']};
-    }
-  }
-}
+//       _prefs.token = decodedResp['idToken'];
+//       //TODOO: Salvar el token en el storage
+//       return {'ok' : true, 'token': decodedResp['idToken']};
+//     }else{
+//       return {'ok': false, 'mensaje': decodedResp['error']['message']};
+//     }
+//   }
+// }

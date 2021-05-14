@@ -5,7 +5,7 @@ import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
 
 UbicacionesOperations _ubiOper = new UbicacionesOperations();
 
-//provider que cambia el valor del index del botton navigator bar
+//provider que maneja los datos de las ubicaciones
 class UbicacionesData with ChangeNotifier {
   List<UbicacionModel> ubicaciones = [];
 
