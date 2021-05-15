@@ -55,6 +55,6 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
     'productoUtil':(BuildContext context) => ProductoActividadList(),
     'ubicacionUtil':(BuildContext context) => UbicacionList(),
     'unidadMedidaUtil': (BuildContext context) => UnidadMedidaList(),
-
+    
   };
 }

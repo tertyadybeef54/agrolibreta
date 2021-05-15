@@ -63,7 +63,7 @@ class _GaleriaRegistrosFotograficosPageState
         child: _galeria(imagenes),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: Icon(Icons.add_a_photo),
         onPressed: () => Navigator.pushNamed(context, 'nuevoRegistroFoto'),
       ),
     );
@@ -73,15 +73,24 @@ class _GaleriaRegistrosFotograficosPageState
     return StaggeredGridView.countBuilder(
       controller: _scrollController,
       crossAxisCount: 2,
-      itemCount: 5,
+      itemCount: imagenes.length < 5 ? imagenes.length : 5,
       itemBuilder: (BuildContext context, int index) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: Container(
-              height: index.isEven ? 200 : 240,
-              color: Colors.green,
-              child: Image.file(File(imagenes[index + _ultimoItem].pathFoto),fit: BoxFit.cover,),
-              ),
+
+        return GestureDetector(
+          onTap:(){
+            Navigator.pushNamed(context,'detalleRegistroFoto', arguments: imagenes[index + _ultimoItem].pathFoto);
+          },
+          child: Hero(
+            tag: imagenes[index+_ultimoItem],
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: Container(
+                  height: index.isEven ? 200 : 240,
+                  color: Colors.green,
+                  child: Image.file(File(imagenes[index + _ultimoItem].pathFoto),fit: BoxFit.cover,),
+                  ),
+            ),
+          ),
         );
       },
       staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
