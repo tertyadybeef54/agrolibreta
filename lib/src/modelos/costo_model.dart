@@ -25,7 +25,7 @@ class CostoModel {
     String fkidRegistroFotografico;
     double cantidad;
     double valorUnidad;
-    String fecha;
+    int fecha;
 
     factory CostoModel.fromJson(Map<String, dynamic> json) => CostoModel(
         idCosto: json["idCosto"],
@@ -34,7 +34,8 @@ class CostoModel {
         fkidRegistroFotografico: json["fkidRegistroFotografico"].toString(),
         cantidad: json["cantidad"],
         valorUnidad: json["valorUnidad"].toDouble(),
-        fecha: json["fecha"],
+        fecha: json["fecha"], //en la base de datos se cambio a int por si sale error 
+        //es por eso.
     );
 
     Map<String, dynamic> toJson() => {

@@ -88,9 +88,17 @@ class _CostosPageState extends State<CostosPage> {
     costos = filData.costos;
     costos.forEach((e) {
       print(
-          '${e.idCosto}, ${e.fecha}, ${e.cantidad}, ${e.fkidProductoActividad}, ${e.valorUnidad}, ${e.cantidad}');
+          '${e.idCosto}, ${e.fecha}, can: ${e.cantidad}, idpro: ${e.fkidProductoActividad}, ${e.valorUnidad}, ${e.fkidCultivo}');
     });
-    filData.prueba();
+    //filData.prueba();
+
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyyMMdd');
+    final String formatted = formatter.format(now);
+    final int format = int.parse(formatted);
+    print('fecha en int');
+    print(format.toString());
+    
     return Scaffold(
       appBar: _appBar(),
       body: Stack(
