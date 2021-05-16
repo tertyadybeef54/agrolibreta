@@ -1,33 +1,54 @@
+
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class DetalleRegistroFotograficoPage extends StatelessWidget {
-const DetalleRegistroFotograficoPage({Key key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
+
+    final numero = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Center(
           child: Column(
-          children: [
-            Text('Detalle'),
-            Text('Registro Fotografico'),
-          ],),
+            children: [
+              Text('Detalle'),
+              Text('Registro Fotografico'),
+            ],
+          ),
         ),   
       ),
-      body:Column(
-        children:[Image.asset('assets/no-image.png'),
-        _crearBoton(),
-        ]),
-      floatingActionButton: FloatingActionButton(
-       child: Icon(Icons.add),
-       onPressed: ()=>Navigator.pushNamed(context,'nuevoRegistroFoto'),
+      body: Container(
+        padding: EdgeInsets.all(15.0),
+        child: Column(
+        children: <Widget>[
+        
+          Hero(
+            tag: numero,
+            child: ClipRRect(
+              child: Container(
+                width: double.infinity,
+                height: 400.0,
+                color: Colors.red,
+                child: Image.file(File(numero),) //fit: BoxFit.cover),
+              ),
+            ),    
+          ),
+          _crearBoton(),
+        ],
+        ),
       ),
+      
     );
   }
    Widget _crearBoton() {
     return ElevatedButton(
-      child: Text('Guardar', style: TextStyle(fontSize: 20.0),),
+      child: Text('Editar', style: TextStyle(fontSize: 20.0),),
       onPressed: (){}
     );
   }
