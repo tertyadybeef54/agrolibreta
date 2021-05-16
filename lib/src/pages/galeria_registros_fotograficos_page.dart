@@ -1,4 +1,3 @@
-//import 'dart:convert';
 import 'dart:io';
 
 import 'package:agrolibreta_v2/src/modelos/registro_fotografico_model.dart';
@@ -73,6 +72,7 @@ class _GaleriaRegistrosFotograficosPageState
     return StaggeredGridView.countBuilder(
       controller: _scrollController,
       crossAxisCount: 2,
+
       itemCount: imagenes.length < 5 ? imagenes.length : 5,
       itemBuilder: (BuildContext context, int index) {
 

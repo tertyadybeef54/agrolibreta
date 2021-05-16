@@ -48,48 +48,48 @@ class DBProvider {
       await db.execute('''
         CREATE TABLE ModelosReferencia(
           idModeloReferencia INTEGER PRIMARY KEY,
-          suma REAL
+          suma REAL NOT NULL
         )
         ''');
       await db.execute('''
         CREATE TABLE Ubicaciones(
           idUbicacion INTEGER PRIMARY KEY,
-          nombreUbicacion STRING,
-          descripcion STRING,
-          estado INTEGER
+          nombreUbicacion STRING NOT NULL,
+          descripcion STRING NOT NULL,
+          estado INTEGER NOT NULL
         )
         ''');
       await db.execute('''
           CREATE TABLE EstadosCultivo(
           idEstado INTEGER PRIMARY KEY,
-          nombreEstado STRING
+          nombreEstado STRING NOT NULL
         )
       ''');
       await db.execute('''
         CREATE TABLE ProductosAgricolas(
           idProductoAgricola INTEGER PRIMARY KEY,
-          nombreProducto STRING
+          nombreProducto STRING NOT NULL
         )
       ''');
       await db.execute('''
         CREATE TABLE Conceptos(
           idConcepto INTEGER PRIMARY KEY,
-          nombreConcepto STRING
+          nombreConcepto STRING NOT NULL
         )
       ''');
       await db.execute('''
         CREATE TABLE UnidadesMedida(
           idUnidadMedida INTEGER PRIMARY KEY,
-          nombreUnidadMedida STRING,
-          descripcion STRING
+          nombreUnidadMedida STRING NOT NULL,
+          descripcion STRING NOT NULL
         )
       ''');
       await db.execute('''
         CREATE TABLE ProductosActividades(
           idProductoActividad INTEGER PRIMARY KEY,
-          fkidConcepto STRING,
-          fkidUnidadMedida STRING,
-          nombreProductoActividad STRING,
+          fkidConcepto STRING NOT NULL,
+          fkidUnidadMedida STRING NOT NULL,
+          nombreProductoActividad STRING NOT NULL,
           FOREIGN KEY (fkidConcepto) REFERENCES Conceptos (idConcepto),
           FOREIGN KEY (fkidUnidadMedida) REFERENCES UnidadesMedida (idUnidadMedida)
         )
@@ -97,18 +97,18 @@ class DBProvider {
       await db.execute('''
         CREATE TABLE RegistrosFotograficos(
           idRegistroFotografico INTEGER PRIMARY KEY,
-          pathFoto TEXT
+          pathFoto TEXT NOT NULL
         )
       ''');
       await db.execute('''
         CREATE TABLE Costos(
           idCosto INTEGER PRIMARY KEY,
-          fkidProductoActividad STRING,
-          fkidCultivo STRING,
-          fkidRegistroFotografico STRING,
-          cantidad REAL,
-          valorUnidad REAL,
-          fecha STRING,
+          fkidProductoActividad STRING NOT NULL,
+          fkidCultivo STRING NOT NULL,
+          fkidRegistroFotografico STRING NOT NULL,
+          cantidad REAL NOT NULL,
+          valorUnidad REAL NOT NULL,
+          fecha INTEGER NOT NULL,
           FOREIGN KEY (fkidProductoActividad) REFERENCES ProductosActividades (idProductoActividad),
           FOREIGN KEY (fkidCultivo) REFERENCES Cultivos (idCultivo),
           FOREIGN KEY (fkidRegistroFotografico) REFERENCES RegistrosFotograficos (idRegistroFotografico)
@@ -117,9 +117,9 @@ class DBProvider {
       await db.execute('''
         CREATE TABLE Porcentajes(
           idPorcentaje INTEGER PRIMARY KEY,
-          fk2idModeloReferencia STRING,
-          fk2idConcepto STRING,
-          porcentaje REAL,
+          fk2idModeloReferencia STRING NOT NULL,
+          fk2idConcepto STRING NOT NULL,
+          porcentaje REAL NOT NULL,
           FOREIGN KEY (fk2idModeloReferencia) REFERENCES ModelosReferencia (idModeloReferencia),
           FOREIGN KEY (fk2idConcepto) REFERENCES Conceptos (idConcepto)
         )
@@ -127,12 +127,12 @@ class DBProvider {
       await db.execute('''
         CREATE TABLE Usuario(
         	idUsuario INTEGER PRIMARY KEY,
-        	documento INTEGER,
-        	password STRING,
-        	nombres STRING,
-        	apellidos STRING,
-        	correo STRING,
-        	fechaNacimiento STRING
+        	documento INTEGER NOT NULL,
+        	password STRING NOT NULL,
+        	nombres STRING NOT NULL,
+        	apellidos STRING NOT NULL,
+        	correo STRING NOT NULL,
+        	fechaNacimiento STRING NOT NULL
         ) 
       ''');
 //#################

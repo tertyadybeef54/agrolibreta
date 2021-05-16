@@ -414,8 +414,9 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     );
     if (picked != null) {
       setState(() {
-        _fechaC = DateFormat('yyyy-MM-dd').format(picked);
-        controlFecha.text = _fechaC;
+        _fechaC = DateFormat('yyyyMMdd').format(picked);
+        final _fechaControler = DateFormat('yyyy-MM-dd').format(picked);
+        controlFecha.text = _fechaControler;
       });
     }
   }
@@ -443,7 +444,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
       fkidRegistroFotografico: "1",
       cantidad: _cantidad,
       valorUnidad: _valorUnidad,
-      fecha: _fechaC,
+      fecha: int.parse(_fechaC),
     );
     cosOper.nuevoCosto(costoTemp);
     final cosData = Provider.of<CostosData>(context, listen: false);
