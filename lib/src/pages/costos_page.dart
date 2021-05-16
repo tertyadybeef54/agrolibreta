@@ -1,7 +1,9 @@
 import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
 import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
 import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
+import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
+import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
 import 'package:agrolibreta_v2/src/widgets/concepto_dropdown.dart';
@@ -9,6 +11,7 @@ import 'package:agrolibreta_v2/src/widgets/cultivo_dropdown.dart';
 import 'package:agrolibreta_v2/src/widgets/producto_actividad_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class CostosPage extends StatefulWidget {
   @override
@@ -18,6 +21,7 @@ class CostosPage extends StatefulWidget {
 class _CostosPageState extends State<CostosPage> {
   final controlDesde = new TextEditingController();
   final controlHasta = new TextEditingController();
+  //operaciones para consultas de los dropdown
   ProductoActividadOperations proActOper = new ProductoActividadOperations();
   CultivoOperations culOper = new CultivoOperations();
   ConceptoOperations conOper = new ConceptoOperations();
@@ -75,8 +79,18 @@ class _CostosPageState extends State<CostosPage> {
     });
   }
 
+  List<CostoModel> costos = [];
+
   @override
   Widget build(BuildContext context) {
+    final filData = Provider.of<FiltrosCostosData>(context);
+    filData.filtrar('1', '', '', '2', '1');
+    costos = filData.costos;
+    costos.forEach((e) {
+      print(
+          '${e.idCosto}, ${e.fecha}, ${e.cantidad}, ${e.fkidProductoActividad}, ${e.valorUnidad}, ${e.cantidad}');
+    });
+    filData.prueba();
     return Scaffold(
       appBar: _appBar(),
       body: Stack(
@@ -101,9 +115,7 @@ class _CostosPageState extends State<CostosPage> {
   Widget _appBar() {
     return AppBar(
       title: Center(
-        child: 
-            Text('Buscar costos por:'),
-         
+        child: Text('Buscar costos por:'),
       ),
     );
   }
@@ -121,7 +133,6 @@ class _CostosPageState extends State<CostosPage> {
             _seleccioneCultivo(),
           ],
         ),
-        
         Row(
           children: [
             SizedBox(width: 8.0),
@@ -317,11 +328,4 @@ class _CostosPageState extends State<CostosPage> {
       child: Center(child: Text(valor)),
     );
   }
-
-  // Widget _botonNuevoGasto(BuildContext context) {
-  //   return FloatingActionButton(
-  //     child: Icon(Icons.add),
-  //     onPressed: () => Navigator.pushNamed(context, 'nuevoGasto'),
-  //   );
-  // }
 }
