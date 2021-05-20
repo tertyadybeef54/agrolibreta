@@ -9,21 +9,21 @@ ConceptoModel conceptoModelFromJson(String str) => ConceptoModel.fromJson(json.d
 String conceptoModelToJson(ConceptoModel data) => json.encode(data.toJson());
 
 class ConceptoModel {
-    ConceptoModel({
-        this.idConcepto,
-        this.nombreConcepto,
-    });
+  ConceptoModel({
+      this.idConcepto,
+      this.nombreConcepto,
+  });
 
-    int idConcepto;
-    String nombreConcepto;
+  int idConcepto;
+  String nombreConcepto;
 
-    factory ConceptoModel.fromJson(Map<String, dynamic> json) => ConceptoModel(
-        idConcepto: json["idConcepto"],
-        nombreConcepto: json["nombreConcepto"],
-    );
+  factory ConceptoModel.fromJson(Map<String, dynamic> json) => ConceptoModel(
+      idConcepto: json["idConcepto"],
+      nombreConcepto: json["nombreConcepto"],
+  );
 
-    Map<String, dynamic> toJson() => {
-        "idConcepto": idConcepto,
-        "nombreConcepto": nombreConcepto,
-    };
+  Map<String, dynamic> toJson() => {
+      "idConcepto": idConcepto,
+      "nombreConcepto": nombreConcepto,
+  };
 }

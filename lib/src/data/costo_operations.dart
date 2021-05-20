@@ -85,6 +85,7 @@ class CostoOperations {
     return suma;
   }
 
+//consulta para todos los filtros de los costos
   Future<List<CostoModel>> costosFiltrados(
       String fkidCultivo,
       String fechaDesde,
@@ -92,41 +93,41 @@ class CostoOperations {
       String fkidproAct,
       String fkidConcepto) async {
     final db = await dbProvider.database;
-
-    //1. esta se hace si se indica un cultvio y un producto o actividad, concepto = todos
+//
+    //1.aab esta se hace si se indica un cultvio y un producto o actividad, concepto = todos
     if (fkidCultivo != 'todos' &&
         fkidproAct != 'todos' &&
         fkidConcepto == 'todos') {
       final res = await db.rawQuery('''
 
-      SELECT * FROM Costos WHERE fkidProductoActividad = '$fkidproAct' AND fkidCultivo = '$fkidCultivo' 
+      SELECT * FROM Costos WHERE fkidProductoActividad = '$fkidproAct' AND fkidCultivo = '$fkidCultivo' AND fecha BETWEEN '$fechaDesde' AND '$fechaHasta' ORDER BY fecha
     
     ''');
         return res.isNotEmpty
       ? res.map((s) => CostoModel.fromJson(s)).toList()
       : [];
     }
-
-    //2. esta se hace si se indica el cultivo,  fecha = todas, produc act = todas concep = todos
+//#############################################
+    //2.abb esta se hace si se indica el cultivo,  fecha = todas, produc act = todas concep = todos
     if (fkidCultivo != 'todos' &&
         fkidproAct == 'todos' &&
         fkidConcepto == 'todos') {
       final res = await db.rawQuery('''
 
-        SELECT * FROM Costos WHERE fkidCultivo = '$fkidCultivo'
+        SELECT * FROM Costos WHERE fkidCultivo = '$fkidCultivo' AND fecha BETWEEN '$fechaDesde' AND '$fechaHasta' ORDER BY fecha
         
       ''');
           return res.isNotEmpty
       ? res.map((s) => CostoModel.fromJson(s)).toList()
       : [];
     }
-    //3. no aplica filtros
+    //3.bbb no aplica filtros
     if (fkidCultivo == 'todos' &&
         fkidproAct == 'todos' &&
         fkidConcepto == 'todos') {
       final res = await db.rawQuery('''
 
-        SELECT * FROM Costos
+        SELECT * FROM Costos WHERE fecha BETWEEN '$fechaDesde' AND '$fechaHasta' ORDER BY fecha
         
       ''');
           return res.isNotEmpty
@@ -134,13 +135,13 @@ class CostoOperations {
       : [];
     }
 
-    //4. esta si se indica el concepto, cultivos = todos, producto Act = todos, fecha = todas
+    //4.bba esta si se indica el concepto, cultivos = todos, producto Act = todos, fecha = todas
     if (fkidCultivo == 'todos' &&
         fkidproAct == 'todos' &&
         fkidConcepto != 'todos') {
       final res = await db.rawQuery('''
 
-        SELECT * FROM Costos WHERE fkidProductoActividad IN (SELECT idProductoActividad FROM ProductosActividades WHERE fkidConcepto = '$fkidConcepto')
+        SELECT * FROM Costos WHERE fkidProductoActividad IN (SELECT idProductoActividad FROM ProductosActividades WHERE fkidConcepto = '$fkidConcepto') AND fecha BETWEEN '$fechaDesde' AND '$fechaHasta' ORDER BY fecha
       
       ''');
           return res.isNotEmpty
@@ -148,49 +149,58 @@ class CostoOperations {
       : [];
     }
 
-    //5. esta si se indica el concepto y el cultivo , producto act = todas
+    //5.baa esta definido prodAct, concepto, cultivo = todos
+    if (fkidCultivo == 'todos' &&
+        fkidproAct != 'todos' &&
+        fkidConcepto != 'todos') {
+      final res = await db.rawQuery('''
+
+        SELECT * FROM Costos WHERE fkidProductoActividad IN (SELECT idProductoActividad FROM ProductosActividades WHERE fkidConcepto = '$fkidConcepto') AND fkidProductoActividad = '$fkidproAct' AND fecha BETWEEN '$fechaDesde' AND '$fechaHasta' ORDER BY fecha
+      
+      ''');
+      return res.isNotEmpty
+      ? res.map((s) => CostoModel.fromJson(s)).toList()
+      : [];
+    }
+
+    //7.aba esta si se indica el concepto y el cultivo , producto act = todas
     if (fkidCultivo != 'todos' &&
         fkidproAct == 'todos' &&
         fkidConcepto != 'todos') {
       final res = await db.rawQuery('''
 
-        SELECT * FROM Costos WHERE fkidProductoActividad IN (SELECT idProductoActividad FROM ProductosActividades WHERE fkidConcepto = '$fkidConcepto') AND fkidCultivo = '$fkidCultivo'
+        SELECT * FROM Costos WHERE fkidProductoActividad IN (SELECT idProductoActividad FROM ProductosActividades WHERE fkidConcepto = '$fkidConcepto') AND fkidCultivo = '$fkidCultivo' AND fecha BETWEEN '$fechaDesde' AND '$fechaHasta' ORDER BY fecha
       
       ''');
-          return res.isNotEmpty
+      return res.isNotEmpty
       ? res.map((s) => CostoModel.fromJson(s)).toList()
       : [];
     }
-
-    //6. si se indican el cultivo, producAtc, concepto y fechas todas
-    // if (fkidCultivo == 'todos' &&
-    //     fkidproAct == 'todos' &&
-    //     fkidConcepto == 'todos') {
+    //8.aba esta si se indica el concepto y el cultivo , producto act = todas
+    if (fkidCultivo == 'todos' &&
+        fkidproAct != 'todos' &&
+        fkidConcepto == 'todos') {
       final res = await db.rawQuery('''
 
-        SELECT * FROM Costos WHERE fkidProductoActividad IN (SELECT idProductoActividad FROM ProductosActividades WHERE fkidConcepto = '$fkidConcepto') AND fkidCultivo = '$fkidCultivo' AND fkidProductoActividad = '$fkidproAct'
+        SELECT * FROM Costos WHERE fkidProductoActividad = '$fkidproAct' AND fecha BETWEEN '$fechaDesde' AND '$fechaHasta' ORDER BY fecha
       
       ''');
-
-    return res.isNotEmpty
+      return res.isNotEmpty
       ? res.map((s) => CostoModel.fromJson(s)).toList()
       : [];
-    //}
-  }
-
-  Future<List<CostoModel>> costosFecha(
-      String fechaDesde, String fechaHasta) async {
-    final db = await dbProvider.database;
-
+    }
+    
+    //6.aaa si se indican el cultivo, producAtc, concepto y fechas
     final res = await db.rawQuery('''
 
-      SELECT * FROM Costos WHERE  fecha >= DATE($fechaDesde) AND fecha <= DATE($fechaHasta)
+        SELECT * FROM Costos WHERE fkidProductoActividad IN (SELECT idProductoActividad FROM ProductosActividades WHERE fkidConcepto = '$fkidConcepto') AND fkidCultivo = '$fkidCultivo' AND fkidProductoActividad = '$fkidproAct' AND fecha BETWEEN '$fechaDesde' AND '$fechaHasta' ORDER BY fecha
+      
+      ''');
     
-    ''');
 
     return res.isNotEmpty
       ? res.map((s) => CostoModel.fromJson(s)).toList()
       : [];
-
+  
   }
 }
