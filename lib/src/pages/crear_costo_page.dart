@@ -415,7 +415,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     if (picked != null) {
       setState(() {
         _fechaC = DateFormat('yyyyMMdd').format(picked);
-        final _fechaControler = DateFormat('yyyy-MM-dd').format(picked);
+        final _fechaControler = DateFormat('dd-MM-yyyy').format(picked);
         controlFecha.text = _fechaControler;
       });
     }

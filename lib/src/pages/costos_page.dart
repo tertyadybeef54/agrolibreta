@@ -6,6 +6,7 @@ import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
 import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
+import 'package:agrolibreta_v2/src/modelos/unidad_medida_model.dart';
 import 'package:agrolibreta_v2/src/widgets/concepto_dropdown.dart';
 import 'package:agrolibreta_v2/src/widgets/cultivo_dropdown.dart';
 import 'package:agrolibreta_v2/src/widgets/producto_actividad_dropdown.dart';
@@ -13,6 +14,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+//vista de los costos, donde se muestra una lista de todos los costos la cual se le puede aplicar filtros:
+//por cultivo, fechas, producto o actividad y concepto.
+//las fehcas se manejan como enteros por tanto se le dabe dar formato de yyyyMMdd,
+//esto debido a que sqflite no soporta los tipo DATE, y es necesario para hacer las
+//consultas por fechas manejarlas como int.
 class CostosPage extends StatefulWidget {
   @override
   _CostosPageState createState() => _CostosPageState();
@@ -22,56 +28,11 @@ class _CostosPageState extends State<CostosPage> {
   final controlDesde = new TextEditingController();
   final controlHasta = new TextEditingController();
   //operaciones para consultas de los dropdown
-  ProductoActividadOperations proActOper = new ProductoActividadOperations();
+  ProductoActividadOperations _proActOper = new ProductoActividadOperations();
+
   CultivoOperations culOper = new CultivoOperations();
   ConceptoOperations conOper = new ConceptoOperations();
-  String _fechaDesde = '';
-  String _fechaHasta = '';
 
-  final Map _costos = {
-    0: {
-      'fecha': '21-07-2020',
-      'cant': 2,
-      'und.': 'lt',
-      'nombre': 'fungicida',
-      'v.und': 50000,
-      'v.total': 100000
-    },
-    1: {
-      'fecha': '24-07-2020',
-      'cant': 3,
-      'und.': 'bultos',
-      'nombre': 'triple 15',
-      'v.und': 80000,
-      'v.total': 240000
-    },
-    2: {
-      'fecha': '28-07-2020',
-      'cant': 2,
-      'und.': 'bultos',
-      'nombre': 'triple 15',
-      'v.und': 80000,
-      'v.total': 160000
-    }
-  };
-
-  // ignore: unused_field
-  ProductoActividadModel _selectedProductoActividad;
-  callback(selectedProductoActividad) {
-    setState(() {
-      _selectedProductoActividad = selectedProductoActividad;
-    });
-  }
-
-  // ignore: unused_field
-  ConceptoModel _selectedConcepto;
-  callback1(selectedConcepto) {
-    setState(() {
-      _selectedConcepto = selectedConcepto;
-    });
-  }
-
-  // ignore: unused_field
   CultivoModel _selectedCultivo;
   callback2(selectedCultivo) {
     setState(() {
@@ -79,45 +40,70 @@ class _CostosPageState extends State<CostosPage> {
     });
   }
 
-  List<CostoModel> costos = [];
+  ProductoActividadModel _selectedProductoActividad;
+  callback(ProductoActividadModel selectedProductoActividad) {
+    setState(() {
+      _selectedProductoActividad = selectedProductoActividad;
+    });
+  }
+
+  ConceptoModel _selectedConcepto;
+  callback1(selectedConcepto) {
+    setState(() {
+      _selectedConcepto = selectedConcepto;
+    });
+  }
+
+//listado de los costos filtrados
+  //List<CostoModel> costos = [];
+  List<UnidadMedidaModel> unidades = [];
+  List<ProductoActividadModel> proActs = [];
+//variables de los filtros
+  String _fechaDesde = '20210101';
+  String _fechaHasta =
+      '20210601'; //DateFormat('yyyyMMdd').format(DateTime.now());
+
+//para meter todos los widget que se mostraran en la pantalla por medio del listview builder
+  List<Widget> listado = [];
 
   @override
   Widget build(BuildContext context) {
     final filData = Provider.of<FiltrosCostosData>(context);
-    filData.filtrar('1', '', '', '2', '1');
-    costos = filData.costos;
+    final costos = filData.costos;
     costos.forEach((e) {
       print(
           '${e.idCosto}, ${e.fecha}, can: ${e.cantidad}, idpro: ${e.fkidProductoActividad}, ${e.valorUnidad}, ${e.fkidCultivo}');
     });
-    //filData.prueba();
 
-    final DateTime now = DateTime.now();
-    final DateFormat formatter = DateFormat('yyyyMMdd');
-    final String formatted = formatter.format(now);
-    final int format = int.parse(formatted);
-    print('fecha en int');
-    print(format.toString());
-    
     return Scaffold(
       appBar: _appBar(),
-      body: Stack(
-        children: <Widget>[
-          titulos(context),
+      body: //Stack(
+          //children: <Widget>[
+          //titulos(context),
           ListView.builder(
-            padding: EdgeInsets.only(
-                left: 0.0, right: 0.0, top: 200.0, bottom: 20.0),
-            itemCount: _costos.length,
-            itemBuilder: (context, index) {
-              return _costo(_costos[index], context);
-            },
-          ),
-          filtros(),
-        ],
+        padding:
+            EdgeInsets.only(left: 0.0, right: 0.0, top: 10.0, bottom: 20.0),
+        itemCount: costos.length + 2,
+        itemBuilder: (context, index) {
+          _armarWidgets(context, costos);
+          return listado[index]; // _costo(costos[index], context);
+        },
       ),
-      // floatingActionButton: _botonNuevoGasto(context),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      //filtros(),
+      //],
+      //),
+      floatingActionButton: _botonFiltrar(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
+  }
+
+  void _armarWidgets(BuildContext context, List<CostoModel> costos) {
+    listado = [];
+    listado.add(filtros());
+    listado.add(titulos(context));
+    costos.forEach((costo) {
+      listado.add(_costo(costo, context));
+    });
   }
 
   Widget _appBar() {
@@ -128,6 +114,27 @@ class _CostosPageState extends State<CostosPage> {
     );
   }
 
+  Widget _botonFiltrar(BuildContext context) {
+    final filData = Provider.of<FiltrosCostosData>(context, listen: false);
+    final String idCul = _selectedCultivo != null
+        ? _selectedCultivo.idCultivo.toString()
+        : 'todos';
+    final String idPro = _selectedProductoActividad != null
+        ? _selectedProductoActividad.idProductoActividad.toString()
+        : 'todos';
+    final String idCon = _selectedConcepto != null
+        ? _selectedConcepto.idConcepto.toString()
+        : 'todos';
+
+    return FloatingActionButton(
+      child: Icon(Icons.filter_list),
+      onPressed: () {
+        filData.filtrar(idCul, _fechaDesde, _fechaHasta, idPro, idCon);
+        setState(() {});
+      },
+    );
+  }
+
   Widget filtros() {
     return Column(
       children: [
@@ -135,6 +142,7 @@ class _CostosPageState extends State<CostosPage> {
           height: 3.0,
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(width: 8.0),
             Text('Cultivo: '),
@@ -142,6 +150,7 @@ class _CostosPageState extends State<CostosPage> {
           ],
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(width: 8.0),
             Text('Desde:'),
@@ -151,6 +160,7 @@ class _CostosPageState extends State<CostosPage> {
           ],
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(width: 8.0),
             Text('Producto o actividadad: '),
@@ -158,6 +168,7 @@ class _CostosPageState extends State<CostosPage> {
           ],
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(width: 8.0),
             Text('Concepto: '),
@@ -201,12 +212,12 @@ class _CostosPageState extends State<CostosPage> {
       setState(() {
         if (n == 1) {
           //para identificar cual date esta seleccionado
-          _fechaDesde = DateFormat('dd-MM-yyyy').format(picked);
+          _fechaDesde = DateFormat('yyyyMMdd').format(picked);
           controlDesde.text = _fechaDesde;
         }
         if (n == 2) {
-          _fechaHasta = DateFormat('dd-MM-yyyy').format(picked);
-          controlHasta.text = _fechaHasta;
+          _fechaHasta = DateFormat('yyyyMMdd').format(picked);
+          controlHasta.text = DateFormat('dd-MM-yyyy').format(picked);
         }
       });
     }
@@ -237,7 +248,7 @@ class _CostosPageState extends State<CostosPage> {
       children: [
         SizedBox(width: 5.0),
         FutureBuilder<List<ProductoActividadModel>>(
-          future: proActOper.consultarProductosActividades(),
+          future: _proActOper.consultarProductosActividades(),
           builder: (context, snapshot) {
             return snapshot.hasData
                 ? ProductosActividadesDropdowun(snapshot.data, callback)
@@ -286,7 +297,7 @@ class _CostosPageState extends State<CostosPage> {
     //estas variables permiten obtener el ancho para ser asignado a cada criterio
     final double ancho = MediaQuery.of(context).size.width;
     return Container(
-      padding: EdgeInsets.only(top: 168.0),
+      padding: EdgeInsets.only(top: 10.0),
       child: Row(
         children: <Widget>[
           SizedBox(
@@ -306,19 +317,24 @@ class _CostosPageState extends State<CostosPage> {
     );
   }
 
-  Widget _costo(Map costo, BuildContext context) {
+  Widget _costo(CostoModel costo, BuildContext context) {
     final double ancho = MediaQuery.of(context).size.width;
+    final fecha = costo.fecha.toString();
+    final fechaDate = DateTime.tryParse(fecha);
+    final fechaFormatted = DateFormat('dd-MM-yy').format(fechaDate);
     return Row(
       children: <Widget>[
         SizedBox(
           width: 5.0,
         ),
-        criterio(costo['fecha'], ancho * 0.15),
-        criterio(costo['cant'].toString(), ancho * 0.07),
-        criterio(costo['und.'].toString(), ancho * 0.15),
-        criterio(costo['nombre'], ancho * 0.30),
-        criterio(costo['v.und'].toString(), ancho * 0.12),
-        criterio(costo['v.total'].toString(), ancho * 0.14),
+        criterio(fechaFormatted, ancho * 0.15),
+        criterio(costo.cantidad.toString(), ancho * 0.07),
+        criterioUnidad(costo.fkidProductoActividad, ancho*0.15),
+        //criterio(costo.fkidProductoActividad.toString(), ancho * 0.15),
+        criterioFuture(costo.fkidProductoActividad, ancho * 0.30),
+        //criterio(costo.fkidProductoActividad, ancho * 0.30),
+        criterio(costo.valorUnidad.toString(), ancho * 0.12),
+        criterio((costo.cantidad * costo.valorUnidad).toString(), ancho * 0.14),
         SizedBox(
           width: 5.0,
         )
@@ -335,5 +351,60 @@ class _CostosPageState extends State<CostosPage> {
           color: Colors.black12, borderRadius: BorderRadius.circular(3.0)),
       child: Center(child: Text(valor)),
     );
+  }
+
+  Widget criterioFuture(String fk, double ancho){
+    return FutureBuilder<String>(
+      future: _proActOper.consultarNombre(fk),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        Widget child;
+        if (snapshot.hasData) {
+          child = Text(snapshot.data);
+        } else if (snapshot.hasError) {
+          child = Text('nn');
+        } else {
+          child = SizedBox(
+            child: CircularProgressIndicator(strokeWidth: 2.0,),
+            width: 10,
+            height: 10, //
+          );
+        }
+        return Container(
+          height: 25.0,
+          width: ancho,
+          margin: EdgeInsets.all(1.0),
+          decoration: BoxDecoration(
+              color: Colors.black12,
+              borderRadius: BorderRadius.circular(3.0)),
+          child: Center(child: child));
+      });
+  }
+
+
+  Widget criterioUnidad(String fk, double ancho) {
+    return FutureBuilder<String>(
+      future: _proActOper.consultarNombreUnidad(fk),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        Widget child;
+        if (snapshot.hasData) {
+          child = Text(snapshot.data);
+        } else if (snapshot.hasError) {
+          child = Text('nn');
+        } else {
+          child = SizedBox(
+            child: CircularProgressIndicator(strokeWidth: 2.0,),
+            width: 10,
+            height: 10, //
+          );
+        }
+        return Container(
+          height: 25.0,
+          width: ancho,
+          margin: EdgeInsets.all(1.0),
+          decoration: BoxDecoration(
+              color: Colors.black12,
+              borderRadius: BorderRadius.circular(3.0)),
+          child: Center(child: child));
+      });
   }
 }

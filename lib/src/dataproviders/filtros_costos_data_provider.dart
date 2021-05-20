@@ -25,13 +25,6 @@ class FiltrosCostosData with ChangeNotifier {
     _resp.forEach((e) {
       print(e.idCosto);
     });
-  }
-
-  prueba() async {
-    final _resp = await _cosOper.costosFecha('01-01-2021', '30-12-2021');
-
-    _resp.forEach((e) {
-      print(e.idCosto);
-    });
+    this.costos = _resp;
   }
 }
