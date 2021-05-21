@@ -1,9 +1,18 @@
+import 'package:agrolibreta_v2/src/data/estados_operations.dart';
+import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
+import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
+import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
+import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
+import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
+import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 import 'package:agrolibreta_v2/src/widgets/cultivo_dropdown.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class InformeCultivoPage extends StatefulWidget {
   @override
@@ -11,7 +20,11 @@ class InformeCultivoPage extends StatefulWidget {
 }
 
 class _InformeCultivoPageState extends State<InformeCultivoPage> {
-  CultivoOperations culOper = new CultivoOperations();
+  ProductoActividadOperations _proActOper = new ProductoActividadOperations();
+  UbicacionesOperations _ubiOper = new UbicacionesOperations();
+  EstadosOperations _estOper = new EstadosOperations();
+  List<Widget> listado = [];
+  CultivoOperations _culOper = new CultivoOperations();
   List<charts.Series<Pollution, String>> _seriesData;
   List<charts.Series<Task, String>> _seriesPieData;
 
@@ -71,33 +84,6 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     );
   }
 
-  final Map _costos = {
-    0: {
-      'fecha': '21-07-2020',
-      'cant': 2,
-      'und.': 'lt',
-      'nombre': 'fungicida',
-      'v.und': 50000,
-      'v.total': 100000
-    },
-    1: {
-      'fecha': '24-07-2020',
-      'cant': 3,
-      'und.': 'bultos',
-      'nombre': 'triple 15',
-      'v.und': 80000,
-      'v.total': 240000
-    },
-    2: {
-      'fecha': '28-07-2020',
-      'cant': 2,
-      'und.': 'bultos',
-      'nombre': 'triple 15',
-      'v.und': 80000,
-      'v.total': 160000
-    }
-  };
-  // ignore: unused_field
   CultivoModel _selectedCultivo;
   callback(selectedCultivo) {
     setState(() {
@@ -111,10 +97,29 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     _seriesData = <charts.Series<Pollution, String>>[];
     _seriesPieData = <charts.Series<Task, String>>[];
     _generateData();
+    _selectedCultivo = new CultivoModel(
+        idCultivo: 1,
+        fkidUbicacion: '1',
+        fkidEstado: '1',
+        fkidModeloReferencia: '1',
+        fkidProductoAgricola: '1',
+        nombreDistintivo: '',
+        areaSembrada: 0.0,
+        fechaInicio: '',
+        fechaFinal: '',
+        presupuesto: 0,
+        precioVentaIdeal: 0.0);
   }
 
   @override
   Widget build(BuildContext context) {
+    final filData = Provider.of<FiltrosCostosData>(context);
+    final costos = filData.costos;
+    final tabs = [
+      Tab(icon: Icon(Icons.assignment)),
+      Tab(icon: Icon(Icons.donut_small)),
+      Tab(icon: Icon(Icons.equalizer)),
+    ];
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
@@ -124,17 +129,13 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
             backgroundColor: Color(0xff1976d2),
             bottom: TabBar(
               indicatorColor: Color(0xff9962D0),
-              tabs: [
-                Tab(icon: Icon(Icons.assignment)),
-                Tab(icon: Icon(Icons.donut_small)),
-                Tab(icon: Icon(Icons.equalizer)),
-              ],
+              tabs: tabs,
             ),
             title: Text('Flutter Charts'),
           ),
           body: TabBarView(
             children: [
-              _tapUno(),
+              _tapUno(context, costos),
               _graficarDona(),
               _graficarBarras(),
             ],
@@ -145,75 +146,84 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
   }
 
   //primera vista del TapBar
-  Widget _tapUno() {
-    return Stack(
-      children: <Widget>[
-        titulos(context),
-        ListView.builder(
-          padding:
-              EdgeInsets.only(left: 0.0, right: 0.0, top: 130.0, bottom: 20.0),
-          itemCount: _costos.length,
-          itemBuilder: (context, index) {
-            return _costo(_costos[index], context);
-          },
-        ),
-        _resumen(),
-      ],
+  Widget _tapUno(BuildContext context, List<CostoModel> costos) {
+    return ListView.builder(
+      padding: EdgeInsets.only(left: 0.0, right: 0.0, top: 0.0),
+      itemCount: costos.length + 2,
+      itemBuilder: (context, index) {
+        _armarWidgets(context, costos);
+        return listado[index];
+      },
     );
   }
 
-  Widget _resumen() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            SizedBox(width: 10.0),
-            Text('Cultivo: '),
-            _seleccioneCultivo(),
-            SizedBox(width: 10.0),
-            SizedBox(
-              child: Column(
-                children: [
-                  Text(
-                    'Pesupuestado: 300000000',
-                    overflow: TextOverflow.fade,
-                  ),
-                  Text('Venta ideal: 50000 x und'),
-                ],
-              ),
-            )
-          ],
-        ),
-        Row(
-          children: [
-            SizedBox(width: 10.0),
-            Text('Ubicación: El llanito.'),
-            SizedBox(width: 10.0),
-            Text('Estado: activo.'),
-            SizedBox(width: 10.0),
-            Text('MR: 1'),
-          ],
-        ),
-        Row(
-          children: [
-            SizedBox(width: 10.0),
-            Text('Cultivo de: Arveja.'),
-            SizedBox(width: 8.0),
-            Text('Area sembrada: 5000 m2'),
-          ],
-        ),
-        Row(
-          children: [
-            SizedBox(width: 10.0),
-            Text('Fecha Inicial: 01-01-2021'),
-            SizedBox(width: 10.0),
-            Text('Final 15-04-2021'),
-            SizedBox(width: 8.0),
-            //
-          ],
-        ),
-      ],
-    );
+  void _armarWidgets(BuildContext context, List<CostoModel> costos) {
+    listado = [];
+    listado.add(cultivow(_selectedCultivo));
+    listado.add(titulos(context));
+    costos.forEach((costo) {
+      listado.add(_costo(costo, context));
+    });
+  }
+
+//cultivo widget que da la informacion del cultivo
+  Widget cultivow(CultivoModel cultivo) {
+    return Column(children: [
+      SizedBox(
+        height: 3.0,
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(width: 8.0),
+          Text('Cultivo: '),
+          _seleccioneCultivo(),
+          _botonFiltrar(context),
+          SizedBox(width: 10.0),
+          SizedBox(
+            child: Column(
+              children: [
+                Text(
+                  'Pesupuestado: ${cultivo.presupuesto.toString()}',
+                ),
+                Text('Venta ideal: ${cultivo.precioVentaIdeal.toString()}'),
+              ],
+            ),
+          )
+        ],
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(width: 10.0),
+          ubicacion(cultivo.fkidUbicacion),
+          SizedBox(width: 10.0),
+          estado(cultivo.fkidEstado),
+          SizedBox(width: 10.0),
+          Text('MR: ${cultivo.fkidModeloReferencia}'),
+        ],
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(width: 10.0),
+          Text('Cultivo de: Arveja.'),
+          SizedBox(width: 8.0),
+          Text('Area sembrada: ${cultivo.areaSembrada.toString()} m2'),
+        ],
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(width: 10.0),
+          Text('Fecha Inicial: ${cultivo.fechaInicio}'),
+          SizedBox(width: 10.0),
+          Text('Final ${cultivo.fechaFinal}'),
+          SizedBox(width: 8.0),
+          //
+        ],
+      ),
+    ]);
   }
 
   //dropdown seleccionar cultivo
@@ -222,7 +232,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
       children: [
         SizedBox(width: 5.0),
         FutureBuilder<List<CultivoModel>>(
-          future: culOper.consultarCultivos(),
+          future: _culOper.consultarCultivos(),
           builder: (context, snapshot) {
             return snapshot.hasData
                 ? CultivoDropdown(snapshot.data, callback) //selected concepto
@@ -233,6 +243,181 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     );
   }
 
+//ubicacion del cultivo
+  Widget ubicacion(String idUbicacion) {
+    return FutureBuilder<UbicacionModel>(
+        future: _ubiOper.getUbicacionById(idUbicacion),
+        builder:
+            (BuildContext context, AsyncSnapshot<UbicacionModel> snapshot) {
+          String _ubicacion = '';
+          if (snapshot.hasData) {
+            _ubicacion = snapshot.data.nombreUbicacion;
+          } else if (snapshot.hasError) {
+            _ubicacion = 'nn';
+          } else {
+            _ubicacion = '';
+          }
+          return Text('Ubicacion: $_ubicacion.');
+        });
+  }
+
+//estado actual del cultivo
+  Widget estado(String idEstado) {
+    return FutureBuilder<EstadoModel>(
+        future: _estOper.getEstadoById(idEstado),
+        builder: (BuildContext context, AsyncSnapshot<EstadoModel> snapshot) {
+          String _estado = '';
+          if (snapshot.hasData) {
+            _estado = snapshot.data.nombreEstado;
+          } else if (snapshot.hasError) {
+            _estado = 'nn';
+          } else {
+            _estado = '';
+          }
+          return Text('Estado: $_estado.');
+        });
+  }
+
+  Widget titulos(BuildContext context) {
+    //estas variables permiten obtener el ancho para ser asignado a cada criterio
+    final double ancho = MediaQuery.of(context).size.width;
+    return Container(
+      padding: EdgeInsets.only(top: 10.0),
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            width: 5.0,
+          ),
+          criterio('Fecha', ancho * 0.15),
+          criterio('Cant', ancho * 0.07),
+          criterio('Und.', ancho * 0.15),
+          criterio('Nombre', ancho * 0.30),
+          criterio('V.und', ancho * 0.12),
+          criterio('V.total', ancho * 0.14),
+          SizedBox(
+            width: 5.0,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _costo(CostoModel costo, BuildContext context) {
+    final double ancho = MediaQuery.of(context).size.width;
+    final fecha = costo.fecha.toString();
+    final fechaDate = DateTime.tryParse(fecha);
+    final fechaFormatted = DateFormat('dd-MM-yy').format(fechaDate);
+    return Row(
+      children: <Widget>[
+        SizedBox(
+          width: 5.0,
+        ),
+        criterio(fechaFormatted, ancho * 0.15),
+        criterio(costo.cantidad.toString(), ancho * 0.07),
+        criterioUnidad(costo.fkidProductoActividad, ancho * 0.15),
+        //criterio(costo.fkidProductoActividad.toString(), ancho * 0.15),
+        criterioFuture(costo.fkidProductoActividad, ancho * 0.30),
+        //criterio(costo.fkidProductoActividad, ancho * 0.30),
+        criterio(costo.valorUnidad.toString(), ancho * 0.12),
+        criterio((costo.cantidad * costo.valorUnidad).toString(), ancho * 0.14),
+        SizedBox(
+          width: 5.0,
+        )
+      ],
+    );
+  }
+
+  Widget criterio(String valor, double ancho) {
+    return Container(
+      height: 25.0,
+      width: ancho,
+      margin: EdgeInsets.all(1.0),
+      decoration: BoxDecoration(
+          color: Colors.black12, borderRadius: BorderRadius.circular(3.0)),
+      child: Center(child: Text(valor)),
+    );
+  }
+
+  Widget criterioFuture(String fk, double ancho) {
+    return FutureBuilder<String>(
+        future: _proActOper.consultarNombre(fk),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          Widget child;
+          if (snapshot.hasData) {
+            child = Text(snapshot.data);
+          } else if (snapshot.hasError) {
+            child = Text('nn');
+          } else {
+            child = SizedBox(
+              child: CircularProgressIndicator(
+                strokeWidth: 2.0,
+              ),
+              width: 10,
+              height: 10, //
+            );
+          }
+          return Container(
+              height: 25.0,
+              width: ancho,
+              margin: EdgeInsets.all(1.0),
+              decoration: BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.circular(3.0)),
+              child: Center(child: child));
+        });
+  }
+
+  Widget criterioUnidad(String fk, double ancho) {
+    return FutureBuilder<String>(
+        future: _proActOper.consultarNombreUnidad(fk),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          Widget child;
+          if (snapshot.hasData) {
+            child = Text(snapshot.data);
+          } else if (snapshot.hasError) {
+            child = Text('nn');
+          } else {
+            child = SizedBox(
+              child: CircularProgressIndicator(
+                strokeWidth: 2.0,
+              ),
+              width: 10,
+              height: 10, //
+            );
+          }
+          return Container(
+              height: 25.0,
+              width: ancho,
+              margin: EdgeInsets.all(1.0),
+              decoration: BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.circular(3.0)),
+              child: Center(child: child));
+        });
+  }
+
+  // ignore: unused_element
+  Widget _botonPDF(BuildContext context) {
+    return FloatingActionButton(
+      child: Text('PDF'),
+      onPressed: () {},
+    );
+  }
+
+  Widget _botonFiltrar(BuildContext context) {
+    final filData = Provider.of<FiltrosCostosData>(context, listen: false);
+    final String idCul =
+        _selectedCultivo != null ? _selectedCultivo.idCultivo.toString() : '1';
+    return FloatingActionButton(
+      child: Icon(Icons.filter_list),
+      onPressed: () {
+        filData.filtrar(idCul, '20210000', '21999999', 'todos', 'todos');
+        setState(() {});
+      },
+    );
+  }
+
+//############################################
   //grafica de la dona
   Widget _graficarDona() {
     return Padding(
@@ -249,29 +434,33 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
                 height: 10.0,
               ),
               Expanded(
-                child: charts.PieChart(_seriesPieData,
-                    animate: true,
-                    animationDuration: Duration(seconds: 2),
-                    behaviors: [
-                      new charts.DatumLegend(
-                        outsideJustification:
-                            charts.OutsideJustification.endDrawArea,
-                        horizontalFirst: false,
-                        desiredMaxRows: 2,
-                        cellPadding:
-                            new EdgeInsets.only(right: 4.0, bottom: 4.0),
-                        entryTextStyle: charts.TextStyleSpec(
-                            color: charts.MaterialPalette.purple.shadeDefault,
-                            fontFamily: 'Georgia',
-                            fontSize: 11),
-                      )
+                child: charts.PieChart(
+                  _seriesPieData,
+                  animate: true,
+                  animationDuration: Duration(seconds: 2),
+                  behaviors: [
+                    new charts.DatumLegend(
+                      outsideJustification:
+                          charts.OutsideJustification.endDrawArea,
+                      horizontalFirst: false,
+                      desiredMaxRows: 2,
+                      cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+                      entryTextStyle: charts.TextStyleSpec(
+                        color: charts.MaterialPalette.purple.shadeDefault,
+                        fontFamily: 'Georgia',
+                        fontSize: 11,
+                      ),
+                    )
+                  ],
+                  defaultRenderer: new charts.ArcRendererConfig(
+                    arcWidth: 100,
+                    arcRendererDecorators: [
+                      new charts.ArcLabelDecorator(
+                        labelPosition: charts.ArcLabelPosition.inside,
+                      ),
                     ],
-                    defaultRenderer: new charts.ArcRendererConfig(
-                        arcWidth: 100,
-                        arcRendererDecorators: [
-                          new charts.ArcLabelDecorator(
-                              labelPosition: charts.ArcLabelPosition.inside)
-                        ])),
+                  ),
+                ),
               ),
             ],
           ),
@@ -279,70 +468,8 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
       ),
     );
   }
-  //crea la fila de los titulos
-  Widget titulos(BuildContext context) {
-    //estas variables permiten obtener el ancho para ser asignado a cada criterio
-    final double ancho = MediaQuery.of(context).size.width;
-    return Container(
-      padding: EdgeInsets.only(top: 100.0),
-      child: Row(
-        children: <Widget>[
-          SizedBox(
-            width: 5.0,
-          ),
-          criterio('Fecha', ancho * 0.15),
-          criterio('Cant', ancho * 0.07),
-          criterio('Und.', ancho * 0.13),
-          criterio('Nombre', ancho * 0.30),
-          criterio('V.und', ancho * 0.12),
-          criterio('V.total', ancho * 0.15),
-          SizedBox(
-            width: 5.0,
-          )
-        ],
-      ),
-    );
-  }
-  //crea las filas de los costos
-  Widget _costo(Map costo, BuildContext context) {
-    final double ancho = MediaQuery.of(context).size.width;
-    return Row(
-      children: <Widget>[
-        SizedBox(
-          width: 5.0,
-        ),
-        criterio(costo['fecha'], ancho * 0.15),
-        criterio(costo['cant'].toString(), ancho * 0.07),
-        criterio(costo['und.'].toString(), ancho * 0.13),
-        criterio(costo['nombre'], ancho * 0.30),
-        criterio(costo['v.und'].toString(), ancho * 0.12),
-        criterio(costo['v.total'].toString(), ancho * 0.15),
-        SizedBox(
-          width: 5.0,
-        )
-      ],
-    );
-  }
-  //funcion que crea cada uno de los bloques del listado
-  Widget criterio(String valor, double ancho) {
-    return Container(
-      height: 25.0,
-      width: ancho,
-      margin: EdgeInsets.all(1.0),
-      decoration: BoxDecoration(
-          color: Colors.black12, borderRadius: BorderRadius.circular(3.0)),
-      child: Center(child: Text(valor)),
-    );
-  }
 
-  // ignore: unused_element
-  Widget _botonPDF(BuildContext context) {
-    return FloatingActionButton(
-      child: Text('PDF'),
-      onPressed: () {},
-    );
-  }
-
+//#############################################
 //brafico de barras camparar cultivo con MR
   Widget _graficarBarras() {
     return Padding(

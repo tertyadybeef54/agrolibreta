@@ -42,7 +42,7 @@ class EstadosOperations {
     return res;
   }
 
-  Future<EstadoModel> getEstadoById(int id) async {
+  Future<EstadoModel> getEstadoById(String id) async {
     final db = await dbProvider.database;
     final res = await db
         .query('EstadosCultivo', where: 'idEstado = ?', whereArgs: [id]);
