@@ -16,6 +16,7 @@ final PorcentajeOperations _porOper = new PorcentajeOperations();
 
 //provider para manejar los datos relacionados a los costos
 class CostosData with ChangeNotifier {
+  
   List<List<double>> sumasList = [];
   List<List<ConceptoModel>> conceptosList = [];
   List<List<double>> sugeridosList = [];
@@ -35,6 +36,7 @@ class CostosData with ChangeNotifier {
     this.conceptos = [...res];
     final cul = await _culOper.consultarCultivos();
     this.cultivos = [...cul];
+
     notifyListeners();
   }
 
@@ -68,8 +70,7 @@ class CostosData with ChangeNotifier {
 
   obtenerCostosByConceptos() {
     if (conceptosList.length == 0) {
-      if(cultivos.length>0){
-
+      if (cultivos.length > 0) {
         this.cultivos.forEach((e) {
           //print(e.nombreDistintivo);
 
@@ -83,7 +84,9 @@ class CostosData with ChangeNotifier {
             //if (resp != -1.0) {}//aca se puede aplicar condicional para modelos de referencia con cantidad de conceptos variable, para este prototipo siempre seran 8 conceptos fijos
             //print('entró al if');
             final double sug = await _porOper.getPorcenByMRyConcep(
-                e.fkidModeloReferencia, e2.idConcepto.toString(), e.presupuesto);
+                e.fkidModeloReferencia,
+                e2.idConcepto.toString(),
+                e.presupuesto);
 
             sumTemp.add(resp);
             conTemp.add(e2);
@@ -109,6 +112,7 @@ class CostosData with ChangeNotifier {
     this.cultivos = [...cul];
     notifyListeners();
   }
+
 /* 
   List<ModeloReferenciaModel> modelosReferencia = []; //se almacenan MRs
   //List<ConceptoModel> conceptos = [];  // almacena conceptos

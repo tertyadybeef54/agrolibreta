@@ -43,4 +43,10 @@ class UbicacionesOperations {
     print('eliminado');
     return res;
   }
+  Future<UbicacionModel> getUbicacionById(String id) async {
+    final db = await dbProvider.database;
+    final res = await db.query('Ubicaciones', where: 'idUbicacion = ?', whereArgs: [id]);
+
+    return res.isNotEmpty ? UbicacionModel.fromJson(res.first) : null;
+  }
 }
