@@ -10,6 +10,7 @@ import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dar
 
 import 'package:agrolibreta_v2/src/dataproviders/cultivo_data.dart';
 import 'package:agrolibreta_v2/src/dataproviders/ubicaciones_data.dart';
+import 'package:agrolibreta_v2/src/dataproviders/pie_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/porcentajes_data_provider.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (context) => new UsuarioProvider()),
           ChangeNotifierProvider(              create: (context) => new RegistrosFotograficosData()),
           ChangeNotifierProvider(create: (context) => new FiltrosCostosData() ),
+          ChangeNotifierProvider(create: (context) => new PieData() ),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
