@@ -121,7 +121,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
             width: 150.0,
             margin: EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-                color: Colors.lightBlue,
+                color: Colors.lightGreen.shade200,
                 borderRadius: BorderRadius.circular(20.0)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -147,7 +147,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
             width: 150.0,
             margin: EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-                color: Colors.lightBlue,
+                color: Colors.lightGreen.shade200,
                 borderRadius: BorderRadius.circular(20.0)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -191,11 +191,10 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
             margin: EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
             padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
             decoration:
-                BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
+                BoxDecoration(shape: BoxShape.circle, color: Color(0xff8c6d62)),
           ),
           IconButton(
-            icon: Icon(Icons.refresh),
-            color: Colors.white,
+            icon: Icon(Icons.refresh, color: Colors.white),
             onPressed: () {
               setState(() {});
             },

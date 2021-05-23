@@ -132,7 +132,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
   Widget _seleccionarUbicacionCultivo() {
     return Row(
       children: [
-        Icon(Icons.add_location),
+        Icon(Icons.add_location, color: Colors.black45,),
         SizedBox(width: 30.0),
         FutureBuilder<List<UbicacionModel>>(
           future: ubicacionesOperations.consultarUbicaciones(),
@@ -148,7 +148,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
               margin: EdgeInsets.symmetric(horizontal: 9.0, vertical: 8.8),
               padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
               decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.lightBlue),
+                  shape: BoxShape.circle, color: Color(0xff8c6d62)),
             ),
             IconButton(
               icon: Icon(Icons.add),
@@ -309,6 +309,18 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       firstDate: new DateTime(2021),
       lastDate: new DateTime(2031),
       locale: Locale('es', 'ES'),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color(0xff6b9b37),// header background color
+              onPrimary: Colors.white, // header text color
+              onSurface: Colors.black,
+            ),
+          ),
+          child: child,
+        );
+      },
     );
     if (picked != null) {
       setState(() {

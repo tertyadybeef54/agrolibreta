@@ -61,9 +61,29 @@ class MyApp extends StatelessWidget {
           routes: getAplicationRoutes(),
           onGenerateRoute: (RouteSettings settings) {
             return MaterialPageRoute(
-              builder: (BuildContext context) => HomePage(),
+              builder: (BuildContext context) => HomePage
+              (),
             );
           },
-        ));
+          theme:ThemeData(
+            primaryColor: Color(0xff9ccc65),
+            primaryColorLight: Color(0xffcfff95),
+            primaryColorDark: Color(0xff6b9b37),
+            accentColor: Color(0xff8c6d62),
+            iconTheme: IconThemeData(color:Color(0xff1b5e20)),
+            textButtonTheme: TextButtonThemeData(style:ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(Color(0xff1b5e20)))),
+            elevatedButtonTheme: ElevatedButtonThemeData(style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Color(0xff8c6d62)))),
+            timePickerTheme: TimePickerThemeData(backgroundColor:Colors.orange),
+            appBarTheme: AppBarTheme(
+              iconTheme: IconThemeData(color: Colors.white),
+              textTheme: TextTheme(headline6: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0, 
+                fontWeight: FontWeight.bold
+              )),
+            )
+          )
+        )
+    );
   }
 }

@@ -93,7 +93,7 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
       right: 10.0,
       child: Ink(
         decoration: const ShapeDecoration(
-          color: Colors.lightBlue,
+          color: Color(0xff8c6d62),
           shape: CircleBorder(),
         ),
         child: IconButton(
