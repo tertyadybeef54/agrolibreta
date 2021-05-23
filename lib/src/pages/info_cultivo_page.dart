@@ -60,6 +60,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             Text('  Nombre Distintivo: ${cultivo.nombreDistintivo}'),
             IconButton(
               icon: Icon(Icons.edit),
+              color: Colors.black45,
               onPressed: () => _editnameAlert(context),
             )
           ]),
@@ -68,6 +69,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             Text('  Área sembrada: ${cultivo.areaSembrada.toString()}'),
             IconButton(
               icon: Icon(Icons.edit),
+              color: Colors.black45,
               onPressed: () => _editnumberAlert(
                   context, 'Área Sembrada m^2', TextInputType.number, 1),
             )
@@ -77,6 +79,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             Text('  Fecha de Inicio: ${cultivo.fechaInicio}'),
             IconButton(
               icon: Icon(Icons.edit),
+              color: Colors.black45,
               onPressed: () => _editFechaAlert(context, 'Fecha de Inicio', 1),
             )
           ]),
@@ -85,6 +88,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             Text('  Fecha de finalización: ${cultivo.fechaFinal}'),
             IconButton(
               icon: Icon(Icons.edit),
+              color: Colors.black45,
               onPressed: () => _editFechaAlert(context, 'Fecha Final', 2),
             )
           ]),
@@ -93,6 +97,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             Text('  Presupuesto: ${cultivo.presupuesto}'),
             IconButton(
                 icon: Icon(Icons.edit),
+                color: Colors.black45,
                 onPressed: () {
                   _editnumberAlert(
                       context, 'Presupuesto', TextInputType.number, 2);
@@ -103,6 +108,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             Text('  Precio de venta sugerido: ${cultivo.precioVentaIdeal}'),
             IconButton(
               icon: Icon(Icons.edit),
+              color: Colors.black45,
               onPressed: () => _editPrecioVentaAlert(context, costosTotales),
             )
           ]),
@@ -111,6 +117,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             Text('  Estado: ${cultivo.fkidEstado}'),
             IconButton(
               icon: Icon(Icons.edit),
+              color: Colors.black45,
               onPressed: () => _cambiarEstadoAlert(context),
             )
           ]),

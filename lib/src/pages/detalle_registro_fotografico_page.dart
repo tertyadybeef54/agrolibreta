@@ -1,11 +1,8 @@
 
-
+import 'package:flutter/material.dart';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-
 class DetalleRegistroFotograficoPage extends StatelessWidget {
-
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +31,7 @@ class DetalleRegistroFotograficoPage extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 height: 400.0,
-                color: Colors.red,
+                color: Colors.white,
                 child: Image.file(File(numero),) //fit: BoxFit.cover),
               ),
             ),    

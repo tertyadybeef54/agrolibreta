@@ -29,6 +29,7 @@ class _Navegacion extends StatelessWidget {
   Widget build(BuildContext context) {
     final navegacionModel = Provider.of<_NavegacionModel>(context);
     return BottomNavigationBar(
+        selectedItemColor: Color(0xff1b5e20),
         type: BottomNavigationBarType.fixed,
         iconSize: 25,
         currentIndex: navegacionModel.paginaActual,
@@ -41,6 +42,7 @@ class _Navegacion extends StatelessWidget {
               icon: Icon(Icons.content_paste_rounded), label: 'Informes'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'costos'),
         ],
+        selectedLabelStyle: TextStyle(color: Color(0xff1b5e20)),
         onTap: (index) => navegacionModel.paginaActual = index);
   }
 }

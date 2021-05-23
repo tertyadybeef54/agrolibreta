@@ -99,7 +99,7 @@ class HomePage extends StatelessWidget {
           Navigator.pushNamed(context, 'resumenCostos',
               arguments: cultivo);
         },
-        child: Text('Entrar'));
+        child: Text('Entrar',style: TextStyle(fontSize:18.0,fontWeight: FontWeight.bold)));
   }
 
   //botton para añadir nuevo cultivo
