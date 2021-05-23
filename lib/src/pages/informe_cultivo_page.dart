@@ -2,6 +2,7 @@ import 'package:agrolibreta_v2/src/data/estados_operations.dart';
 import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
 import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
 import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/pie_data_provider.dart';
 import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
 import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
@@ -25,11 +26,11 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
   EstadosOperations _estOper = new EstadosOperations();
   List<Widget> listado = [];
   CultivoOperations _culOper = new CultivoOperations();
-  List<charts.Series<Pollution, String>> _seriesData;
-  List<charts.Series<Task, String>> _seriesPieData;
+  //List<charts.Series<Pollution, String>> _seriesData;
+  //List<charts.Series<Task, String>> _seriesPieData;
 
-  _generateData() {
-    var data1 = [
+  //_generateData() {
+/*     var data1 = [
       new Pollution(1, 'semilla', 30000),
       new Pollution(1, 'mano de obra', 1500000),
       new Pollution(1, 'fertilizantes', 200000),
@@ -61,8 +62,8 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         fillColorFn: (Pollution pollution, _) =>
             charts.ColorUtil.fromDartColor(Color(0xff109618)),
       ),
-    );
-    var piedata = [
+    ); */
+/*     var piedata = [
       new Task('Semilla', 6.5, Color(0xff3366cc)),
       new Task('Fertilizantes', 12.1, Color(0xff990099)),
       new Task('Plaguicidas', 17.7, Color(0xff109618)),
@@ -81,8 +82,8 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         data: piedata,
         labelAccessorFn: (Task row, _) => '${row.taskvalue}',
       ),
-    );
-  }
+    ); */
+  //}
 
   CultivoModel _selectedCultivo;
   callback(selectedCultivo) {
@@ -94,9 +95,9 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
   @override
   void initState() {
     super.initState();
-    _seriesData = <charts.Series<Pollution, String>>[];
-    _seriesPieData = <charts.Series<Task, String>>[];
-    _generateData();
+    //_seriesData = <charts.Series<Pollution, String>>[];
+    //_seriesPieData = <charts.Series<Task, String>>[];
+    //_generateData();
     _selectedCultivo = new CultivoModel(
         idCultivo: 1,
         fkidUbicacion: '1',
@@ -115,6 +116,9 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
   Widget build(BuildContext context) {
     final filData = Provider.of<FiltrosCostosData>(context);
     final costos = filData.costos;
+    final pieData = Provider.of<PieData>(context, listen: false);
+    pieData.generarData();
+    pieData.generarDataMRCul();
     final tabs = [
       Tab(icon: Icon(Icons.assignment)),
       Tab(icon: Icon(Icons.donut_small)),
@@ -405,7 +409,11 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
   }
 
   Widget _botonFiltrar(BuildContext context) {
+    final pieData = Provider.of<PieData>(context, listen: false);
     final filData = Provider.of<FiltrosCostosData>(context, listen: false);
+    if (_selectedCultivo != null) {
+      pieData.cultivo = _selectedCultivo;
+    }
     final String idCul =
         _selectedCultivo != null ? _selectedCultivo.idCultivo.toString() : '1';
     return FloatingActionButton(
@@ -420,6 +428,11 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
 //############################################
   //grafica de la dona
   Widget _graficarDona() {
+    final pieData = Provider.of<PieData>(context, listen: false);
+    final _seriesPieData = pieData.seriesPieData;
+    if (_seriesPieData == null) {
+      return Container();
+    }
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Container(
@@ -443,8 +456,8 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
                       outsideJustification:
                           charts.OutsideJustification.endDrawArea,
                       horizontalFirst: false,
-                      desiredMaxRows: 2,
-                      cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+                      desiredMaxRows: 3,
+                      //cellPadding: new EdgeInsets.only(),
                       entryTextStyle: charts.TextStyleSpec(
                         color: charts.MaterialPalette.purple.shadeDefault,
                         fontFamily: 'Georgia',
@@ -472,6 +485,11 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
 //#############################################
 //brafico de barras camparar cultivo con MR
   Widget _graficarBarras() {
+    final pieData = Provider.of<PieData>(context, listen:false);
+    final _seriesData = pieData.seriesData;
+    if (_seriesData == null) {
+      return Container();
+    }
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: Container(
@@ -479,7 +497,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           child: Column(
             children: <Widget>[
               Text(
-                'Esperado y obtenido en los conceptos',
+                'Esperado y obtenido por conceptos',
                 style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
               ),
               Expanded(
@@ -499,18 +517,10 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
   }
 }
 
-class Task {
+/* class Task {
   String task;
   double taskvalue;
   Color colorval;
 
   Task(this.task, this.taskvalue, this.colorval);
-}
-
-class Pollution {
-  String place;
-  int year;
-  int quantity;
-
-  Pollution(this.year, this.place, this.quantity);
-}
+} */
