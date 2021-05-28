@@ -22,18 +22,20 @@ class PieData with ChangeNotifier {
 
   CultivoModel cultivo;
 
+//inicializa con el cultivo 1 por defecto
   PieData() {
     this.getCultivo();
     this.seriesPieData = [];
     this.seriesData = [];
   }
+  //se asigna el cultivo 1 al parametro cultivo del provider
   getCultivo() async {
     final _cultivo = await _culOper.getCultivoById(1);
     this.cultivo = _cultivo;
     print('provider pie data');
     notifyListeners();
   }
-
+//se consultan y almacenan los datos para graficar la torta
   generarData() async {
     this.seriesPieData = [];
     if (this.cultivo != null) {
@@ -69,7 +71,7 @@ class PieData with ChangeNotifier {
           );
     }
   }
-
+//se consulta y extraen los datos para graficar el grafico de barras
   generarDataMRCul() async {
     this.seriesData = [];
     if (this.cultivo != null) {
@@ -87,8 +89,8 @@ class PieData with ChangeNotifier {
         print(gastoIdeal);
         print("####");
         final nombre = concepto.nombreConcepto.substring(0, 5);
-        final conTempR = new Concepto(1, nombre, suma);
-        final conTempI = new Concepto(2, nombre, gastoIdeal);
+        final conTempR = new Concepto(nombre, suma);
+        final conTempI = new Concepto(nombre, gastoIdeal);
 
         barraData1.add(conTempR);
         barraData2.add(conTempI);
@@ -96,8 +98,8 @@ class PieData with ChangeNotifier {
 
       seriesData.add(
         charts.Series(
-          domainFn: (Concepto concepto, _) => concepto.concepto,
-          measureFn: (Concepto concepto, _) => concepto.total,
+          domainFn: (Concepto concepto, _) => concepto.concepto, //eje x+
+          measureFn: (Concepto concepto, _) => concepto.total, // eje y+
           id: 'cultivo',
           data: barraData1,
           fillPatternFn: (_, __) => charts.FillPatternType.solid,
@@ -131,9 +133,8 @@ class PorcConcepto {
 }
 
 class Concepto {
-  int id;
   String concepto;
   double total;
 
-  Concepto(this.id, this.concepto, this.total);
+  Concepto(this.concepto, this.total);
 }

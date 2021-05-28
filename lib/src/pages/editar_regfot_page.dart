@@ -14,14 +14,12 @@ import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 import 'package:agrolibreta_v2/src/dataproviders/registro_fotograficos_data.dart';
 import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
 
-class NuevoRegistroFotograficoPage extends StatefulWidget {
+class EditarRegFotPage extends StatefulWidget {
   @override
-  _NuevoRegistroFotograficoPageState createState() =>
-      _NuevoRegistroFotograficoPageState();
+  _EditarRegFotPageState createState() => _EditarRegFotPageState();
 }
 
-class _NuevoRegistroFotograficoPageState
-    extends State<NuevoRegistroFotograficoPage> {
+class _EditarRegFotPageState extends State<EditarRegFotPage> {
   ProductoActividadOperations _proActOper = new ProductoActividadOperations();
   File imagenFile;
   final _picker = ImagePicker();
@@ -55,7 +53,7 @@ class _NuevoRegistroFotograficoPageState
         title: Center(
             child: Column(
           children: [
-            Text('Nuevo'),
+            Text('Editar'),
             Text('Registro Fotografico'),
           ],
         )),

@@ -1,20 +1,22 @@
-import 'package:agrolibreta_v2/src/data/estados_operations.dart';
-import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
-import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
-import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
-import 'package:agrolibreta_v2/src/dataproviders/pie_data_provider.dart';
-import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
-import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
-import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
+import 'package:agrolibreta_v2/src/data/estados_operations.dart';
+import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
+import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
+import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
+import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
-import 'package:agrolibreta_v2/src/widgets/cultivo_dropdown.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
 
+import 'package:agrolibreta_v2/src/widgets/cultivo_dropdown.dart';
+import 'package:agrolibreta_v2/src/dataproviders/pie_data_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
+
+//Se muestran los datos importantes del cultivo, los costos, un grafico de torta con el porcentaje que tienen los costos agrupados por conceptos con respecto al 100 porcento del costo total de la produccion, y un grafico de barras que compara el costo total de costos asociados por concepto del cultivo con el modelo de referencia. es decir costo esperado segun el presupuesto y el MR con costo obtenido.
 class InformeCultivoPage extends StatefulWidget {
   @override
   _InformeCultivoPageState createState() => _InformeCultivoPageState();
@@ -26,64 +28,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
   EstadosOperations _estOper = new EstadosOperations();
   List<Widget> listado = [];
   CultivoOperations _culOper = new CultivoOperations();
-  //List<charts.Series<Pollution, String>> _seriesData;
-  //List<charts.Series<Task, String>> _seriesPieData;
 
-  //_generateData() {
-/*     var data1 = [
-      new Pollution(1, 'semilla', 30000),
-      new Pollution(1, 'mano de obra', 1500000),
-      new Pollution(1, 'fertilizantes', 200000),
-    ];
-    var data2 = [
-      new Pollution(2, 'semilla', 25000),
-      new Pollution(2, 'mano de obra', 1600000),
-      new Pollution(2, 'fertilizantes', 220000),
-    ];
-    _seriesData.add(
-      charts.Series(
-        domainFn: (Pollution pollution, _) => pollution.place,
-        measureFn: (Pollution pollution, _) => pollution.quantity,
-        id: '1',
-        data: data1,
-        fillPatternFn: (_, __) => charts.FillPatternType.solid,
-        fillColorFn: (Pollution pollution, _) =>
-            charts.ColorUtil.fromDartColor(Color(0xff990099)),
-      ),
-    );
-
-    _seriesData.add(
-      charts.Series(
-        domainFn: (Pollution pollution, _) => pollution.place,
-        measureFn: (Pollution pollution, _) => pollution.quantity,
-        id: '2',
-        data: data2,
-        fillPatternFn: (_, __) => charts.FillPatternType.solid,
-        fillColorFn: (Pollution pollution, _) =>
-            charts.ColorUtil.fromDartColor(Color(0xff109618)),
-      ),
-    ); */
-/*     var piedata = [
-      new Task('Semilla', 6.5, Color(0xff3366cc)),
-      new Task('Fertilizantes', 12.1, Color(0xff990099)),
-      new Task('Plaguicidas', 17.7, Color(0xff109618)),
-      new Task('Empaques', 6.7, Color(0xfffdbe19)),
-      new Task('Mano de obra', 41.8, Color(0xffff9900)),
-      new Task('Other', 11.3, Color(0xffdc3912)),
-    ];
-
-    _seriesPieData.add(
-      charts.Series(
-        domainFn: (Task task, _) => task.task,
-        measureFn: (Task task, _) => task.taskvalue,
-        colorFn: (Task task, _) =>
-            charts.ColorUtil.fromDartColor(task.colorval),
-        id: 'Air Pollution',
-        data: piedata,
-        labelAccessorFn: (Task row, _) => '${row.taskvalue}',
-      ),
-    ); */
-  //}
 
   CultivoModel _selectedCultivo;
   callback(selectedCultivo) {
@@ -95,9 +40,6 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
   @override
   void initState() {
     super.initState();
-    //_seriesData = <charts.Series<Pollution, String>>[];
-    //_seriesPieData = <charts.Series<Task, String>>[];
-    //_generateData();
     _selectedCultivo = new CultivoModel(
         idCultivo: 1,
         fkidUbicacion: '1',
@@ -114,8 +56,8 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final filData = Provider.of<FiltrosCostosData>(context);
-    final costos = filData.costos;
+    final filData = Provider.of<FiltrosCostosData>(context, listen: false);
+    final costos = filData.costosbyCul;
     final pieData = Provider.of<PieData>(context, listen: false);
     pieData.generarData();
     pieData.generarDataMRCul();
@@ -135,7 +77,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
               indicatorColor: Color(0xff9962D0),
               tabs: tabs,
             ),
-            title: Text('Flutter Charts'),
+            title: Center(child: Text('Informe del cultivo')),
           ),
           body: TabBarView(
             children: [
@@ -413,13 +355,13 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     final filData = Provider.of<FiltrosCostosData>(context, listen: false);
     if (_selectedCultivo != null) {
       pieData.cultivo = _selectedCultivo;
-    }
-    final String idCul =
+          final String idCul =
         _selectedCultivo != null ? _selectedCultivo.idCultivo.toString() : '1';
+        filData.costosByCultivo(idCul);
+    }
     return FloatingActionButton(
       child: Icon(Icons.filter_list),
       onPressed: () {
-        filData.filtrar(idCul, '20210000', '21999999', 'todos', 'todos');
         setState(() {});
       },
     );
@@ -517,10 +459,3 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
   }
 }
 
-/* class Task {
-  String task;
-  double taskvalue;
-  Color colorval;
-
-  Task(this.task, this.taskvalue, this.colorval);
-} */
