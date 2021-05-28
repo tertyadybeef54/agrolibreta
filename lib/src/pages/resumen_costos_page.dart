@@ -23,11 +23,9 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     final _conceptosAll = cosData.conceptosList;
     final _sugeridos = cosData.sugeridosList;
     final culData = Provider.of<CultivoData>(context, listen: false);
-    //culData.getCultivo(cultivoArg.idCultivo); //asignar el cultivo
     culData.conceptos = [];
     culData.porcentajes = [];
     culData.consultarMR(cultivoArg.fkidModeloReferencia);
-
 
     _sumasAll.forEach((element) {
       print(element.toString());
@@ -39,7 +37,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     });
     _sugeridos.forEach((element) {
       print(element.toString());
-    }); 
+    });
 
     return Scaffold(
       appBar: _appBar(context, nombreCul, idCul),
@@ -57,7 +55,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
                     _sugeridos[idCul - 1][i],
                     _conceptosAll[idCul - 1][4 + i].nombreConcepto,
                     _sumasAll[idCul - 1][4 + i],
-                    _sugeridos[idCul - 1][4 + i]);
+                    _sugeridos[idCul - 1][4 + i],i+1);
               } else
                 return Center(
                   child: Text('Actualizar'),
@@ -95,7 +93,8 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
       double totalCostoSugerido,
       String concepto2,
       double totalCosto2,
-      double totalCostoSugerido2) {
+      double totalCostoSugerido2,
+      int n) {
     //colores, verde si esta bajo el presupuesto y rojo caso contrario
     TextStyle color1;
     TextStyle color2;
@@ -111,6 +110,8 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     } else {
       color2 = new TextStyle(color: Colors.black);
     }
+    String img1 = n.toString();
+    String img2 = (n+4).toString();
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +128,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Image(
-                  image: AssetImage('assets/no-image.png'),
+                  image: AssetImage('assets/concepto$img1.png'),
                   width: 135.0,
                   height: 85.0,
                   fit: BoxFit.cover,
@@ -153,7 +154,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Image(
-                  image: AssetImage('assets/no-image.png'),
+                  image: AssetImage('assets/concepto$img2.png'),
                   width: 135.0,
                   height: 85.0,
                   fit: BoxFit.cover,

@@ -27,10 +27,11 @@ class CostoOperations {
   }
 
 //U - actualizar
-  Future<int> updateCostos(CostoModel nuevoCosto) async {
+  Future<int> updateCosto(CostoModel nuevoCosto) async {
     final db = await dbProvider.database;
     final res = await db.update('Costos', nuevoCosto.toJson(),
-        where: 'idCostos = ?', whereArgs: [nuevoCosto.idCosto]);
+        where: 'idCosto = ?', whereArgs: [nuevoCosto.idCosto]);
+    print(res);
     return res;
   }
 
@@ -103,9 +104,9 @@ class CostoOperations {
       SELECT * FROM Costos WHERE fkidProductoActividad = '$fkidproAct' AND fkidCultivo = '$fkidCultivo' AND fecha BETWEEN '$fechaDesde' AND '$fechaHasta' ORDER BY fecha
     
     ''');
-        return res.isNotEmpty
-      ? res.map((s) => CostoModel.fromJson(s)).toList()
-      : [];
+      return res.isNotEmpty
+          ? res.map((s) => CostoModel.fromJson(s)).toList()
+          : [];
     }
 //#############################################
     //2.abb esta se hace si se indica el cultivo,  fecha = todas, produc act = todas concep = todos
@@ -117,9 +118,9 @@ class CostoOperations {
         SELECT * FROM Costos WHERE fkidCultivo = '$fkidCultivo' AND fecha BETWEEN '$fechaDesde' AND '$fechaHasta' ORDER BY fecha
         
       ''');
-          return res.isNotEmpty
-      ? res.map((s) => CostoModel.fromJson(s)).toList()
-      : [];
+      return res.isNotEmpty
+          ? res.map((s) => CostoModel.fromJson(s)).toList()
+          : [];
     }
     //3.bbb no aplica filtros
     if (fkidCultivo == 'todos' &&
@@ -130,9 +131,9 @@ class CostoOperations {
         SELECT * FROM Costos WHERE fecha BETWEEN '$fechaDesde' AND '$fechaHasta' ORDER BY fecha
         
       ''');
-          return res.isNotEmpty
-      ? res.map((s) => CostoModel.fromJson(s)).toList()
-      : [];
+      return res.isNotEmpty
+          ? res.map((s) => CostoModel.fromJson(s)).toList()
+          : [];
     }
 
     //4.bba esta si se indica el concepto, cultivos = todos, producto Act = todos, fecha = todas
@@ -144,9 +145,9 @@ class CostoOperations {
         SELECT * FROM Costos WHERE fkidProductoActividad IN (SELECT idProductoActividad FROM ProductosActividades WHERE fkidConcepto = '$fkidConcepto') AND fecha BETWEEN '$fechaDesde' AND '$fechaHasta' ORDER BY fecha
       
       ''');
-          return res.isNotEmpty
-      ? res.map((s) => CostoModel.fromJson(s)).toList()
-      : [];
+      return res.isNotEmpty
+          ? res.map((s) => CostoModel.fromJson(s)).toList()
+          : [];
     }
 
     //5.baa esta definido prodAct, concepto, cultivo = todos
@@ -159,8 +160,8 @@ class CostoOperations {
       
       ''');
       return res.isNotEmpty
-      ? res.map((s) => CostoModel.fromJson(s)).toList()
-      : [];
+          ? res.map((s) => CostoModel.fromJson(s)).toList()
+          : [];
     }
 
     //7.aba esta si se indica el concepto y el cultivo , producto act = todas
@@ -173,8 +174,8 @@ class CostoOperations {
       
       ''');
       return res.isNotEmpty
-      ? res.map((s) => CostoModel.fromJson(s)).toList()
-      : [];
+          ? res.map((s) => CostoModel.fromJson(s)).toList()
+          : [];
     }
     //8.aba esta si se indica el concepto y el cultivo , producto act = todas
     if (fkidCultivo == 'todos' &&
@@ -186,21 +187,27 @@ class CostoOperations {
       
       ''');
       return res.isNotEmpty
-      ? res.map((s) => CostoModel.fromJson(s)).toList()
-      : [];
+          ? res.map((s) => CostoModel.fromJson(s)).toList()
+          : [];
     }
-    
+
     //6.aaa si se indican el cultivo, producAtc, concepto y fechas
     final res = await db.rawQuery('''
 
         SELECT * FROM Costos WHERE fkidProductoActividad IN (SELECT idProductoActividad FROM ProductosActividades WHERE fkidConcepto = '$fkidConcepto') AND fkidCultivo = '$fkidCultivo' AND fkidProductoActividad = '$fkidproAct' AND fecha BETWEEN '$fechaDesde' AND '$fechaHasta' ORDER BY fecha
       
       ''');
-    
 
     return res.isNotEmpty
-      ? res.map((s) => CostoModel.fromJson(s)).toList()
-      : [];
-  
+        ? res.map((s) => CostoModel.fromJson(s)).toList()
+        : [];
+  }
+
+//consulttar si el costo pertenece al registro fotografico
+
+
+  Future<bool> registroFotografico() async {
+    bool pertenece = false;
+    return pertenece;
   }
 }

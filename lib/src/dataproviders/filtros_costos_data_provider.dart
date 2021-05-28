@@ -9,6 +9,7 @@ final CultivoOperations _culOper = new CultivoOperations();
 
 class FiltrosCostosData with ChangeNotifier {
   List<CostoModel> costos = [];
+  List<CostoModel> costosbyCul = [];
   CultivoModel cultivo;
 
   FiltrosCostosData() {
@@ -33,4 +34,21 @@ class FiltrosCostosData with ChangeNotifier {
     });
     this.costos = _resp;
   }
+
+  costosByCultivo(String fkidCultivo) async {
+    final _resp = await _cosOper.costosFiltrados(
+        fkidCultivo, '20210000', '29990000', 'todos', 'todos');
+    print('provider filtros by cul');
+    _resp.forEach((e) {
+      print(e.idCosto);
+    });
+    this.costosbyCul = _resp;
+  }
+
+/*   actualizarCosto(int idCos, int fkidRegistroF) async {
+    final CostoModel cosTemp = await _cosOper.getCostoById(idCos);
+    cosTemp.fkidRegistroFotografico = fkidRegistroF.toString();
+    await _cosOper.updateCosto(cosTemp);
+    print('actualizar registro F provider filtros');
+  } */
 }
