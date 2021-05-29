@@ -55,9 +55,9 @@ class CostosData with ChangeNotifier {
         nombreDistintivo: nombreDistintivo,
         areaSembrada: areaSembrada,
         fechaInicio: fechaInicio,
-        fechaFinal: '.',
+        fechaFinal: 'Sin especificar',
         presupuesto: presupuesto,
-        precioVentaIdeal: 1.0);
+        precioVentaIdeal: 0);
     final resp = await _culOper.nuevoCultivo(cultivo);
     cultivo.idCultivo = resp;
     cultivos.add(cultivo);

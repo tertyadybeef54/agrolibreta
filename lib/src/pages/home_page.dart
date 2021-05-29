@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
                 Text('Área Sembrada: $_area'),
                 Text('Presupuesto: $_presupuesto'),
                 Text('Precio de Venta: $_precio'),
-                Text('id MR: $_mR'),
+                Text('Id MR: $_mR'),
                 SizedBox(height: 20.0),
                 _botonEntrar(context, cultivo),
               ],

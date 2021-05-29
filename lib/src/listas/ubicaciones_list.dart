@@ -36,8 +36,9 @@ class UbicacionList extends StatelessWidget {
     final Widget temp = Column(
       children: [
         ListTile(
+          leading: Icon(Icons.place),
           title: Text('${ubicacion.idUbicacion.toString()}. ${ubicacion.nombreUbicacion}'),
-          subtitle: Text('${ubicacion.descripcion}, estado: ${ubicacion.estado}'),
+          subtitle: Text('Descripcion: ${ubicacion.descripcion} - Estado: ${(ubicacion.estado==1)?'Activa': 'Inactiva'}'),
           //onTap: () {},
         ),
         Divider(),

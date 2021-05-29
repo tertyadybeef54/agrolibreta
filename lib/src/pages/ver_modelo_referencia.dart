@@ -26,39 +26,16 @@ class VerModeloReferencia extends StatelessWidget {
               return Card(
                 child: ListTile(
                   leading: Icon(Icons.grass_rounded),
-                  onTap: () {},
+                  //onTap: () {},
                   title: Text(
                       '${conceptos[index].nombreConcepto}:  ${porcentajes[index].porcentaje} %'),
-                  trailing: Icon(Icons.keyboard_arrow_right),
+                  //trailing: Icon(Icons.keyboard_arrow_right),
                 ),
               );
             },
           ),
-          //_sumaBoton(),
         ],
       ),
     );
   }
-
-//###################################################
-
-  //#######################################################
-  // widges que muestra la suma restante y el boton
-/*   Widget _sumaBoton() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text('suma restante: $_resto %'),
-          SizedBox(
-            height: 10.0,
-          ),
-          ElevatedButton(onPressed: () {}, child: Text('Finalizar')),
-          SizedBox(
-            height: 30.0,
-          )
-        ],
-      ),
-    );
-  } */
 }
