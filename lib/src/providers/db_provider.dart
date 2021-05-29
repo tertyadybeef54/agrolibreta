@@ -141,54 +141,54 @@ class DBProvider {
       ''');
 //################# conceptos
       await db.rawInsert('''
-        INSERT INTO Conceptos(nombreConcepto) VALUES("semilla")
+        INSERT INTO Conceptos(nombreConcepto) VALUES("Semilla")
       ''');
       await db.rawInsert('''
-        INSERT INTO Conceptos(nombreConcepto) VALUES("abono y fertilizantes")
+        INSERT INTO Conceptos(nombreConcepto) VALUES("Abono y fertilizantes")
       ''');
       await db.rawInsert('''
-        INSERT INTO Conceptos(nombreConcepto) VALUES("plaguicidas y herbicidas")
+        INSERT INTO Conceptos(nombreConcepto) VALUES("Plaguicidas y herbicidas")
       ''');
       await db.rawInsert('''
         INSERT INTO Conceptos(nombreConcepto) VALUES("Materiales y empaques")
       ''');
       await db.rawInsert('''
-        INSERT INTO Conceptos(nombreConcepto) VALUES("maquinaria")
+        INSERT INTO Conceptos(nombreConcepto) VALUES("Maquinaria")
       ''');
       await db.rawInsert('''
-        INSERT INTO Conceptos(nombreConcepto) VALUES("mano de obra")
+        INSERT INTO Conceptos(nombreConcepto) VALUES("Mano de obra")
       ''');
       await db.rawInsert('''
-        INSERT INTO Conceptos(nombreConcepto) VALUES("transporte")
+        INSERT INTO Conceptos(nombreConcepto) VALUES("Transporte")
       ''');
       await db.rawInsert('''
-        INSERT INTO Conceptos(nombreConcepto) VALUES("otros")
+        INSERT INTO Conceptos(nombreConcepto) VALUES("Otros")
       ''');
 //#################  estados del cultivo
       await db.rawInsert('''
-        INSERT INTO EstadosCultivo(nombreEstado) VALUES("activo")
+        INSERT INTO EstadosCultivo(nombreEstado) VALUES("Activo")
       ''');
       await db.rawInsert('''
-        INSERT INTO EstadosCultivo(nombreEstado) VALUES("inactivo")
+        INSERT INTO EstadosCultivo(nombreEstado) VALUES("Inactivo")
       ''');
       await db.rawInsert('''
-        INSERT INTO EstadosCultivo(nombreEstado) VALUES("perdido")
+        INSERT INTO EstadosCultivo(nombreEstado) VALUES("Perdido")
       ''');
 //#################  unidades de medida
       await db.rawInsert('''
         INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("kg", "kilogramo")
       ''');
       await db.rawInsert('''
-        INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("bultos", "bultos")
+        INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Bultos", "Bultos")
       ''');
       await db.rawInsert('''
-        INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("125 gr", "pepeleta de 125 gr")
+        INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("125 gr", "Pepeleta de 125 gr")
       ''');
       await db.rawInsert('''
-        INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("jornal", "8 horas")
+        INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Jornal", "8 horas")
       ''');
       await db.rawInsert('''
-        INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("rollo", "rollo n metros")
+        INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Rollo", "Rollo n metros")
       ''');
 //#################  porcentajes del MR modelo de referencia
       await db.rawInsert('''
