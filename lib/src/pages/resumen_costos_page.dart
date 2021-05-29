@@ -55,7 +55,8 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
                     _sugeridos[idCul - 1][i],
                     _conceptosAll[idCul - 1][4 + i].nombreConcepto,
                     _sumasAll[idCul - 1][4 + i],
-                    _sugeridos[idCul - 1][4 + i],i+1);
+                    _sugeridos[idCul - 1][4 + i],
+                    i + 1);
               } else
                 return Center(
                   child: Text('Actualizar'),
@@ -111,7 +112,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
       color2 = new TextStyle(color: Colors.black);
     }
     String img1 = n.toString();
-    String img2 = (n+4).toString();
+    String img2 = (n + 4).toString();
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

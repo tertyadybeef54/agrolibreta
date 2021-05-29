@@ -35,6 +35,7 @@ class PieData with ChangeNotifier {
     print('provider pie data');
     notifyListeners();
   }
+
 //se consultan y almacenan los datos para graficar la torta
   generarData() async {
     this.seriesPieData = [];
@@ -47,7 +48,10 @@ class PieData with ChangeNotifier {
         final resp = await _cosOper.sumaCostosByConcepto(
             this.cultivo.idCultivo, concepto.idConcepto.toString());
         print(resp);
-        final porcentaje = resp * 100 / total;
+        double porcentaje = 1;
+        if (total != 0) {
+          porcentaje = resp * 100 / total;
+        }
         final n = num.parse(porcentaje.toStringAsFixed(2));
 
         PorcConcepto nuevoPorcConcepto = new PorcConcepto(
@@ -71,6 +75,7 @@ class PieData with ChangeNotifier {
           );
     }
   }
+
 //se consulta y extraen los datos para graficar el grafico de barras
   generarDataMRCul() async {
     this.seriesData = [];
@@ -105,7 +110,6 @@ class PieData with ChangeNotifier {
           fillPatternFn: (_, __) => charts.FillPatternType.solid,
           fillColorFn: (Concepto concepto, _) =>
               charts.ColorUtil.fromDartColor(Colors.blue),
-          
         ),
       );
 
