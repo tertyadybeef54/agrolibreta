@@ -55,13 +55,13 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
   TextEditingController controlFecha = new TextEditingController();
 
   //valores para crear el cultivo, el id es automatico
-  String _nombreDistintivo = 'nn'; //nn sin especificar
+  String _nombreDistintivo = 'Nn'; //nn sin especificar
   double _areaSembrada = 1;
-  String _fechaInicio = 'nn';
+  String _fechaInicio = 'Nf';
   int _presupuesto = 1;
   //variables para crear la ubicacion
-  String _nombreUbicacion = 'nn';
-  String _desUbicacion = 'nn';
+  String _nombreUbicacion = 'Nu';
+  String _desUbicacion = 'No existe';
 
   @override
   Widget build(BuildContext context) {

@@ -15,8 +15,7 @@ class ModeloReferenciaList extends StatefulWidget {
 class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
   @override
   Widget build(BuildContext context) {
-    final modelosReferenciaData =
-        Provider.of<ModeloReferenciaData>(context, listen: true);
+    final modelosReferenciaData = Provider.of<ModeloReferenciaData>(context);
 
     final List<ModeloReferenciaModel> modelosReferencia =
         modelosReferenciaData.modelosReferencia;
@@ -35,13 +34,9 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
         automaticallyImplyLeading: false,
         title: Center(child: Text('Modelos de Referencia')),
       ),
-      body: Stack(
-        children: [
-          _modeloReferenciaTiles(
-              context, modelosReferencia, porcentajesList, conceptosList),
-          _refrescar(context),
-        ],
-      ),
+      body: _modeloReferenciaTiles(
+          context, modelosReferencia, porcentajesList, conceptosList),
+      //_refrescar(context),
       floatingActionButton: _crearMR(context),
     );
   }
@@ -52,16 +47,16 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
       List<List<PorcentajeModel>> porcentajesList,
       List<List<ConceptoModel>> conceptosList) {
     return ListView.builder(
-      itemCount: porcentajesList.length,
-      itemBuilder: (_, i) => _listTile(modelosReferencia[i].idModeloReferencia,
+      itemCount: modelosReferencia.length,
+      itemBuilder: (_, i) => _card(modelosReferencia[i].idModeloReferencia,
           porcentajesList[i], conceptosList[i]),
     );
   }
 
-  Widget _listTile(
+/*   Widget _listTile(
       int i, List<PorcentajeModel> porcentajes, List<ConceptoModel> conceptos) {
     List<Widget> por = [];
-    por.add(Text('$i'));
+    por.add(Text('MR: $i'));
     if (porcentajes.length != 0) {
       for (int i = 0; i < porcentajes.length; i++) {
         final textTemp = Text(
@@ -73,6 +68,49 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
     return Column(
       children: por,
     );
+  } */
+
+  Widget _card(
+      int i, List<PorcentajeModel> porcentajes, List<ConceptoModel> conceptos) {
+    List<Widget> hijos = [];
+    hijos.add(SizedBox(height: 13.0,));
+    hijos.add(Text(
+      'MR: $i',
+      style: TextStyle(fontWeight: FontWeight.bold),
+    ));
+    //hijos.add(Divider(color: Colors.black, height: 2.0,));
+    if (porcentajes.length != 0) {
+      for (int i = 0; i < porcentajes.length; i++) {
+        final Row row = Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 12.0,
+                ),
+                Icon(Icons.grass),
+                Text('   ${conceptos[i].nombreConcepto}'),
+              ],
+            ),
+            Text('${porcentajes[i].porcentaje} %    '),
+          ],
+        );
+        hijos.add(row);
+        hijos.add(Divider());
+      }
+    }
+
+    final tarjeta = Card(
+      margin: EdgeInsets.all(15.0),
+      clipBehavior: Clip.antiAlias,
+      elevation: 2.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: Column(
+        children: hijos,
+      ),
+    );
+    return tarjeta;
   }
 
   Widget _crearMR(BuildContext context) {
