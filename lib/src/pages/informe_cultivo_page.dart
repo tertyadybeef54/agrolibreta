@@ -398,7 +398,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
                       outsideJustification:
                           charts.OutsideJustification.endDrawArea,
                       horizontalFirst: false,
-                      desiredMaxRows: 3,
+                      desiredMaxRows: 4,
                       //cellPadding: new EdgeInsets.only(),
                       entryTextStyle: charts.TextStyleSpec(
                         color: charts.MaterialPalette.purple.shadeDefault,

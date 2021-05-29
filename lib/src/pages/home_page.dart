@@ -9,8 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 
 class HomePage extends StatelessWidget {
-  UbicacionesOperations _ubiOper = new UbicacionesOperations();
-  EstadosOperations _estOper = new EstadosOperations();
+  final UbicacionesOperations _ubiOper = new UbicacionesOperations();
+  final EstadosOperations _estOper = new EstadosOperations();
   @override
   Widget build(BuildContext context) {
     final cosData = Provider.of<CostosData>(context);
@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
                 Text('Área Sembrada: $_area'),
                 Text('Presupuesto: $_presupuesto'),
                 Text('Precio de Venta: $_precio'),
-                Text('id MR: $_mR'),
+                Text('Id MR: $_mR'),
                 SizedBox(height: 20.0),
                 _botonEntrar(context, cultivo),
               ],

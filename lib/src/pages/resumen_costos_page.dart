@@ -114,7 +114,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
       color2 = new TextStyle(color: Colors.black);
     }
     String img1 = n.toString();
-    String img2 = (n+4).toString();
+    String img2 = (n + 4).toString();
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

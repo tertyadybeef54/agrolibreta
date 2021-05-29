@@ -85,7 +85,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
           ]),
           Divider(height: 10.0),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('  Fecha de finalización: ${cultivo.fechaFinal}'),
+            Text('  Fecha de finalización: ${cultivo.fechaFinal}', style: TextStyle(fontWeight: FontWeight.bold),),
             IconButton(
               icon: Icon(Icons.edit),
               color: Colors.black45,
@@ -105,7 +105,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
           ]),
           Divider(height: 10.0),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('  Precio de venta sugerido: ${cultivo.precioVentaIdeal}'),
+            Text('  Precio de venta sugerido: ${cultivo.precioVentaIdeal==1 ? 'ingrese datos' : cultivo.precioVentaIdeal}'),
             IconButton(
               icon: Icon(Icons.edit),
               color: Colors.black45,
@@ -114,7 +114,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
           ]),
           Divider(height: 10.0),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('  Estado: ${cultivo.fkidEstado}'),
+            estado(cultivo.fkidEstado),
             IconButton(
               icon: Icon(Icons.edit),
               color: Colors.black45,
@@ -122,14 +122,32 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             )
           ]),
           Divider(height: 10.0),
-
-
-
         ],
       )
     ]);
   }
 
+  Widget estado(String fkestado) {
+    return FutureBuilder<EstadoModel>(
+        future: _estOper.getEstadoById(fkestado),
+        builder: (BuildContext context, AsyncSnapshot<EstadoModel> snapshot) {
+          Widget child;
+          if (snapshot.hasData) {
+            child = Text('Estado: ${snapshot.data.nombreEstado}');
+          } else if (snapshot.hasError) {
+            child = Text('Estado: 1');
+          } else {
+            child = SizedBox(
+              child: CircularProgressIndicator(
+                strokeWidth: 2.0,
+              ),
+              width: 10,
+              height: 10, //
+            );
+          }
+          return child;
+        });
+  }
 //editar nombre
   void _editnameAlert(BuildContext context) {
     showDialog(
@@ -204,63 +222,6 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
     });
   }
 
-  /* void _editLocationAlert(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (contex) {
-        return AlertDialog(
-          title: Text(
-            'Editar Ubicación',
-            style: TextStyle(fontSize: 18.0),
-          ),
-          content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(bottom: 10.0),
-              height: 60.0,
-              child: TextField(
-                textCapitalization: TextCapitalization.sentences,
-                keyboardType: TextInputType.name,
-                style: TextStyle(fontSize: 18.0),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                  labelText: 'Ubicación',
-                  icon: Icon(Icons.drive_file_rename_outline),
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(bottom: 10.0),
-              height: 60.0,
-              child: TextField(
-                textCapitalization: TextCapitalization.sentences,
-                keyboardType: TextInputType.name,
-                style: TextStyle(fontSize: 18.0),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0)),
-                  labelText: 'Descripción',
-                  icon: Icon(Icons.drive_file_rename_outline),
-                ),
-              ),
-            ),
-          ]),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancelar'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: Text('Guardar'),
-              onPressed: () => Navigator.of(context).pop(),
-            )
-          ],
-        );
-      },
-    );
-  }
- */
 //alerta del area y del presupuesto
   void _editnumberAlert(
       BuildContext context, String titulo, TextInputType tipotext, int n) {
