@@ -36,7 +36,6 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
       ),
       body: _modeloReferenciaTiles(
           context, modelosReferencia, porcentajesList, conceptosList),
-      //_refrescar(context),
       floatingActionButton: _crearMR(context),
     );
   }
@@ -46,10 +45,13 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
       List<ModeloReferenciaModel> modelosReferencia,
       List<List<PorcentajeModel>> porcentajesList,
       List<List<ConceptoModel>> conceptosList) {
-    return ListView.builder(
-      itemCount: modelosReferencia.length,
-      itemBuilder: (_, i) => _card(modelosReferencia[i].idModeloReferencia,
-          porcentajesList[i], conceptosList[i]),
+    return RefreshIndicator(
+      onRefresh: _refrescar,
+      child: ListView.builder(
+        itemCount: modelosReferencia.length,
+        itemBuilder: (_, i) => _card(modelosReferencia[i].idModeloReferencia,
+            porcentajesList[i], conceptosList[i]),
+      ),
     );
   }
 
@@ -125,23 +127,7 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
     );
   }
 
-  Widget _refrescar(BuildContext context) {
-    return Positioned(
-      top: 10.0,
-      right: 10.0,
-      child: Ink(
-        decoration: const ShapeDecoration(
-          color: Color(0xff8c6d62),
-          shape: CircleBorder(),
-        ),
-        child: IconButton(
-          icon: const Icon(Icons.refresh),
-          color: Colors.white,
-          onPressed: () {
-            setState(() {});
-          },
-        ),
-      ),
-    );
+  Future <void> _refrescar() async{
+    setState(() {});
   }
 }
