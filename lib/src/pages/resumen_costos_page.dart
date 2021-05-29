@@ -43,27 +43,29 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
       appBar: _appBar(context, nombreCul, idCul),
       body: Stack(
         children: <Widget>[
-          ListView.builder(
-            padding:
-                EdgeInsets.only(left: 0.0, right: 0.0, top: 25.0, bottom: 20.0),
-            itemCount: 4,
-            itemBuilder: (context, i) {
-              if (_conceptosAll.length > 0) {
-                return _concepto(
-                    _conceptosAll[idCul - 1][i].nombreConcepto,
-                    _sumasAll[idCul - 1][i],
-                    _sugeridos[idCul - 1][i],
-                    _conceptosAll[idCul - 1][4 + i].nombreConcepto,
-                    _sumasAll[idCul - 1][4 + i],
-                    _sugeridos[idCul - 1][4 + i],
-                    i + 1);
-              } else
-                return Center(
-                  child: Text('Actualizar'),
-                );
-            },
+          RefreshIndicator(
+            onRefresh: _refrescar,
+            child: ListView.builder(
+              padding:
+                  EdgeInsets.only(left: 0.0, right: 0.0, top: 25.0, bottom: 20.0),
+              itemCount: 4,
+              itemBuilder: (context, i) {
+                if (_conceptosAll.length > 0) {
+                  return _concepto(
+                      _conceptosAll[idCul - 1][i].nombreConcepto,
+                      _sumasAll[idCul - 1][i],
+                      _sugeridos[idCul - 1][i],
+                      _conceptosAll[idCul - 1][4 + i].nombreConcepto,
+                      _sumasAll[idCul - 1][4 + i],
+                      _sugeridos[idCul - 1][4 + i],i+1);
+                } else
+                  return Center(
+                    child: Text('Actualizar'),
+                  );
+              },
+            ),
           ),
-          _refrescar(context),
+          //_refrescar(context),
         ],
       ),
       floatingActionButton: _botonNuevoCosto(context, idCul),
@@ -181,28 +183,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     );
   }
 
-  Widget _refrescar(BuildContext context) {
-    return Positioned(
-      top: 0.0,
-      right: 0.0,
-      width: 40.0,
-      height: 40.0,
-      child: Stack(
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
-            padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-            decoration:
-                BoxDecoration(shape: BoxShape.circle, color: Color(0xff8c6d62)),
-          ),
-          IconButton(
-            icon: Icon(Icons.refresh, color: Colors.white),
-            onPressed: () {
-              setState(() {});
-            },
-          ),
-        ],
-      ),
-    );
+  Future <void> _refrescar() async{
+    setState(() {});
   }
 }
