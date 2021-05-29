@@ -70,15 +70,19 @@ class _GaleriaRegistrosFotograficosPageState
             } else if (snapshot.hasError) {
               galeria = Container();
             } else {
-              galeria = Column(children: [
-                SizedBox(
-                  child: CircularProgressIndicator(),
-                  width: 60,
-                  height: 60,
+              galeria = Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                Center(
+                  child: SizedBox(
+                    child: CircularProgressIndicator(),
+                    width: 60,
+                    height: 60,
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting result...'),
+                  child: Text('Cargando...'),
                 )
               ]);
             }
@@ -108,7 +112,7 @@ class _GaleriaRegistrosFotograficosPageState
               borderRadius: BorderRadius.circular(5),
               child: Container(
                 height: index.isEven ? 200 : 240,
-                color: Colors.green,
+                //color: Colors.green,
                 child: Image.file(
                   File(imagenes[index + _ultimoItem].pathFoto),
                   fit: BoxFit.cover,
