@@ -100,10 +100,10 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
           ),
           _seleccioneProductoActividad(),
           Divider(),
-          _input('Cantidad', '5', 'Ejemplo: 5', TextInputType.number, 1),
+          _input('Cantidad de unidades o jornales', '5', 'Ejemplo: 5', TextInputType.number, 1),
           Divider(),
           _input(
-              'Valor Unidad', '5700', 'Ejemplo: 5700', TextInputType.number, 2),
+              'Valor Unidad o jornal', '5700', 'Ejemplo: 5700', TextInputType.number, 2),
           _valorTotal(),
           Divider(),
           _fecha(context),
@@ -378,33 +378,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   }
 
   _selectDate(BuildContext context) async {
-    //------------------------ para pruebas
-    /* 
-    final concepto = new ConceptoModel(
-      nombreConcepto: _nombreConcepto,
-    );
-    final nuevoUnidadMedida = new UnidadMedidaModel(
-      nombreUnidadMedida: _nombreUnidadMedida,
-      descripcion: '',
-    );
-    final nuevoProductoActividad = new ProductoActividadModel(
-      fkidConcepto: 1,
-      fkidUnidadMedida: 1,
-      nombreProductoActividad: 'piquinegra',
-    );
-    final nuevoRegistroFotografico = new RegistroFotograficoModel(
-      pathFoto: _pathFoto,
-    );
-
-    await conOper.nuevoConcepto(concepto);
-    await uniMedOper.nuevoUnidadMedida(nuevoUnidadMedida);
-    await proActOper.nuevoProductoActividad(nuevoProductoActividad);
-    await regFotOper.nuevoRegistroFotografico(nuevoRegistroFotografico);
-    
-     */
-
-    //---------------------------
-
+ 
     DateTime picked = await showDatePicker(
       context: context,
       initialDate: new DateTime.now(),
