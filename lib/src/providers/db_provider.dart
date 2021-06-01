@@ -141,13 +141,15 @@ class DBProvider {
       ''');
 //################# conceptos
       await db.rawInsert('''
-        INSERT INTO Conceptos(nombreConcepto) VALUES(Semilla")
+
+        INSERT INTO Conceptos(nombreConcepto) VALUES("Semilla")
       ''');
       await db.rawInsert('''
-        INSERT INTO Conceptos(nombreConcepto) VALUES("Abono y Fertilizantes")
+        INSERT INTO Conceptos(nombreConcepto) VALUES("Abono y fertilizantes")
       ''');
       await db.rawInsert('''
-        INSERT INTO Conceptos(nombreConcepto) VALUES("Plaguicidas y Herbicidas")
+        INSERT INTO Conceptos(nombreConcepto) VALUES("Plaguicidas y herbicidas")
+
       ''');
       await db.rawInsert('''
         INSERT INTO Conceptos(nombreConcepto) VALUES("Materiales y Empaques")
@@ -156,7 +158,9 @@ class DBProvider {
         INSERT INTO Conceptos(nombreConcepto) VALUES("Maquinaria")
       ''');
       await db.rawInsert('''
-        INSERT INTO Conceptos(nombreConcepto) VALUES("Mano de Obra")
+
+        INSERT INTO Conceptos(nombreConcepto) VALUES("Mano de obra")
+
       ''');
       await db.rawInsert('''
         INSERT INTO Conceptos(nombreConcepto) VALUES("Transporte")
@@ -182,13 +186,18 @@ class DBProvider {
         INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Bultos", "Bultos")
       ''');
       await db.rawInsert('''
+
         INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("125 gr", "Papeleta de 125 gr")
+
       ''');
       await db.rawInsert('''
         INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Jornal", "8 horas")
       ''');
       await db.rawInsert('''
-        INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Rollo", "rollo n metros")
+
+
+        INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Rollo", "Rollo n metros")
+
       ''');
 //#################  porcentajes del MR modelo de referencia
       await db.rawInsert('''
