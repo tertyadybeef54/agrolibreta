@@ -24,12 +24,16 @@ class VerModeloReferencia extends StatelessWidget {
             itemCount: conceptos.length,
             itemBuilder: (context, index) {
               return Card(
-                child: ListTile(
-                  leading: Icon(Icons.grass_rounded),
-                  //onTap: () {},
-                  title: Text(
-                      '${conceptos[index].nombreConcepto}:  ${porcentajes[index].porcentaje} %'),
-                  //trailing: Icon(Icons.keyboard_arrow_right),
+                margin: EdgeInsets.all(5.0),
+                child: Container(
+                  padding: EdgeInsets.all(15.0),
+                  child: Row(
+                    children: [
+                    Icon(Icons.grass_rounded),
+                    SizedBox(width:10.0),
+                    Text('${conceptos[index].nombreConcepto}:  ${porcentajes[index].porcentaje} %'),
+                    ]
+                  ),
                 ),
               );
             },

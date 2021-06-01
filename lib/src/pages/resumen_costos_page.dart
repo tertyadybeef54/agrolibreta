@@ -137,9 +137,21 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
                   fit: BoxFit.cover,
                 ),
                 SizedBox(height: 5.0),
-                Text(concepto),
-                Text('Total: ${totalCosto.toString()}', style: color1),
-                Text('Limite: ${totalCostoSugerido.toString()}'),
+                Text(concepto, style:TextStyle(fontWeight: FontWeight.bold)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:[
+                    Text('Total: ', style:TextStyle(fontWeight: FontWeight.bold)),
+                    Text('${totalCosto.toString()}', style: color1)
+                  ]
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:[
+                  Text('Límite: ', style:TextStyle(fontWeight: FontWeight.bold)),
+                  Text('${totalCostoSugerido.toString()}')
+                  ]
+                ),
                 SizedBox(height: 5.0)
               ],
             ),
@@ -163,9 +175,21 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
                   fit: BoxFit.cover,
                 ),
                 SizedBox(height: 5.0),
-                Text(concepto2),
-                Text('Total: ${totalCosto2.toString()}', style: color2),
-                Text('Limite: ${totalCostoSugerido2.toString()}'),
+                Text(concepto2, style:TextStyle(fontWeight: FontWeight.bold)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:[
+                    Text('Total: ', style:TextStyle(fontWeight: FontWeight.bold)), 
+                    Text('${totalCosto2.toString()}', style: color2)
+                  ]
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:[
+                    Text('Límite: ', style:TextStyle(fontWeight: FontWeight.bold)),
+                    Text('${totalCostoSugerido2.toString()}')
+                  ]
+                ),
                 SizedBox(height: 5.0)
               ],
             ),

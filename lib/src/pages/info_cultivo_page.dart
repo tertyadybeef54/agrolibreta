@@ -56,8 +56,12 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Divider(height: 10.0),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('  Nombre Distintivo: ${cultivo.nombreDistintivo}'),
+          Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+          children: [ Row( children:[
+            Text('  Nombre Distintivo: ', style:TextStyle(fontWeight: FontWeight.bold)),
+            Text('${cultivo.nombreDistintivo}'),
+          ]),
             IconButton(
               icon: Icon(Icons.edit),
               color: Colors.black45,
@@ -65,8 +69,12 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             )
           ]),
           Divider(height: 10.0),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('  Área sembrada: ${cultivo.areaSembrada.toString()}'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+            children: [ Row( children:[
+            Text('  Área sembrada: ', style:TextStyle(fontWeight: FontWeight.bold)),
+            Text('${cultivo.areaSembrada.toString()}'),
+            ]),
             IconButton(
               icon: Icon(Icons.edit),
               color: Colors.black45,
@@ -75,8 +83,12 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             )
           ]),
           Divider(height: 10.0),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('  Fecha de Inicio: ${cultivo.fechaInicio}'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+            children: [ Row( children:[
+            Text('  Fecha de Inicio: ', style:TextStyle(fontWeight: FontWeight.bold)),
+            Text('${cultivo.fechaInicio}'),
+            ]),
             IconButton(
               icon: Icon(Icons.edit),
               color: Colors.black45,
@@ -84,8 +96,12 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             )
           ]),
           Divider(height: 10.0),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('  Fecha de finalización: ${cultivo.fechaFinal}', style: TextStyle(fontWeight: FontWeight.bold),),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+            children: [ Row(children:[
+            Text('  Fecha de finalización: ', style:TextStyle(fontWeight: FontWeight.bold)),
+            Text('${cultivo.fechaFinal}'),
+            ]),
             IconButton(
               icon: Icon(Icons.edit),
               color: Colors.black45,
@@ -93,8 +109,12 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             )
           ]),
           Divider(height: 10.0),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('  Presupuesto: ${cultivo.presupuesto}'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+            children: [ Row( children:[
+            Text('  Presupuesto:', style:TextStyle(fontWeight: FontWeight.bold)),
+            Text('${cultivo.presupuesto}'),
+            ]),
             IconButton(
                 icon: Icon(Icons.edit),
                 color: Colors.black45,
@@ -104,8 +124,12 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
                 })
           ]),
           Divider(height: 10.0),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('  Precio de venta sugerido: ${cultivo.precioVentaIdeal==1 ? 'ingrese datos' : cultivo.precioVentaIdeal}'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+            children: [Row(children:[
+            Text('  Precio de venta sugerido: ', style:TextStyle(fontWeight: FontWeight.bold)),
+            Text('${cultivo.precioVentaIdeal==1 ? ' Ingrese datos' : cultivo.precioVentaIdeal}'),
+            ]),
             IconButton(
               icon: Icon(Icons.edit),
               color: Colors.black45,
@@ -133,9 +157,14 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
         builder: (BuildContext context, AsyncSnapshot<EstadoModel> snapshot) {
           Widget child;
           if (snapshot.hasData) {
-            child = Text('Estado: ${snapshot.data.nombreEstado}');
+            child = Row(children:[
+              Text('  Estado: ', style:TextStyle(fontWeight: FontWeight.bold)),
+              Text('${snapshot.data.nombreEstado}')
+            ]);
           } else if (snapshot.hasError) {
-            child = Text('Estado: 1');
+            child = Row(children:[
+              Text('  Estado: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('1')
+            ]);
           } else {
             child = SizedBox(
               child: CircularProgressIndicator(
