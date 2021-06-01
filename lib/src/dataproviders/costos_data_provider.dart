@@ -90,6 +90,7 @@ class CostosData with ChangeNotifier {
 
             sumTemp.add(resp);
             conTemp.add(e2);
+            
             sugTemp.add(sug);
 
             //print(              ' ${e2.nombreConcepto}: ${resp.toString()} sugerido: ${sug.toString()}');
@@ -97,6 +98,7 @@ class CostosData with ChangeNotifier {
           /* if (sumTemp != []) {
           } */
           this.conceptosList.add(conTemp);
+          
           this.sumasList.add(sumTemp);
           this.sugeridosList.add(sugTemp);
         });

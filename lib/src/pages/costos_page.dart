@@ -153,6 +153,8 @@ class _CostosPageState extends State<CostosPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(width: 8.0),
+            Icon(Icons.calendar_today),
+            SizedBox(width: 8.0),
             Text('Desde:'),
             _fFechaDesde(context),
             Text(' hasta:'),
@@ -183,14 +185,14 @@ class _CostosPageState extends State<CostosPage> {
   Widget _fFechaDesde(BuildContext context) {
     return Container(
       height: 30.0,
-      width: 148.0,
+      width: 100.0,
       child: TextField(
         textAlignVertical: TextAlignVertical.center,
         enableInteractiveSelection: false,
         controller: controlDesde,
         decoration: InputDecoration(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-          icon: Icon(Icons.calendar_today),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+          //icon: Icon(Icons.calendar_today),
         ),
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
@@ -207,6 +209,18 @@ class _CostosPageState extends State<CostosPage> {
       firstDate: new DateTime(2021),
       lastDate: new DateTime(2030),
       locale: Locale('es', 'ES'),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color(0xff6b9b37),// header background color
+              onPrimary: Colors.white, // header text color
+              onSurface: Colors.black,
+            ),
+          ),
+          child: child,
+        );
+      },
     );
     if (picked != null) {
       setState(() {
@@ -226,7 +240,7 @@ class _CostosPageState extends State<CostosPage> {
   Widget _fFechaHasta(BuildContext context) {
     return Container(
       height: 30.0,
-      width: 118,
+      width: 100.0,
       child: TextField(
         textAlignVertical: TextAlignVertical.center,
         enableInteractiveSelection: false,
@@ -303,12 +317,12 @@ class _CostosPageState extends State<CostosPage> {
           SizedBox(
             width: 5.0,
           ),
-          criterio('Fecha', ancho * 0.15),
-          criterio('Cant', ancho * 0.07),
-          criterio('Und.', ancho * 0.15),
-          criterio('Nombre', ancho * 0.30),
-          criterio('V.und', ancho * 0.12),
-          criterio('V.total', ancho * 0.14),
+          criterioTitulos('Fecha', ancho * 0.15),
+          criterioTitulos('Cnt', ancho * 0.07),
+          criterioTitulos('Und.', ancho * 0.15),
+          criterioTitulos('Nombre', ancho * 0.30),
+          criterioTitulos('V.und', ancho * 0.12),
+          criterioTitulos('V.total', ancho * 0.14),
           SizedBox(
             width: 5.0,
           )
@@ -348,8 +362,20 @@ class _CostosPageState extends State<CostosPage> {
       width: ancho,
       margin: EdgeInsets.all(1.0),
       decoration: BoxDecoration(
-          color: Colors.black12, borderRadius: BorderRadius.circular(3.0)),
+          color: Colors.black12, borderRadius: BorderRadius.circular(3.0)
+      ),
       child: Center(child: Text(valor)),
+    );
+  }
+  Widget criterioTitulos(String valor, double ancho) {
+    return Container(
+      height: 25.0,
+      width: ancho,
+      margin: EdgeInsets.all(1.0),
+      decoration: BoxDecoration(
+          color: Colors.black12, borderRadius: BorderRadius.circular(3.0)
+      ),
+      child: Center(child: Text(valor, style:TextStyle(fontWeight: FontWeight.bold))),
     );
   }
 

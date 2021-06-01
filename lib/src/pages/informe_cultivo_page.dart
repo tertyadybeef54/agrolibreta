@@ -72,9 +72,9 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Color(0xff1976d2),
+            backgroundColor: Color(0xff9ccc65),
             bottom: TabBar(
-              indicatorColor: Color(0xff9962D0),
+              indicatorColor: Color(0xff1b5e20),
               tabs: tabs,
             ),
             title: Center(child: Text('Informe del cultivo')),
@@ -86,6 +86,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
               _graficarBarras(),
             ],
           ),
+          floatingActionButtonLocation:FloatingActionButtonLocation.endFloat,
         ),
       ),
     );
@@ -93,11 +94,13 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
 
   //primera vista del TapBar
   Widget _tapUno(BuildContext context, List<CostoModel> costos) {
+    
+    _armarWidgets(context, costos);
     return ListView.builder(
       padding: EdgeInsets.only(left: 0.0, right: 0.0, top: 0.0),
       itemCount: costos.length + 2,
       itemBuilder: (context, index) {
-        _armarWidgets(context, costos);
+        //_armarWidgets(context, costos);
         return listado[index];
       },
     );
@@ -122,20 +125,11 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 8.0),
-          Text('Cultivo: '),
+          Text('Cultivo: ', style:TextStyle(fontWeight: FontWeight.bold)),
           _seleccioneCultivo(),
-          _botonFiltrar(context),
           SizedBox(width: 10.0),
-          SizedBox(
-            child: Column(
-              children: [
-                Text(
-                  'Pesupuestado: ${cultivo.presupuesto.toString()}',
-                ),
-                Text('Venta ideal: ${cultivo.precioVentaIdeal.toString()}'),
-              ],
-            ),
-          )
+          _botonFiltrar(context),
+          
         ],
       ),
       Row(
@@ -146,29 +140,44 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           SizedBox(width: 10.0),
           estado(cultivo.fkidEstado),
           SizedBox(width: 10.0),
-          Text('MR: ${cultivo.fkidModeloReferencia}'),
+          Text('MR:', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text('${cultivo.fkidModeloReferencia}'),
         ],
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 10.0),
-          Text('Cultivo de: Arveja.'),
+          Text('Cultivo de:', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text('Arveja.'),
           SizedBox(width: 8.0),
-          Text('Area sembrada: ${cultivo.areaSembrada.toString()} m2'),
+          Text('Area sembrada:', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text('${cultivo.areaSembrada.toString()} m2'),
         ],
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 10.0),
-          Text('Fecha Inicial: ${cultivo.fechaInicio}'),
+          Text('Fecha Inicial:', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text( '${cultivo.fechaInicio}'),
           SizedBox(width: 10.0),
-          Text('Final ${cultivo.fechaFinal}'),
+          Text('Final:', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text('${cultivo.fechaFinal}'),
           SizedBox(width: 8.0),
-          //
         ],
       ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(width: 10.0),
+          Text('Presupuesto:', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text('${cultivo.presupuesto.toString()}'),
+          SizedBox(width: 10.0),
+          Text('Venta ideal:', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text('${cultivo.precioVentaIdeal.toString()}'),
+        ],
+      )
     ]);
   }
 
@@ -203,7 +212,12 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           } else {
             _ubicacion = '';
           }
-          return Text('Ubicacion: $_ubicacion.');
+          return Row(
+            children:[
+            Text('Ubicacion:', style:TextStyle(fontWeight: FontWeight.bold)),
+            Text(' $_ubicacion.'),
+            ]
+          );
         });
   }
 
@@ -220,7 +234,12 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           } else {
             _estado = '';
           }
-          return Text('Estado: $_estado.');
+          return Row(
+            children:[
+            Text('Estado:', style:TextStyle(fontWeight: FontWeight.bold)),
+            Text('$_estado.'),
+            ]
+          );
         });
   }
 
@@ -234,12 +253,12 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           SizedBox(
             width: 5.0,
           ),
-          criterio('Fecha', ancho * 0.15),
-          criterio('Cant', ancho * 0.07),
-          criterio('Und.', ancho * 0.15),
-          criterio('Nombre', ancho * 0.30),
-          criterio('V.und', ancho * 0.12),
-          criterio('V.total', ancho * 0.14),
+          criterioTitulos('Fecha', ancho * 0.15),
+          criterioTitulos('Cnt', ancho * 0.07),
+          criterioTitulos('Und.', ancho * 0.15),
+          criterioTitulos('Nombre', ancho * 0.30),
+          criterioTitulos('V.und', ancho * 0.12),
+          criterioTitulos('V.total', ancho * 0.14),
           SizedBox(
             width: 5.0,
           )
@@ -283,7 +302,17 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
       child: Center(child: Text(valor)),
     );
   }
-
+  Widget criterioTitulos(String valor, double ancho) {
+    return Container(
+      height: 25.0,
+      width: ancho,
+      margin: EdgeInsets.all(1.0),
+      decoration: BoxDecoration(
+          color: Colors.black12, borderRadius: BorderRadius.circular(3.0)
+      ),
+      child: Center(child: Text(valor, style:TextStyle(fontWeight: FontWeight.bold))),
+    );
+  }
   Widget criterioFuture(String fk, double ancho) {
     return FutureBuilder<String>(
         future: _proActOper.consultarNombre(fk),
@@ -359,8 +388,10 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         _selectedCultivo != null ? _selectedCultivo.idCultivo.toString() : '1';
         filData.costosByCultivo(idCul);
     }
+    
     return FloatingActionButton(
-      child: Icon(Icons.search, size: 28.0,),
+      child: Icon(Icons.search, size: 28.0),
+      backgroundColor: Color(0xff8c6d62),
       onPressed: () {
         setState(() {});
       },

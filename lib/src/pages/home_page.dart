@@ -29,7 +29,11 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: _crearListaDeCultivo(context, cultivos),
+      body:Container(
+        padding: EdgeInsets.all(15.0),
+        child: _crearListaDeCultivo(context, cultivos)
+      ),
+
       floatingActionButton: _agregarCultivo(context),
     );
   }
@@ -68,8 +72,8 @@ class HomePage extends StatelessWidget {
         child: Row(
           children: <Widget>[
             Image(
-              image: AssetImage('assets/plant.jpg'),
-              width: 100.0,
+              image: AssetImage('assets/arveja.jpg'),
+              width: 130.0,
               height: 210.0,
               fit: BoxFit.cover,
             ),
@@ -78,16 +82,16 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 10.0),
-                Text('Nombre: $_nombre'),
-                Text('Cultivo de: arveja'),
-                Text('Fecha: $_fecha'),
+                Row(children:[Text('Nombre: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('$_nombre')]),
+                Row(children:[Text('Cultivo de: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('Arveja')]),
+                Row(children:[Text('Fecha: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('$_fecha')]),
                 ubicacion(_ubicacion),
                 estado(_estado),
-                Text('Área Sembrada: $_area'),
-                Text('Presupuesto: $_presupuesto'),
-                Text('Precio de Venta: $_precio'),
-                Text('Id MR: $_mR'),
-                SizedBox(height: 20.0),
+                Row(children:[Text('Área Sembrada: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('$_area')]),
+                Row(children:[Text('Presupuesto: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('$_presupuesto')]),
+                Row(children:[Text('Precio de Venta: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('$_precio')]),
+                Row(children:[Text('Id MR: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('$_mR')]),
+                //SizedBox(height: 20.0),
                 _botonEntrar(context, cultivo),
               ],
             ),
@@ -104,9 +108,19 @@ class HomePage extends StatelessWidget {
             (BuildContext context, AsyncSnapshot<UbicacionModel> snapshot) {
           Widget child;
           if (snapshot.hasData) {
-            child = Text('Ubicación: ${snapshot.data.nombreUbicacion}');
+            child = Row(
+              children:[
+                Text('Ubicación: ', style:TextStyle(fontWeight: FontWeight.bold)), 
+                Text('${snapshot.data.nombreUbicacion}')
+              ]
+            );
           } else if (snapshot.hasError) {
-            child = Text('Ubicación: nn');
+            child = Row(
+              children:[
+                Text('Ubicación: ',style:TextStyle(fontWeight: FontWeight.bold)),
+                Text('No existe'),
+              ]
+            );
           } else {
             child = SizedBox(
               child: CircularProgressIndicator(
@@ -128,9 +142,19 @@ class HomePage extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<EstadoModel> snapshot) {
           Widget child;
           if (snapshot.hasData) {
-            child = Text('Estado: ${snapshot.data.nombreEstado}');
+            child = Row(
+              children:[
+                Text('Estado: ', style:TextStyle(fontWeight: FontWeight.bold)),
+                Text('${snapshot.data.nombreEstado}'),
+              ]
+            );
           } else if (snapshot.hasError) {
-            child = Text('Estado: nn');
+            child = Row(
+              children:[
+                Text('Estado: ', style:TextStyle(fontWeight: FontWeight.bold)),
+                Text('No existe'),
+              ]
+            );
           } else {
             child = SizedBox(
               child: CircularProgressIndicator(
