@@ -7,11 +7,6 @@ import 'package:provider/provider.dart';
 class ConfigCultivoPage extends StatelessWidget {
   EstadosOperations estOper = new EstadosOperations();
 
-/*   EstadoModel _selectedEstado;
-  callback(selectedEstado) {
-    _selectedEstado = selectedEstado;
-  } */
-
   @override
   Widget build(BuildContext context) {
     //se obtiene el id del cultivo que esta viendo
@@ -26,7 +21,6 @@ class ConfigCultivoPage extends StatelessWidget {
         title: Center(child: Text('Configuración Cultivo')),
       ),
       body: ListView(
-          //padding: EdgeInsets.all(20.0),
           children: <Widget>[
             SizedBox(height: 20.0),
             Icon(Icons.settings, size: 85.0),
@@ -48,48 +42,8 @@ class ConfigCultivoPage extends StatelessWidget {
                   arguments: idCulArg),
             ),
             Divider(height: 10.0),
-            /* ListTile(
-              title: Text('Cambiar Estado'),
-              leading: Icon(Icons.drag_indicator),
-              trailing: Icon(Icons.keyboard_arrow_right),
-              onTap: () => _cambiarEstadoAlert(context, idCulArg),
-            ),
-            Divider(height: 10.0), */
           ]),
     );
   }
-
-/*   void _cambiarEstadoAlert(BuildContext context, int idCul) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (contex) {
-        return AlertDialog(
-          title: Center(
-              child: Text('Cambiar estado del cultivo',
-                  style: TextStyle(fontSize: 18.0))),
-          content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-            _seleccioneConcepto(),
-          ]),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancelar', style: TextStyle(fontSize: 17.0)),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-                child: Text('Guardar', style: TextStyle(fontSize: 17.0)),
-                onPressed: () {
-                final culData = Provider.of<CultivoData>(context, listen: false);
-                culData.actualizarEstadoCul(idCul, _selectedEstado.idEstado); 
-                final cosData = Provider.of<CostosData>(context, listen: false);
-                cosData.actualizarCultivos();
-                Navigator.of(context).pop();
-                })
-          ],
-        );
-      },
-    );
-  } */
-
 
 }

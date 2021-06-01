@@ -1,3 +1,4 @@
+import 'package:agrolibreta_v2/src/pages/editar_regfot_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:agrolibreta_v2/src/pages/home_page.dart';
@@ -55,6 +56,7 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
     'productoUtil':(BuildContext context) => ProductoActividadList(),
     'ubicacionUtil':(BuildContext context) => UbicacionList(),
     'unidadMedidaUtil': (BuildContext context) => UnidadMedidaList(),
+    'editarRegistro': (BuildContext context) => EditarRegFotPage(),
     
   };
 }

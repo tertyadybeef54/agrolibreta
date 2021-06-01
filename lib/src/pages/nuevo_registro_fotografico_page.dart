@@ -48,7 +48,7 @@ class _NuevoRegistroFotograficoPageState
         print(i);
       }
     }
-
+    armarWidgets(context, costosByCul);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -71,7 +71,6 @@ class _NuevoRegistroFotograficoPageState
         padding: EdgeInsets.only(left: 0.0, right: 0.0, top: 0.0, bottom: 0.0),
         itemCount: costosByCul.length + 3,
         itemBuilder: (context, index) {
-          armarWidgets(context, costosByCul);
           return listado[index];
         },
       ),
@@ -88,7 +87,7 @@ class _NuevoRegistroFotograficoPageState
       listado.add(_costo(context, costo, cont));
       cont++;
     });
-  }
+  } 
 
   Widget imgDrop() {
     final Widget body1 = Column(children: [
@@ -200,7 +199,7 @@ class _NuevoRegistroFotograficoPageState
     CostoModel costo,
     int cont,
   ) {
-    if (costo.fkidRegistroFotografico != '1') {
+    if (costo.fkidRegistroFotografico != '0') {
       return SizedBox();
     }
     final double ancho = MediaQuery.of(context).size.width;
@@ -235,6 +234,9 @@ class _NuevoRegistroFotograficoPageState
             if (_bloquear[i]) {
               _costosSelecteds.add(costo);
               print('añadido');
+            }else{
+              _costosSelecteds.remove(costo);
+              print('removido');
             }
           });
         });
@@ -246,7 +248,6 @@ class _NuevoRegistroFotograficoPageState
           color: Colors.black12, borderRadius: BorderRadius.circular(3.0)),
       child: Center(child: temp),
     );
-
     return widge;
   }
 
@@ -296,12 +297,6 @@ class _NuevoRegistroFotograficoPageState
     setState(() {
       if (imagen != null) {
         imagenFile = File(imagen.path);
-
-        //_imagen = localImage;
-        // final bytes = _imagen.readAsBytesSync();
-        // final imagenNow = base64Encode(bytes);
-        //imagenRuta = pathRuta;
-        //print('String Imagen $imagenRuta');
       } else {
         print('No Image Selected');
       }
@@ -309,9 +304,6 @@ class _NuevoRegistroFotograficoPageState
   }
 
   void _guardarImagen() async {
-    /*    if (imagenFile == null) {
-      return;
-    } */
     final String pathRuta =
         (await getTemporaryDirectory()).path + '${DateTime.now()}.png';
     final File localImage = await imagenFile.copy('$pathRuta');
@@ -334,4 +326,5 @@ class _NuevoRegistroFotograficoPageState
     );
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
+
 }

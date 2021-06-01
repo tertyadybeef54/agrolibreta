@@ -122,7 +122,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
         ClipRect(
           child: Container(
             height: 150.0,
-            width: 150.0,
+            width: 155.0,
             margin: EdgeInsets.all(8.0),
             decoration: BoxDecoration(
                 color: Colors.lightGreen.shade200,
@@ -148,7 +148,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
         ClipRect(
           child: Container(
             height: 150.0,
-            width: 150.0,
+            width: 155.0,
             margin: EdgeInsets.all(8.0),
             decoration: BoxDecoration(
                 color: Colors.lightGreen.shade200,

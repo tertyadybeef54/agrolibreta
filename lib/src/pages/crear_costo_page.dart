@@ -411,14 +411,18 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   //###############################################
   //boton _guardar y guardar en la base de datos el registro del cultivo
   Widget _guardar(BuildContext context, String fkidCultivo) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 15.0),
-      child: ElevatedButton(
-          child: Text('Guardar'),
-          onPressed: () {
-            _save(context, fkidCultivo);
-            Navigator.pop(context);
-          }),
+    return Center(
+      child: Column(
+        children: [
+          ElevatedButton(
+                child: Text('Guardar'),
+                onPressed: () {
+                  _save(context, fkidCultivo);
+                  Navigator.pop(context);
+                }
+          ),
+        ],
+      ),
     );
   }
 
@@ -427,7 +431,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
       fkidProductoActividad:
           _selectedProductoActividad.idProductoActividad.toString(),
       fkidCultivo: fkidCultivo,
-      fkidRegistroFotografico: "1",
+      fkidRegistroFotografico: "0",
       cantidad: _cantidad,
       valorUnidad: _valorUnidad,
       fecha: int.parse(_fechaC),
