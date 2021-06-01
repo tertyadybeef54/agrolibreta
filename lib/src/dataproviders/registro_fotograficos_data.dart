@@ -30,9 +30,17 @@ class RegistrosFotograficosData with ChangeNotifier {
     this.imagenes.add(nuevoRegFot);
     print('nuevo rf añadido');
     notifyListeners();
-     costosSelecteds.forEach((costo) {
-      costo.fkidRegistroFotografico = _id.toString();
-      _cosOper.updateCosto(costo);
+    costosSelecteds.forEach((costo) async {
+      final CostoModel costoTemp = costo;
+      costoTemp.fkidRegistroFotografico = _id.toString();
+      await _cosOper.updateCosto(costo);
+    });
+  }
+  actualizarCostosAsociados(String idRegFot, List<CostoModel> costosSelecteds){
+        costosSelecteds.forEach((costo) async {
+      final CostoModel costoTemp = costo;
+      costoTemp.fkidRegistroFotografico = idRegFot;
+      await _cosOper.updateCosto(costo);
     });
   }
 }

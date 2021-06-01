@@ -31,7 +31,7 @@ class CostoOperations {
     final db = await dbProvider.database;
     final res = await db.update('Costos', nuevoCosto.toJson(),
         where: 'idCosto = ?', whereArgs: [nuevoCosto.idCosto]);
-    print(res);
+    print('costo actualizado: $res');
     return res;
   }
 
@@ -210,4 +210,16 @@ class CostoOperations {
     bool pertenece = false;
     return pertenece;
   }
+
+  Future<List<CostoModel>> costosByRegisto(String fkidRegistro) async {
+    final db = await dbProvider.database;
+    final res = await db.rawQuery('''
+      SELECT * FROM Costos WHERE fkidRegistroFotografico = $fkidRegistro
+    ''');
+
+    return res.isNotEmpty
+        ? res.map((s) => CostoModel.fromJson(s)).toList()
+        : [];
+  }
+
 }

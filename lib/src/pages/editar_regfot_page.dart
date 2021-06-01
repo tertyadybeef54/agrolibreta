@@ -1,12 +1,11 @@
 import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
 import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
+import 'package:agrolibreta_v2/src/modelos/registro_fotografico_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'package:agrolibreta_v2/src/widgets/cultivo_dropdown.dart';
@@ -21,14 +20,13 @@ class EditarRegFotPage extends StatefulWidget {
 
 class _EditarRegFotPageState extends State<EditarRegFotPage> {
   ProductoActividadOperations _proActOper = new ProductoActividadOperations();
-  File imagenFile;
-  final _picker = ImagePicker();
   String imagenRuta = '';
   CultivoOperations culOper = new CultivoOperations();
   List<Widget> listado;
   List<bool> _bloquear = [];
   List<CostoModel> _costosSelecteds = [];
-
+  String
+      _idRegFot; //para guardar el id del registro fotografico el cual será enviado al metodo guardar para actualizar el compo fkregis de los cosotos seleccionados.
   CultivoModel _selectedCultivo;
   callback2(selectedCultivo) {
     setState(() {
@@ -38,7 +36,10 @@ class _EditarRegFotPageState extends State<EditarRegFotPage> {
 
   @override
   Widget build(BuildContext context) {
+    final RegistroFotograficoModel imagen =
+        ModalRoute.of(context).settings.arguments;
     final filData = Provider.of<FiltrosCostosData>(context, listen: false);
+    _idRegFot = imagen.idRegistroFotografico.toString();
     final costosByCul = filData.costosbyCul;
     if (_bloquear.length < costosByCul.length) {
       for (var i = 0; i < costosByCul.length; i++) {
@@ -46,39 +47,32 @@ class _EditarRegFotPageState extends State<EditarRegFotPage> {
         print(i);
       }
     }
-
+    armarWidgets(context, costosByCul, imagen);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Center(
             child: Column(
           children: [
-            Text('Editar'),
-            Text('Registro Fotografico'),
+            Text('Asociar'),
+            Text('mas costos'),
           ],
         )),
-        actions: <Widget>[
-          IconButton(
-            iconSize: 30.0,
-            icon: new Icon(Icons.photo_camera),
-            onPressed: _getImagen,
-          )
-        ],
       ),
       body: ListView.builder(
         padding: EdgeInsets.only(left: 0.0, right: 0.0, top: 0.0, bottom: 0.0),
         itemCount: costosByCul.length + 3,
         itemBuilder: (context, index) {
-          armarWidgets(context, costosByCul);
           return listado[index];
         },
       ),
     );
   }
 
-  void armarWidgets(BuildContext context, List<CostoModel> costos) {
+  void armarWidgets(BuildContext context, List<CostoModel> costos,
+      RegistroFotograficoModel imagen) {
     listado = [];
-    listado.add(imgDrop());
+    listado.add(imgDrop(imagen));
     listado.add(_crearBoton());
     listado.add(_titulos(context));
     int cont = 0;
@@ -88,16 +82,17 @@ class _EditarRegFotPageState extends State<EditarRegFotPage> {
     });
   }
 
-  Widget imgDrop() {
+  Widget imgDrop(RegistroFotograficoModel imagen) {
     final Widget body1 = Column(children: [
       Container(
-        width: double.infinity,
-        height: 274.0,
-        color: Colors.white,
-        child: imagenFile == null
-            ? Image.asset('assets/no-image.png', height: 300.0)
-            : Image.file(imagenFile),
-      ),
+          width: double.infinity,
+          height: 274.0,
+          color: Colors.white,
+          child: imagen == null
+              ? Image.asset('assets/no-image.png', height: 300.0)
+              : Image.file(
+                  File(imagen.pathFoto),
+                )),
       SizedBox(height: 20),
       Text('Seleccione los costos asociados a esta imagen'),
       Row(
@@ -154,7 +149,7 @@ class _EditarRegFotPageState extends State<EditarRegFotPage> {
             'Guardar',
             style: TextStyle(fontSize: 20.0),
           ),
-          onPressed: _guardarImagen,
+          onPressed: _guardar,
         ),
       ],
     );
@@ -198,7 +193,7 @@ class _EditarRegFotPageState extends State<EditarRegFotPage> {
     CostoModel costo,
     int cont,
   ) {
-    if (costo.fkidRegistroFotografico != '1') {
+    if (costo.fkidRegistroFotografico != '0' /* && costo.fkidRegistroFotografico != _idRegFot */) {
       return SizedBox();
     }
     final double ancho = MediaQuery.of(context).size.width;
@@ -233,6 +228,9 @@ class _EditarRegFotPageState extends State<EditarRegFotPage> {
             if (_bloquear[i]) {
               _costosSelecteds.add(costo);
               print('añadido');
+            }else{
+              _costosSelecteds.remove(costo);
+              print('removido');
             }
           });
         });
@@ -244,7 +242,6 @@ class _EditarRegFotPageState extends State<EditarRegFotPage> {
           color: Colors.black12, borderRadius: BorderRadius.circular(3.0)),
       child: Center(child: temp),
     );
-
     return widge;
   }
 
@@ -289,38 +286,13 @@ class _EditarRegFotPageState extends State<EditarRegFotPage> {
   }
 //#########################################
 
-  void _getImagen() async {
-    final imagen = await _picker.getImage(source: ImageSource.camera);
-    setState(() {
-      if (imagen != null) {
-        imagenFile = File(imagen.path);
-
-        //_imagen = localImage;
-        // final bytes = _imagen.readAsBytesSync();
-        // final imagenNow = base64Encode(bytes);
-        //imagenRuta = pathRuta;
-        //print('String Imagen $imagenRuta');
-      } else {
-        print('No Image Selected');
-      }
-    });
-  }
-
-  void _guardarImagen() async {
-    /*    if (imagenFile == null) {
-      return;
-    } */
-    final String pathRuta =
-        (await getTemporaryDirectory()).path + '${DateTime.now()}.png';
-    final File localImage = await imagenFile.copy('$pathRuta');
-    imagenFile = localImage;
-    imagenRuta = pathRuta;
-
+  void _guardar() async {
+    //actualizar los costos que se añadan o quiten
     final regFotData =
         Provider.of<RegistrosFotograficosData>(context, listen: false);
-    regFotData.nuevoRegFotografico(imagenRuta, _costosSelecteds);
-    print(imagenRuta);
-    mostrarSnackbar('Imagen guardada');
+    //await regFotData.nuevoRegFotografico(imagenRuta, _costosSelecteds);
+    regFotData.actualizarCostosAsociados(_idRegFot, _costosSelecteds);
+    mostrarSnackbar('actualizado');
     Navigator.pop(context);
   }
 

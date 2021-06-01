@@ -104,10 +104,10 @@ class _GaleriaRegistrosFotograficosPageState
         return GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, 'detalleRegistroFoto',
-                arguments: imagenes[index + _ultimoItem].pathFoto);
+                arguments: imagenes[index + _ultimoItem]);
           },
           child: Hero(
-            tag: imagenes[index + _ultimoItem],
+            tag: imagenes[index + _ultimoItem].pathFoto,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5),
               child: Container(
