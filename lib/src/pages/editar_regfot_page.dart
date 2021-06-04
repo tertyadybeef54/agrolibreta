@@ -38,13 +38,13 @@ class _EditarRegFotPageState extends State<EditarRegFotPage> {
   Widget build(BuildContext context) {
     final RegistroFotograficoModel imagen =
         ModalRoute.of(context).settings.arguments;
-    final filData = Provider.of<FiltrosCostosData>(context, listen: false);
+    final filData = Provider.of<FiltrosCostosData>(context, listen: true);
     _idRegFot = imagen.idRegistroFotografico.toString();
     final costosByCul = filData.costosbyCul;
     if (_bloquear.length < costosByCul.length) {
       for (var i = 0; i < costosByCul.length; i++) {
         _bloquear.add(false);
-        print(i);
+        //print(i);
       }
     }
     armarWidgets(context, costosByCul, imagen);
@@ -292,7 +292,7 @@ class _EditarRegFotPageState extends State<EditarRegFotPage> {
         Provider.of<RegistrosFotograficosData>(context, listen: false);
     //await regFotData.nuevoRegFotografico(imagenRuta, _costosSelecteds);
     regFotData.actualizarCostosAsociados(_idRegFot, _costosSelecteds);
-    mostrarSnackbar('actualizado');
+    mostrarSnackbar('agregados');
     Navigator.pop(context);
   }
 

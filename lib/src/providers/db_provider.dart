@@ -186,18 +186,13 @@ class DBProvider {
         INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Bultos", "Bultos")
       ''');
       await db.rawInsert('''
-
         INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("125 gr", "Papeleta de 125 gr")
-
       ''');
       await db.rawInsert('''
         INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Jornal", "8 horas")
       ''');
       await db.rawInsert('''
-
-
         INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Rollo", "Rollo n metros")
-
       ''');
 //#################  porcentajes del MR modelo de referencia
       await db.rawInsert('''
@@ -245,7 +240,7 @@ class DBProvider {
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("1", "1", "Rabo de gallo")
       ''');
       await db.rawInsert('''
-        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("3", "6", "Metarex")
+        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("3", "3", "Metarex")
       ''');
       await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("3", "1", "Dinate")

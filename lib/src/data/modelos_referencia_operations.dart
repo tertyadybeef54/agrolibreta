@@ -1,5 +1,4 @@
 import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
-export 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
 import 'package:agrolibreta_v2/src/providers/db_provider.dart';
 
 //CRUD PARA Ubicacaciones
@@ -47,5 +46,16 @@ class ModelosReferenciaOperations {
         where: 'idModeloReferencia = ?', whereArgs: [id]);
     print('eliminado');
     return res;
+  }
+
+
+
+  //otros R otras consultas
+  Future<ModeloReferenciaModel> getModeloById(int id) async {
+    final db = await dbProvider.database;
+    final res = await db
+        .query('ModelosReferencia', where: 'idModeloReferencia = ?', whereArgs: [id]);
+
+    return res.isNotEmpty ? ModeloReferenciaModel.fromJson(res.first) : null;
   }
 }
