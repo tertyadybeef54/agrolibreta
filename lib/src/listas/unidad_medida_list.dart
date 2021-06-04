@@ -34,10 +34,10 @@ class UnidadMedidaList extends StatelessWidget {
       return Column(
         children: [
           ListTile(
+          leading: Icon(Icons.square_foot),
           title: Text('${unidadMedida.idUnidadMedida.toString()}. ${unidadMedida.nombreUnidadMedida}'),
           subtitle: Text('${unidadMedida.descripcion}'),
-             //onTap: () {},
-           ),
+          ),
           Divider(),
         ],
       );

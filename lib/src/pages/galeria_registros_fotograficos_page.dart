@@ -60,8 +60,7 @@ class _GaleriaRegistrosFotograficosPageState
         )),
       ),
       body: FutureBuilder<List<RegistroFotograficoModel>>(
-          future: _regFotOper
-              .consultarRegistrosFotograficos(), // a previously-obtained Future<String> or null
+          future: _regFotOper.consultarRegistrosFotograficos(), // a previously-obtained Future<String> or null
           builder: (BuildContext context,
               AsyncSnapshot<List<RegistroFotograficoModel>> snapshot) {
             Widget galeria;
@@ -97,6 +96,7 @@ class _GaleriaRegistrosFotograficosPageState
 
   Widget _galeria(List<RegistroFotograficoModel> imagenes) {
     return StaggeredGridView.countBuilder(
+      padding: EdgeInsets.all(15.0),
       controller: _scrollController,
       crossAxisCount: 2,
       itemCount: imagenes.length < 5 ? imagenes.length : 5,

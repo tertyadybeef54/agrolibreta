@@ -100,10 +100,10 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
           ),
           _seleccioneProductoActividad(),
           Divider(),
-          _input('Cantidad de unidades o jornales', '5', 'Ejemplo: 5', TextInputType.number, 1),
+          _input('Cantidad de unidades o jornales', 'Ejemplo: 5', TextInputType.number, 1),
           Divider(),
           _input(
-              'Valor Unidad o jornal', '5700', 'Ejemplo: 5700', TextInputType.number, 2),
+              'Valor Unidad o jornal', 'Ejemplo: 5700', TextInputType.number, 2),
           _valorTotal(),
           Divider(),
           _fecha(context),
@@ -156,20 +156,24 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
         barrierDismissible: true,
         builder: (context) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Registrar'),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            title: Text('Registrar nuevo producto o actividad'),
             content: Column(
-              //se debe mejorar para mostrarlo mas estetico
+              //mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 _seleccioneUnidadMedida(),
-                Divider(),
-                _inputI(
-                    '', 'Nombre del prod...', 'Nombre', TextInputType.name, 3),
+                SizedBox(height:10.0),
+                _inputI('', 'Nombre', TextInputType.name, 3),
+                SizedBox(height:10.0),
                 _seleccioneConcepto(),
               ],
             ),
             actions: [
+              TextButton(
+              child: Text('Cancelar'),
+              onPressed: () => Navigator.of(context).pop(),
+              ),
               TextButton(
                 onPressed: () {
                   setState(() {
@@ -192,21 +196,30 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
 
   //2. segundo dropdown seleccionar el concepto
   Widget _seleccioneConcepto() {
-    return FutureBuilder<List<ConceptoModel>>(
-      //debe consultar solo los conceptos que estan relacionados con ese cultivo
-      future: conOper.consultarConceptos(),
-      builder: (context, snapshot) {
-        return snapshot.hasData
-            ? ConceptoDropdown(snapshot.data, callback1) //selected concepto
-            : Text('sin conceptos');
-      },
+    return Row(
+      children: [
+        Icon(Icons.grass_rounded, color:Colors.black45),
+        SizedBox(width:13.0),
+        FutureBuilder<List<ConceptoModel>>(
+          //debe consultar solo los conceptos que estan relacionados con ese cultivo
+          future: conOper.consultarConceptos(),
+          builder: (context, snapshot) {
+            return snapshot.hasData
+                ? ConceptoDropdown(snapshot.data, callback1) //selected concepto
+                : Text('sin conceptos');
+          },
+        ),
+      ],
     );
   }
 
   //3.tercer dropdown Seleccionar unidad de medida
   Widget _seleccioneUnidadMedida() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Icon(Icons.square_foot, color:Colors.black45),
+        SizedBox(width:13.0),
         FutureBuilder<List<UnidadMedidaModel>>(
           future: uniMedOper.consultarUnidadesMedida(),
           builder: (context, snapshot) {
@@ -221,7 +234,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
               margin: EdgeInsets.symmetric(horizontal: 9.0, vertical: 8.8),
               padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
               decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.lightBlue),
+                  shape: BoxShape.circle, color: Color(0xff8c6d62)),
             ),
             IconButton(
               icon: Icon(Icons.add),
@@ -247,13 +260,16 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _inputI('', 'kg', 'Ejemplo: kg', TextInputType.name, 4),
-                Divider(),
-                _inputI(
-                    '', 'bolsas de kilo', 'Descripcion', TextInputType.name, 5),
+                _inputI('', 'Ejemplo: kg', TextInputType.name, 4),
+                //Divider(),
+                _inputI('', 'Descripcion', TextInputType.name, 5),
               ],
             ),
             actions: [
+              TextButton(
+              child: Text('Cancelar'),
+              onPressed: () => Navigator.of(context).pop(),
+              ),
               TextButton(
                   onPressed: () {
                     setState(() {
@@ -275,11 +291,9 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   //###############################################
   // ingresar el nombre 1.distintivo, 2.area sembrada 3.presupuesto y 4. nombre ubicacion 5. descripcion ubicacion
   // Se debe agrgar condicion de solo enteros para 2 y 3
-  Widget _input(String descripcion, String hilabel, String labeltext,
-      TextInputType tipotext, int n) {
+  Widget _input(String descripcion,  String labeltext, TextInputType tipotext, int n) {
     var inputDecoration = InputDecoration(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-      hintText: hilabel,
       labelText: labeltext,
       helperText: descripcion,
       icon: Icon(Icons.drive_file_rename_outline),
@@ -287,7 +301,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     );
     return Container(
       padding: EdgeInsets.only(bottom: 5.0),
-      height: 60.0,
+      height: 70.0,
       width: double.infinity,
       child: TextField(
         textAlignVertical: TextAlignVertical.bottom,
@@ -319,12 +333,12 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   }
 
   //input internos
-  Widget _inputI(String descripcion, String hilabel, String labeltext,
-      TextInputType tipotext, int n) {
+  Widget _inputI(String descripcion, String labeltext, TextInputType tipotext, int n) {
     var inputDecoration = InputDecoration(
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-      hintText: hilabel,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+      //hintText: hilabel,
       labelText: labeltext,
+      icon: Icon(Icons.drive_file_rename_outline),
     );
     return Container(
       padding: EdgeInsets.only(bottom: 5.0),
@@ -415,7 +429,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
       child: Column(
         children: [
           ElevatedButton(
-                child: Text('Guardar'),
+                child: Text('Guardar', style: TextStyle(fontSize: 18.0),),
                 onPressed: () {
                   _save(context, fkidCultivo);
                   Navigator.pop(context);
