@@ -60,8 +60,7 @@ class _CostosPageState extends State<CostosPage> {
   List<ProductoActividadModel> proActs = [];
 //variables de los filtros
   String _fechaDesde = '20210101';
-  String _fechaHasta =
-      '20210601'; //DateFormat('yyyyMMdd').format(DateTime.now());
+  String _fechaHasta = '30219999'; //DateFormat('yyyyMMdd').format(DateTime.now());
 
 //para meter todos los widget que se mostraran en la pantalla por medio del listview builder
   List<Widget> listado = [];
@@ -74,21 +73,21 @@ class _CostosPageState extends State<CostosPage> {
       print(
           '${e.idCosto}, ${e.fecha}, can: ${e.cantidad}, idpro: ${e.fkidProductoActividad}, ${e.valorUnidad}, ${e.fkidCultivo}');
     });
-
+    _armarWidgets(context, costos);
     return Scaffold(
       appBar: _appBar(),
-      body: //Stack(
-          //children: <Widget>[
-          //titulos(context),
-          ListView.builder(
+      body: 
+          RefreshIndicator(
+            onRefresh: _refrescar,
+                      child: ListView.builder(
         padding:
-            EdgeInsets.only(left: 0.0, right: 0.0, top: 10.0, bottom: 20.0),
+              EdgeInsets.only(left: 0.0, right: 0.0, top: 10.0, bottom: 20.0),
         itemCount: costos.length + 2,
         itemBuilder: (context, index) {
-          _armarWidgets(context, costos);
-          return listado[index]; // _costo(costos[index], context);
+            return listado[index];
         },
       ),
+          ),
       //filtros(),
       //],
       //),
@@ -127,7 +126,9 @@ class _CostosPageState extends State<CostosPage> {
         : 'todos';
 
     return FloatingActionButton(
+
       child: Icon(Icons.search, size: 28.0),
+
       onPressed: () {
         filData.filtrar(idCul, _fechaDesde, _fechaHasta, idPro, idCon);
         setState(() {});
@@ -213,7 +214,7 @@ class _CostosPageState extends State<CostosPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: Color(0xff6b9b37),// header background color
+              primary: Color(0xff6b9b37), // header background color
               onPrimary: Colors.white, // header text color
               onSurface: Colors.black,
             ),
@@ -307,6 +308,7 @@ class _CostosPageState extends State<CostosPage> {
     );
   }
 
+//dibuja la primera fila del listado, es decir la cabecera
   Widget titulos(BuildContext context) {
     //estas variables permiten obtener el ancho para ser asignado a cada criterio
     final double ancho = MediaQuery.of(context).size.width;
@@ -331,29 +333,34 @@ class _CostosPageState extends State<CostosPage> {
     );
   }
 
+//dibuja cada una de las filas para cada costo
   Widget _costo(CostoModel costo, BuildContext context) {
     final double ancho = MediaQuery.of(context).size.width;
     final fecha = costo.fecha.toString();
     final fechaDate = DateTime.tryParse(fecha);
     final fechaFormatted = DateFormat('dd-MM-yy').format(fechaDate);
-    return Row(
-      children: <Widget>[
-        SizedBox(
-          width: 5.0,
+
+    return GestureDetector(
+        child: Row(
+          children: <Widget>[
+            SizedBox(
+              width: 5.0,
+            ),
+            criterio(fechaFormatted, ancho * 0.15),
+            criterio(costo.cantidad.toString(), ancho * 0.07),
+            criterioUnidad(costo.fkidProductoActividad, ancho * 0.15),
+            criterioFuture(costo.fkidProductoActividad, ancho * 0.30),
+            criterio(costo.valorUnidad.toString(), ancho * 0.12),
+            criterio(
+                (costo.cantidad * costo.valorUnidad).toString(), ancho * 0.14),
+            SizedBox(
+              width: 5.0,
+            )
+          ],
         ),
-        criterio(fechaFormatted, ancho * 0.15),
-        criterio(costo.cantidad.toString(), ancho * 0.07),
-        criterioUnidad(costo.fkidProductoActividad, ancho*0.15),
-        //criterio(costo.fkidProductoActividad.toString(), ancho * 0.15),
-        criterioFuture(costo.fkidProductoActividad, ancho * 0.30),
-        //criterio(costo.fkidProductoActividad, ancho * 0.30),
-        criterio(costo.valorUnidad.toString(), ancho * 0.12),
-        criterio((costo.cantidad * costo.valorUnidad).toString(), ancho * 0.14),
-        SizedBox(
-          width: 5.0,
-        )
-      ],
-    );
+        onTap: () {
+          Navigator.pushNamed(context, 'verCosto', arguments: costo);
+        });
   }
 
   Widget criterio(String valor, double ancho) {
@@ -362,75 +369,81 @@ class _CostosPageState extends State<CostosPage> {
       width: ancho,
       margin: EdgeInsets.all(1.0),
       decoration: BoxDecoration(
-          color: Colors.black12, borderRadius: BorderRadius.circular(3.0)
-      ),
+          color: Colors.black12, borderRadius: BorderRadius.circular(3.0)),
       child: Center(child: Text(valor)),
     );
   }
+
   Widget criterioTitulos(String valor, double ancho) {
     return Container(
       height: 25.0,
       width: ancho,
       margin: EdgeInsets.all(1.0),
       decoration: BoxDecoration(
-          color: Colors.black12, borderRadius: BorderRadius.circular(3.0)
-      ),
-      child: Center(child: Text(valor, style:TextStyle(fontWeight: FontWeight.bold))),
+          color: Colors.black12, borderRadius: BorderRadius.circular(3.0)),
+      child: Center(
+          child: Text(valor, style: TextStyle(fontWeight: FontWeight.bold))),
     );
   }
 
-  Widget criterioFuture(String fk, double ancho){
+  Widget criterioFuture(String fk, double ancho) {
     return FutureBuilder<String>(
-      future: _proActOper.consultarNombre(fk),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        Widget child;
-        if (snapshot.hasData) {
-          child = Text(snapshot.data);
-        } else if (snapshot.hasError) {
-          child = Text('nn');
-        } else {
-          child = SizedBox(
-            child: CircularProgressIndicator(strokeWidth: 2.0,),
-            width: 10,
-            height: 10, //
-          );
-        }
-        return Container(
-          height: 25.0,
-          width: ancho,
-          margin: EdgeInsets.all(1.0),
-          decoration: BoxDecoration(
-              color: Colors.black12,
-              borderRadius: BorderRadius.circular(3.0)),
-          child: Center(child: child));
-      });
+        future: _proActOper.consultarNombre(fk),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          Widget child;
+          if (snapshot.hasData) {
+            child = Text(snapshot.data);
+          } else if (snapshot.hasError) {
+            child = Text('nn');
+          } else {
+            child = SizedBox(
+              child: CircularProgressIndicator(
+                strokeWidth: 2.0,
+              ),
+              width: 10,
+              height: 10, //
+            );
+          }
+          return Container(
+              height: 25.0,
+              width: ancho,
+              margin: EdgeInsets.all(1.0),
+              decoration: BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.circular(3.0)),
+              child: Center(child: child));
+        });
   }
-
 
   Widget criterioUnidad(String fk, double ancho) {
     return FutureBuilder<String>(
-      future: _proActOper.consultarNombreUnidad(fk),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        Widget child;
-        if (snapshot.hasData) {
-          child = Text(snapshot.data);
-        } else if (snapshot.hasError) {
-          child = Text('nn');
-        } else {
-          child = SizedBox(
-            child: CircularProgressIndicator(strokeWidth: 2.0,),
-            width: 10,
-            height: 10, //
-          );
-        }
-        return Container(
-          height: 25.0,
-          width: ancho,
-          margin: EdgeInsets.all(1.0),
-          decoration: BoxDecoration(
-              color: Colors.black12,
-              borderRadius: BorderRadius.circular(3.0)),
-          child: Center(child: child));
-      });
+        future: _proActOper.consultarNombreUnidad(fk),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          Widget child;
+          if (snapshot.hasData) {
+            child = Text(snapshot.data);
+          } else if (snapshot.hasError) {
+            child = Text('nn');
+          } else {
+            child = SizedBox(
+              child: CircularProgressIndicator(
+                strokeWidth: 2.0,
+              ),
+              width: 10,
+              height: 10, //
+            );
+          }
+          return Container(
+              height: 25.0,
+              width: ancho,
+              margin: EdgeInsets.all(1.0),
+              decoration: BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.circular(3.0)),
+              child: Center(child: child));
+        });
+  }
+    Future <void> _refrescar() async{
+    setState(() {});
   }
 }

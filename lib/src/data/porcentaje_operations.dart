@@ -78,4 +78,12 @@ class PorcentajeOperations {
 
     return valor;
   }
+ 
+  //D - borrar un registros
+  Future<int> deletePorcentajeByMR(int idMr) async {
+    final db = await dbProvider.database;
+    final res = await db
+        .delete('Porcentajes', where: 'fk2idModeloReferencia = ?', whereArgs: [idMr]);
+    return res;
+  }
 }

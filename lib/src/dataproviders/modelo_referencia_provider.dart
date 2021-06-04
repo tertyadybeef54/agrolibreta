@@ -1,4 +1,5 @@
 import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
+import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
@@ -26,7 +27,6 @@ class ModeloReferenciaData with ChangeNotifier {
   getModelosReferencia() async {
     final _resp = await _modOper.consultarModelosReferencia();
     this.modelosReferencia = [..._resp];
-    notifyListeners();
   }
 
   anadirModeloReferencia(double sum) async {
@@ -36,7 +36,6 @@ class ModeloReferenciaData with ChangeNotifier {
     nuevoMR.idModeloReferencia = _id;
     this.modelosReferencia.add(nuevoMR);
     this.id = _id;
-    notifyListeners();
   }
 
   obtenerByID() {
@@ -45,13 +44,13 @@ class ModeloReferenciaData with ChangeNotifier {
         final _resp = await _porOper.consultarPorcentajesbyModeloReferencia(
             modelo.idModeloReferencia.toString());
 
-        List<ConceptoModel> conceptos = []; //lista temporal de conceptos
+        List<ConceptoModel> _conceptos = []; //lista temporal de conceptos
         _resp.forEach((porcentaje) async {
           final _resp2 = await _conOper
               .getConceptoById(int.parse(porcentaje.fk2idConcepto));
-          conceptos.add(_resp2);
+          _conceptos.add(_resp2);
         });
-        this.conceptosList.add(conceptos); //se añade la lista de conceptos
+        this.conceptosList.add(_conceptos); //se añade la lista de conceptos
         this.porcentajesList.add(_resp); //añade la lista de porcentajes
       },
     );
@@ -65,7 +64,9 @@ class ModeloReferenciaData with ChangeNotifier {
     notifyListeners();
   }
 
-  refrescar() {
-    notifyListeners();
+  eliminarModelo(int idMr) async {
+    await _modOper.deleteModeloReferencia(idMr);
+    await _porOper.deletePorcentajeByMR(idMr);
+    this.getModelosReferencia();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
 import 'package:agrolibreta_v2/src/data/porcentaje_operations.dart';
+import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
@@ -22,8 +23,11 @@ class PorcentajeData with ChangeNotifier {
   //anade a la lista para mostrar el porcentaje, el concepto y ademas
   //actualiza el valor de la suma del modelo de referencia
   //ya que será valido solo si su campo suma es de 100
-  anadirPorcentaje(int fkMR, double valor,
-      ConceptoModel concepto,) async {
+  anadirPorcentaje(
+    int fkMR,
+    double valor,
+    ConceptoModel concepto,
+  ) async {
     final nuevoPor = new PorcentajeModel(
         fk2idConcepto: concepto.idConcepto.toString(),
         fk2idModeloReferencia: fkMR.toString(),
@@ -40,8 +44,6 @@ class PorcentajeData with ChangeNotifier {
         new ModeloReferenciaModel(idModeloReferencia: fkMR, suma: this.suma);
     //se actualiza el modelo de referencia
     _modOper.updateModelosReferencia(tempModel);
-/*     print('MR actualizado ${tempModel.idModeloReferencia}, suma: ${tempModel.suma} '); */
-    
     notifyListeners();
   }
 
@@ -49,5 +51,11 @@ class PorcentajeData with ChangeNotifier {
     this.suma = 0;
     this.conceptos = [];
     this.porcentajes = [];
+  }
+
+  eliminarPorcentaje(PorcentajeModel porcentaje) async {
+    await _porOper.deletePorcentaje(porcentaje.idPorcentaje);
+    this.suma = this.suma - porcentaje.porcentaje;
+    notifyListeners();
   }
 }

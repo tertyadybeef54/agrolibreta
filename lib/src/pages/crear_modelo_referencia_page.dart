@@ -1,4 +1,5 @@
 import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
+import 'package:agrolibreta_v2/src/modelos/porcentaje_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,8 +13,9 @@ class CrearModeloReferencia extends StatelessWidget {
   //operaciones CRUD porcentajes y conceptos
   final ConceptoOperations conOper = new ConceptoOperations();
 
+  List<PorcentajeModel> _porcentajes = [];
+  List<ConceptoModel> _conceptos = [];
   double _porcentaje = 0.0; // valor del porcentaje asignado
-
   //variables para crear nuevo concepto
   //String _nombreConcepto = ''; //nombre asignado al concepto
 
@@ -26,6 +28,7 @@ class CrearModeloReferencia extends StatelessWidget {
   Widget build(BuildContext context) {
     final porcentajesData = Provider.of<PorcentajeData>(context);
 
+//aca esta el problema de que ponga los datos del anterior modelo de referencia
     final porcentajes = porcentajesData.porcentajes;
     final conceptos = porcentajesData.conceptos;
     final suma = porcentajesData.suma;
@@ -49,31 +52,48 @@ class CrearModeloReferencia extends StatelessWidget {
                 left: 30.0, right: 30.0, top: 20.0, bottom: 90.0),
             itemCount: porcentajes.length,
             itemBuilder: (context, index) {
-              return Card(
-                child: ListTile(
-                  leading: Icon(Icons.grass_rounded),
-                  onTap: () {}, //aca se pondra funcion para editar
-                  title: Text(
-                      '${conceptos[index].nombreConcepto}: ${porcentajes[index].porcentaje} %'),
-                  trailing: Icon(Icons.edit),
+              return Dismissible(
+                key: UniqueKey(),
+                onDismissed: (direction) {
+                  Provider.of<PorcentajeData>(context, listen: false)
+                      .eliminarPorcentaje(porcentajes[index]);
+                  _porcentajes.removeWhere(
+                      (e) => e.idPorcentaje == porcentajes[index].idPorcentaje);
+                  _conceptos.removeWhere(
+                      (e) => e.idConcepto == conceptos[index].idConcepto);
+                },
+                background: Container(
+                  child: Text('Eliminar'),
+                  color: Colors.red,
+                ),
+                child: Card(
+                  child: ListTile(
+                    leading: Icon(Icons.grass_rounded),
+                    title: Text(
+                        '${conceptos[index].nombreConcepto}: ${porcentajes[index].porcentaje} %'),
+                    trailing: Icon(
+                      Icons.arrow_left,
+                      color: Colors.red,
+                    ),
+                  ),
                 ),
               );
             },
           ),
-          _sumaBoton(context, suma),
+          _sumaBoton(context, suma, conceptos, porcentajes),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          _crearItem(context);
+          _crearItem(context, suma);
         },
       ),
     );
   }
 
 //Registrar un nuevo porcentaje
-  void _crearItem(BuildContext context) {
+  void _crearItem(BuildContext context, double suma) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -101,9 +121,17 @@ class CrearModeloReferencia extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                porcentajesData.anadirPorcentaje(
-                    modelosReferenciaData.id, _porcentaje, _selectedConcepto);
-                Navigator.pop(context);
+                final double sumaTemp = suma + _porcentaje;
+                if (sumaTemp < 100) {
+                  porcentajesData.anadirPorcentaje(
+                      modelosReferenciaData.id, _porcentaje, _selectedConcepto);
+                  _porcentajes.add(new PorcentajeModel(porcentaje: _porcentaje));
+                  _conceptos.add(new ConceptoModel(nombreConcepto: _selectedConcepto.nombreConcepto));
+                  Navigator.pop(context);
+                } else {
+                  mostrarSnackbar2(context, 'la suma no debe superar el 100%');
+                  Navigator.pop(context);
+                }
               },
               child: Text('Guardar'),
             ),
@@ -111,6 +139,14 @@ class CrearModeloReferencia extends StatelessWidget {
         );
       },
     );
+  }
+
+  void mostrarSnackbar2(BuildContext context, String mensaje) {
+    final snackbar = SnackBar(
+      content: Text(mensaje),
+      duration: Duration(milliseconds: 2500),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   //##########################################
@@ -126,28 +162,9 @@ class CrearModeloReferencia extends StatelessWidget {
                 : Text('sin conceptos');
           },
         ),
-
-//se deja el codigo para futuras versiones permitir crear conceptos
-/*         Stack(
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 9.0, vertical: 8.8),
-              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.lightBlue),
-            ),
-            IconButton(
-              icon: Icon(Icons.add),
-              color: Colors.white,
-              onPressed: () => _registrarConcepto(context),
-            ),
-          ],
-        ), */
       ],
     );
   }
-
-
 
   //#######################################################
   //input para el porcentaje
@@ -177,7 +194,8 @@ class CrearModeloReferencia extends StatelessWidget {
   }
 
   // widges que muestra la suma restante y el boton
-  Widget _sumaBoton(BuildContext context, double suma) {
+  Widget _sumaBoton(BuildContext context, double suma,
+      List<ConceptoModel> conceptos, List<PorcentajeModel> porcentajes) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -188,12 +206,12 @@ class CrearModeloReferencia extends StatelessWidget {
           ),
           ElevatedButton(
               onPressed: () {
-               final porcentajesData =
-                    Provider.of<PorcentajeData>(context, listen: false);                
+                final porcentajesData =
+                    Provider.of<PorcentajeData>(context, listen: false);
                 final modData =
-                Provider.of<ModeloReferenciaData>(context, listen: false);
-                modData.nuevoConPorList(porcentajesData.conceptos, porcentajesData.porcentajes);
- 
+                    Provider.of<ModeloReferenciaData>(context, listen: false);
+                modData.nuevoConPorList(_conceptos, _porcentajes);
+
                 porcentajesData.reset();
 
                 Navigator.pop(context);
@@ -207,61 +225,3 @@ class CrearModeloReferencia extends StatelessWidget {
     );
   }
 }
-//###################################################
-//registro de un nuevo concepto con su funcion de input, futuras versiones
-/*   void _registrarConcepto(BuildContext context) {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Registrar concepto'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _inputNombre('Nombre', '', '', TextInputType.name),
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () async {
-                    final nuevoConcepto = new ConceptoModel(
-                      nombreConcepto: _nombreConcepto,
-                    );
-                    await conOper.nuevoConcepto(nuevoConcepto);
-
-                    Navigator.pop(context, 'crearModeloReferencia');
-                  },
-                  child: Text('Guardar')),
-            ],
-          );
-        }).then((value) => Navigator.pop(context));
-  } */
-//input del nombre del concepto para futuras versiones
-/*   Widget _inputNombre(String descripcion, String hilabel, String labeltext,
-      TextInputType tipotext) {
-    var inputDecoration = InputDecoration(
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-      hintText: hilabel,
-      labelText: labeltext,
-      helperText: descripcion,
-      icon: Icon(Icons.drive_file_rename_outline),
-      //suffixIcon: Icon(Icons.touch_app),
-    );
-    return Container(
-      padding: EdgeInsets.only(bottom: 5.0),
-      height: 60.0,
-      width: double.infinity,
-      child: TextField(
-        textAlignVertical: TextAlignVertical.bottom,
-        keyboardType: tipotext,
-        textCapitalization: TextCapitalization.sentences,
-        decoration: inputDecoration,
-        onChanged: (valor) {
-          _nombreConcepto = valor;
-        },
-      ),
-    );
-  } */

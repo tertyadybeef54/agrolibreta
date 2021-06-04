@@ -48,5 +48,19 @@ class CultivoOperations {
 
     return res.isNotEmpty ? CultivoModel.fromJson(res.first) : null;
   }
+
+    //consultar en nombre del cultivo
+    Future<String> getNombreCultivoById(String fkidCult) async {
+    final db = await dbProvider.database;
+    final res = await db.rawQuery('''
+    SELECT * FROM Cultivos WHERE idCultivo = $fkidCult
+    ''');
+    String nombre = 'nn';
+    if (res.isNotEmpty) {
+      final culTemp = CultivoModel.fromJson(res.first);
+      nombre = culTemp.nombreDistintivo;
+    }
+    return nombre;
+  }
   
 }
