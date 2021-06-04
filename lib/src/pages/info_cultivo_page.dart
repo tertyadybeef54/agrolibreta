@@ -184,10 +184,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
       barrierDismissible: true,
       builder: (contex) {
         return AlertDialog(
-          title: Text(
-            'Editar Nombre Distintivo',
-            style: TextStyle(fontSize: 18.0),
-          ),
+          title: Text('Editar Nombre Distintivo',style: TextStyle(fontSize: 18.0)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

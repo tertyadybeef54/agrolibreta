@@ -138,7 +138,7 @@ class _NuevoRegistroFotograficoPageState
     }
 
     return FloatingActionButton(
-      child: Icon(Icons.filter_list),
+      child: Icon(Icons.search, size: 28.0),
       onPressed: () {
         filData.costosByCultivo(_idCul);
         setState(() {});

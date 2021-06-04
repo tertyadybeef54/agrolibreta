@@ -126,10 +126,9 @@ class _CostosPageState extends State<CostosPage> {
         : 'todos';
 
     return FloatingActionButton(
-      child: Icon(
-        Icons.search,
-        size: 28.0,
-      ),
+
+      child: Icon(Icons.search, size: 28.0),
+
       onPressed: () {
         filData.filtrar(idCul, _fechaDesde, _fechaHasta, idPro, idCon);
         setState(() {});

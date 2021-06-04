@@ -1,5 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -15,6 +17,8 @@ import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
 import 'package:agrolibreta_v2/src/widgets/cultivo_dropdown.dart';
 import 'package:agrolibreta_v2/src/dataproviders/pie_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
+import 'crear_pdf_informe_page.dart';
+
 
 //Se muestran los datos importantes del cultivo, los costos, un grafico de torta con el porcentaje que tienen los costos agrupados por conceptos con respecto al 100 porcento del costo total de la produccion, y un grafico de barras que compara el costo total de costos asociados por concepto del cultivo con el modelo de referencia. es decir costo esperado segun el presupuesto y el MR con costo obtenido.
 class InformeCultivoPage extends StatefulWidget {
@@ -78,6 +82,19 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
               tabs: tabs,
             ),
             title: Center(child: Text('Informe del cultivo')),
+            actions: <Widget>[
+              IconButton(
+                iconSize: 40.0,
+                icon: Icon(Icons.picture_as_pdf),
+                tooltip: 'Ver documento',
+                onPressed: (){
+                  Printing.layoutPdf(onLayout: (PdfPageFormat pageFormat){
+                    return (buildPdf(pageFormat));
+                  });
+                }
+                //Navigator.pushNamed(context, ''),
+              ),
+            ],
           ),
           body: TabBarView(
             children: [
@@ -132,6 +149,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           
         ],
       ),
+      SizedBox(height: 20.0),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
