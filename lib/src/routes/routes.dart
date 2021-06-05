@@ -1,4 +1,6 @@
+import 'package:agrolibreta_v2/src/pages/editar_costo_page.dart';
 import 'package:agrolibreta_v2/src/pages/editar_regfot_page.dart';
+import 'package:agrolibreta_v2/src/pages/ver_costo_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:agrolibreta_v2/src/pages/home_page.dart';
@@ -57,6 +59,8 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
     'ubicacionUtil':(BuildContext context) => UbicacionList(),
     'unidadMedidaUtil': (BuildContext context) => UnidadMedidaList(),
     'editarRegistro': (BuildContext context) => EditarRegFotPage(),
+    'verCosto': (BuildContext context) => VerCostoPage(),
+    'EditarCosto': (BuildContext context) => EditarCostoPage(),
     
   };
 }

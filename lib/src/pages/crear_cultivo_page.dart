@@ -1,3 +1,4 @@
+import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,6 @@ import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
 import 'package:agrolibreta_v2/src/data/estados_operations.dart';
 import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
 import 'package:agrolibreta_v2/src/data/producto_agricola_operations.dart';
-import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
 
 import 'package:agrolibreta_v2/src/widgets/ubicaciones_dropdown.dart';
 
@@ -24,10 +24,11 @@ class CrearCultivoPage extends StatefulWidget {
 }
 
 class _CrearCultivoPageState extends State<CrearCultivoPage> {
-  ModelosReferenciaOperations modRefOper = new ModelosReferenciaOperations();
+  ModelosReferenciaOperations _modRefOper = new ModelosReferenciaOperations();
   CultivoOperations operacionCultivo = new CultivoOperations();
   UbicacionesOperations ubicacionesOperations = new UbicacionesOperations();
   EstadosOperations estadosOperations = new EstadosOperations();
+
   ModelosReferenciaOperations modelosReferenciaOperations =
       new ModelosReferenciaOperations();
   ProductoAgricolaOperations productoAgricolaOperations =
@@ -116,7 +117,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
         Icon(Icons.article, color: Colors.black45),
         SizedBox(width: 30.0),
         FutureBuilder<List<ModeloReferenciaModel>>(
-          future: modRefOper.consultarModelosReferencia(),
+          future: _modRefOper.consultarModelosReferencia(),
           builder: (context, snapshot) {
             return snapshot.hasData
                 ? ModeloReferenciaDropdowun(snapshot.data, callback2)

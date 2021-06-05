@@ -43,4 +43,11 @@ class RegistrosFotograficosData with ChangeNotifier {
       await _cosOper.updateCosto(costo);
     });
   }
+  actCosDESAso(List<CostoModel> costosSelecteds){
+        costosSelecteds.forEach((costo) async {
+      final CostoModel costoTemp = costo;
+      costoTemp.fkidRegistroFotografico = '0';
+      await _cosOper.updateCosto(costo);
+    });
+  } 
 }

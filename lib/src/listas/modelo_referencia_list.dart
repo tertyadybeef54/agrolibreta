@@ -13,6 +13,8 @@ class ModeloReferenciaList extends StatefulWidget {
 }
 
 class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
+
+
   @override
   Widget build(BuildContext context) {
     final modelosReferenciaData = Provider.of<ModeloReferenciaData>(context);
@@ -23,12 +25,7 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
         modelosReferenciaData.porcentajesList;
     final List<List<ConceptoModel>> conceptosList =
         modelosReferenciaData.conceptosList;
-    conceptosList.forEach((element) {
-      element.forEach((e) {
-        print(e.idConcepto);
-      });
-    });
-    
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -49,33 +46,30 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
       onRefresh: _refrescar,
       child: ListView.builder(
         itemCount: modelosReferencia.length,
-        itemBuilder: (_, i) => _card(modelosReferencia[i].idModeloReferencia,
-            porcentajesList[i], conceptosList[i]),
+        itemBuilder: (_, i) => Dismissible(
+          key: UniqueKey(),
+          background: Container(
+            color: Colors.red,
+          ),
+          onDismissed: (direction) {
+            if(modelosReferencia[i].idModeloReferencia!=1){
+              Provider.of<ModeloReferenciaData>(context, listen: false)
+                  .eliminarModelo(modelosReferencia[i].idModeloReferencia);
+            }
+          },
+          child: _card(modelosReferencia[i].idModeloReferencia,
+              porcentajesList[i], conceptosList[i]),
+        ),
       ),
     );
   }
 
-/*   Widget _listTile(
-      int i, List<PorcentajeModel> porcentajes, List<ConceptoModel> conceptos) {
-    List<Widget> por = [];
-    por.add(Text('MR: $i'));
-    if (porcentajes.length != 0) {
-      for (int i = 0; i < porcentajes.length; i++) {
-        final textTemp = Text(
-            '${conceptos[i].nombreConcepto}: ${porcentajes[i].porcentaje} %');
-        por.add(textTemp);
-      }
-    }
-    por.add(Divider());
-    return Column(
-      children: por,
-    );
-  } */
-
   Widget _card(
       int i, List<PorcentajeModel> porcentajes, List<ConceptoModel> conceptos) {
     List<Widget> hijos = [];
-    hijos.add(SizedBox(height: 13.0,));
+    hijos.add(SizedBox(
+      height: 13.0,
+    ));
     hijos.add(Text(
       'MR: $i',
       style: TextStyle(fontWeight: FontWeight.bold),
@@ -95,7 +89,7 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
                 Text('   ${conceptos[i].nombreConcepto}'),
               ],
             ),
-            Text('${porcentajes[i].porcentaje} %    '),
+            Text('${porcentajes[i].porcentaje} %           '),
           ],
         );
         hijos.add(row);
@@ -121,13 +115,14 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
       onPressed: () {
         final modelosReferenciaData =
             Provider.of<ModeloReferenciaData>(context, listen: false);
-        modelosReferenciaData.anadirModeloReferencia(0);  //crea modelo de referencia
+        modelosReferenciaData
+            .anadirModeloReferencia(0); //crea modelo de referencia
         Navigator.pushNamed(context, 'crearModeloReferencia');
       },
     );
   }
 
-  Future <void> _refrescar() async{
+  Future<void> _refrescar() async {
     setState(() {});
   }
 }
