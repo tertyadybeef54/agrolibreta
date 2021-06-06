@@ -67,8 +67,8 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     pieData.generarDataMRCul();
     final tabs = [
       Tab(icon: Icon(Icons.assignment)),
-      Tab(icon: Icon(Icons.donut_small)),
       Tab(icon: Icon(Icons.equalizer)),
+      Tab(icon: Icon(Icons.donut_small)),
     ];
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -99,8 +99,8 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           body: TabBarView(
             children: [
               _tapUno(context, costos),
-              _graficarDona(),
               _graficarBarras(),
+              _graficarDona(),
             ],
           ),
           floatingActionButtonLocation:FloatingActionButtonLocation.endFloat,
@@ -135,9 +135,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
 //cultivo widget que da la informacion del cultivo
   Widget cultivow(CultivoModel cultivo) {
     return Column(children: [
-      SizedBox(
-        height: 3.0,
-      ),
+      SizedBox(height: 10.0),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -148,6 +146,10 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           _botonFiltrar(context),
           
         ],
+      ),
+      SizedBox(height: 20.0),
+      Center(child:
+        Text('Tabla 1. Costos del cultivo', style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold))
       ),
       SizedBox(height: 20.0),
       Row(
@@ -425,18 +427,17 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
       return Container();
     }
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(20.0),
       child: Container(
         child: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text(
-                'Proporciones de los costos',
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+              Center(
+                child: Text('Grafico 2. Porcentaje de costos por conceptos del cultivo',
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
               ),
-              SizedBox(
-                height: 10.0,
-              ),
+              SizedBox( height: 10.0),
               Expanded(
                 child: charts.PieChart(
                   _seriesPieData,
@@ -482,15 +483,14 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
       return Container();
     }
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(20.0),
       child: Container(
         child: Center(
           child: Column(
             children: <Widget>[
-              Text(
-                'Esperado y obtenido por conceptos',
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-              ),
+              Center(child: Text('Grafico1. Modelo de referencia y costos del cultivo',
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+              )),
               Expanded(
                 child: charts.BarChart(
                   _seriesData,
