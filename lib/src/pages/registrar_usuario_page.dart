@@ -10,11 +10,8 @@ import 'package:agrolibreta_v2/src/blocs/provider.dart';
 
 
 class RegistrarUsuario extends StatefulWidget {
-
   @override
   _RegistrarUsuarioState createState() => _RegistrarUsuarioState();
-  
-     
 }
 
 class _RegistrarUsuarioState extends State<RegistrarUsuario> {
@@ -321,35 +318,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
       }
     );
   }
-  // _registrer(LoginRegistroBloc bloc, BuildContext context) async{
-
-    
-  //   if (formKey.currentState.validate() ){
-  //     formKey.currentState.save();
-  //     //final info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
-      
-  //     if(info['ok']){
-  //       registroUsuariosProvider.crearUsuario(registro);
-  //       Navigator.pushReplacementNamed(context, 'taps'); 
-  //       mostrarSnackbar('Usuario guardado');
-  //       Navigator.pop(context);
-
-  //     }else{
-  //       utils.mostrarAlerta(context, info['mensaje']);
-
-  //     }
-      
-
-  //     // print('TODO OK');
-  //     // print(registro.nombres);
-  //     // print(registro.apellidos);
-  //     // print(registro.documento);
-  //     // print(registro.fechaNacimiento);
-  //     // print(registro.email);
-  //     // print(registro.password);
-  //   }else{return;}
-  // }
-
+ 
 // metodo para crear el aviso de 'usuario guardado'         
   void mostrarSnackbar(String mensaje){
 

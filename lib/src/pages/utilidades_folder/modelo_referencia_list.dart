@@ -17,7 +17,7 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
 
   @override
   Widget build(BuildContext context) {
-    final modelosReferenciaData = Provider.of<ModeloReferenciaData>(context);
+    final modelosReferenciaData = Provider.of<ModeloReferenciaData>(context, listen: false);
 
     final List<ModeloReferenciaModel> modelosReferencia =
         modelosReferenciaData.modelosReferencia;

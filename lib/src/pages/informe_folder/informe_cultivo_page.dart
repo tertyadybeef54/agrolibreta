@@ -19,7 +19,6 @@ import 'package:agrolibreta_v2/src/dataproviders/pie_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
 import 'crear_pdf_informe_page.dart';
 
-
 //Se muestran los datos importantes del cultivo, los costos, un grafico de torta con el porcentaje que tienen los costos agrupados por conceptos con respecto al 100 porcento del costo total de la produccion, y un grafico de barras que compara el costo total de costos asociados por concepto del cultivo con el modelo de referencia. es decir costo esperado segun el presupuesto y el MR con costo obtenido.
 class InformeCultivoPage extends StatefulWidget {
   @override
@@ -32,8 +31,6 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
   EstadosOperations _estOper = new EstadosOperations();
   List<Widget> listado = [];
   CultivoOperations _culOper = new CultivoOperations();
-
-
   CultivoModel _selectedCultivo;
   callback(selectedCultivo) {
     setState(() {
@@ -84,16 +81,16 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
             title: Center(child: Text('Informe del cultivo')),
             actions: <Widget>[
               IconButton(
-                iconSize: 40.0,
-                icon: Icon(Icons.picture_as_pdf),
-                tooltip: 'Ver documento',
-                onPressed: (){
-                  Printing.layoutPdf(onLayout: (PdfPageFormat pageFormat){
-                    return (buildPdf(pageFormat));
-                  });
-                }
-                //Navigator.pushNamed(context, ''),
-              ),
+                  iconSize: 40.0,
+                  icon: Icon(Icons.picture_as_pdf),
+                  tooltip: 'Ver documento',
+                  onPressed: () {
+                    Printing.layoutPdf(
+                      onLayout: (PdfPageFormat pageFormat) {
+                        return (buildPdf(pageFormat));
+                      },
+                    );
+                  }),
             ],
           ),
           body: TabBarView(
@@ -103,7 +100,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
               _graficarDona(),
             ],
           ),
-          floatingActionButtonLocation:FloatingActionButtonLocation.endFloat,
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         ),
       ),
     );
@@ -111,7 +108,6 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
 
   //primera vista del TapBar
   Widget _tapUno(BuildContext context, List<CostoModel> costos) {
-    
     _armarWidgets(context, costos);
     return ListView.builder(
       padding: EdgeInsets.only(left: 0.0, right: 0.0, top: 0.0),
@@ -127,6 +123,16 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     listado = [];
     listado.add(cultivow(_selectedCultivo));
     listado.add(titulos(context));
+
+    //#############################################################
+    informeFecha = []; //############################
+    informeCant = []; //#############################
+    informeUnidad = []; //###########################
+    informeNombre = []; //###########################
+    informeValUni = []; //###########################
+    informeVtotal = []; //###########################
+    //#############################################################
+    
     costos.forEach((costo) {
       listado.add(_costo(costo, context));
     });
@@ -134,23 +140,30 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
 
 //cultivo widget que da la informacion del cultivo
   Widget cultivow(CultivoModel cultivo) {
+    //#########################################################
+    informeNombreCultivo = cultivo.nombreDistintivo; //########
+    informeFechaCultivo = cultivo.fechaInicio; //##############
+    informeAreaCultivo = cultivo.areaSembrada; //##############
+    informePresupuestoCultivo = cultivo.presupuesto; //########
+    informePrecioIdealCultivo = cultivo.precioVentaIdeal; //###
+    //#########################################################
+
     return Column(children: [
       SizedBox(height: 10.0),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 8.0),
-          Text('Cultivo: ', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text('Cultivo: ', style: TextStyle(fontWeight: FontWeight.bold)),
           _seleccioneCultivo(),
           SizedBox(width: 10.0),
           _botonFiltrar(context),
-          
         ],
       ),
       SizedBox(height: 20.0),
-      Center(child:
-        Text('Tabla 1. Costos del cultivo', style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold))
-      ),
+      Center(
+          child: Text('Tabla 1. Costos del cultivo',
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold))),
       SizedBox(height: 20.0),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -160,7 +173,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           SizedBox(width: 10.0),
           estado(cultivo.fkidEstado),
           SizedBox(width: 10.0),
-          Text('MR:', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text('MR:', style: TextStyle(fontWeight: FontWeight.bold)),
           Text('${cultivo.fkidModeloReferencia}'),
         ],
       ),
@@ -168,10 +181,10 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 10.0),
-          Text('Cultivo de:', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text('Cultivo de:', style: TextStyle(fontWeight: FontWeight.bold)),
           Text('Arveja.'),
           SizedBox(width: 8.0),
-          Text('Area sembrada:', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text('Area sembrada:', style: TextStyle(fontWeight: FontWeight.bold)),
           Text('${cultivo.areaSembrada.toString()} m2'),
         ],
       ),
@@ -179,10 +192,10 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 10.0),
-          Text('Fecha Inicial:', style:TextStyle(fontWeight: FontWeight.bold)),
-          Text( '${cultivo.fechaInicio}'),
+          Text('Fecha Inicial:', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('${cultivo.fechaInicio}'),
           SizedBox(width: 10.0),
-          Text('Final:', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text('Final:', style: TextStyle(fontWeight: FontWeight.bold)),
           Text('${cultivo.fechaFinal}'),
           SizedBox(width: 8.0),
         ],
@@ -191,10 +204,10 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 10.0),
-          Text('Presupuesto:', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text('Presupuesto:', style: TextStyle(fontWeight: FontWeight.bold)),
           Text('${cultivo.presupuesto.toString()}'),
           SizedBox(width: 10.0),
-          Text('Venta ideal:', style:TextStyle(fontWeight: FontWeight.bold)),
+          Text('Venta ideal:', style: TextStyle(fontWeight: FontWeight.bold)),
           Text('${cultivo.precioVentaIdeal.toString()}'),
         ],
       )
@@ -227,17 +240,18 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           String _ubicacion = '';
           if (snapshot.hasData) {
             _ubicacion = snapshot.data.nombreUbicacion;
+            //###########################################
+            informeUbicacionCultivo = _ubicacion; //######
+            //###########################################
           } else if (snapshot.hasError) {
             _ubicacion = 'nn';
           } else {
             _ubicacion = '';
           }
-          return Row(
-            children:[
-            Text('Ubicacion:', style:TextStyle(fontWeight: FontWeight.bold)),
+          return Row(children: [
+            Text('Ubicacion:', style: TextStyle(fontWeight: FontWeight.bold)),
             Text(' $_ubicacion.'),
-            ]
-          );
+          ]);
         });
   }
 
@@ -249,17 +263,18 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           String _estado = '';
           if (snapshot.hasData) {
             _estado = snapshot.data.nombreEstado;
+            //#######################################
+            informeEstadoCultivo = _estado; //########
+            //#######################################
           } else if (snapshot.hasError) {
             _estado = 'nn';
           } else {
             _estado = '';
           }
-          return Row(
-            children:[
-            Text('Estado:', style:TextStyle(fontWeight: FontWeight.bold)),
+          return Row(children: [
+            Text('Estado:', style: TextStyle(fontWeight: FontWeight.bold)),
             Text('$_estado.'),
-            ]
-          );
+          ]);
         });
   }
 
@@ -292,6 +307,13 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     final fecha = costo.fecha.toString();
     final fechaDate = DateTime.tryParse(fecha);
     final fechaFormatted = DateFormat('dd-MM-yy').format(fechaDate);
+    //#############################################################
+    informeFecha.add(fechaFormatted); //0############################
+    informeCant.add(costo.cantidad); //1############################
+    informeValUni.add(costo.valorUnidad); //2#########################
+    informeVtotal.add(costo.cantidad * costo.valorUnidad); //3########
+
+    //#############################################################
     return Row(
       children: <Widget>[
         SizedBox(
@@ -300,9 +322,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         criterio(fechaFormatted, ancho * 0.15),
         criterio(costo.cantidad.toString(), ancho * 0.07),
         criterioUnidad(costo.fkidProductoActividad, ancho * 0.15),
-        //criterio(costo.fkidProductoActividad.toString(), ancho * 0.15),
         criterioFuture(costo.fkidProductoActividad, ancho * 0.30),
-        //criterio(costo.fkidProductoActividad, ancho * 0.30),
         criterio(costo.valorUnidad.toString(), ancho * 0.12),
         criterio((costo.cantidad * costo.valorUnidad).toString(), ancho * 0.14),
         SizedBox(
@@ -322,17 +342,19 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
       child: Center(child: Text(valor)),
     );
   }
+
   Widget criterioTitulos(String valor, double ancho) {
     return Container(
       height: 25.0,
       width: ancho,
       margin: EdgeInsets.all(1.0),
       decoration: BoxDecoration(
-          color: Colors.black12, borderRadius: BorderRadius.circular(3.0)
-      ),
-      child: Center(child: Text(valor, style:TextStyle(fontWeight: FontWeight.bold))),
+          color: Colors.black12, borderRadius: BorderRadius.circular(3.0)),
+      child: Center(
+          child: Text(valor, style: TextStyle(fontWeight: FontWeight.bold))),
     );
   }
+
   Widget criterioFuture(String fk, double ancho) {
     return FutureBuilder<String>(
         future: _proActOper.consultarNombre(fk),
@@ -340,6 +362,10 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           Widget child;
           if (snapshot.hasData) {
             child = Text(snapshot.data);
+            //#####################################################
+            informeNombre.add(snapshot.data); //5#####################
+            //######################
+            //#####################################################
           } else if (snapshot.hasError) {
             child = Text('nn');
           } else {
@@ -369,6 +395,9 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           Widget child;
           if (snapshot.hasData) {
             child = Text(snapshot.data);
+            //#####################################################
+            informeUnidad.add(snapshot.data); //4#####################
+            //#####################################################
           } else if (snapshot.hasError) {
             child = Text('nn');
           } else {
@@ -404,11 +433,12 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     final filData = Provider.of<FiltrosCostosData>(context, listen: false);
     if (_selectedCultivo != null) {
       pieData.cultivo = _selectedCultivo;
-          final String idCul =
-        _selectedCultivo != null ? _selectedCultivo.idCultivo.toString() : '1';
-        filData.costosByCultivo(idCul);
+      final String idCul = _selectedCultivo != null
+          ? _selectedCultivo.idCultivo.toString()
+          : '1';
+      filData.costosByCultivo(idCul);
     }
-    
+
     return FloatingActionButton(
       child: Icon(Icons.search, size: 28.0),
       backgroundColor: Color(0xff8c6d62),
@@ -434,10 +464,12 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Center(
-                child: Text('Grafico 2. Porcentaje de costos por conceptos del cultivo',
-                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
+                child: Text(
+                    'Grafico 2. Porcentaje de costos por conceptos del cultivo',
+                    style:
+                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
               ),
-              SizedBox( height: 10.0),
+              SizedBox(height: 10.0),
               Expanded(
                 child: charts.PieChart(
                   _seriesPieData,
@@ -477,7 +509,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
 //#############################################
 //brafico de barras camparar cultivo con MR
   Widget _graficarBarras() {
-    final pieData = Provider.of<PieData>(context, listen:false);
+    final pieData = Provider.of<PieData>(context, listen: false);
     final _seriesData = pieData.seriesData;
     if (_seriesData == null) {
       return Container();
@@ -488,8 +520,10 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         child: Center(
           child: Column(
             children: <Widget>[
-              Center(child: Text('Grafico1. Modelo de referencia y costos del cultivo',
-                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+              Center(
+                  child: Text(
+                'Grafico1. Modelo de referencia y costos del cultivo',
+                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
               )),
               Expanded(
                 child: charts.BarChart(
@@ -507,4 +541,3 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     );
   }
 }
-

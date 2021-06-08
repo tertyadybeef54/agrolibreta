@@ -8,11 +8,10 @@ import 'package:agrolibreta_v2/src/modelos/porcentaje_model.dart';
 
 PorcentajeOperations _porOper = new PorcentajeOperations();
 ModelosReferenciaOperations _modOper = new ModelosReferenciaOperations();
-
+ 
 //provider que para manejar datos de los porcentajes de un MR
 class PorcentajeData with ChangeNotifier {
   double suma;
-  String idModeloReferencia;
   List<ConceptoModel> conceptos = [];
   List<PorcentajeModel> porcentajes = [];
 
@@ -53,9 +52,11 @@ class PorcentajeData with ChangeNotifier {
     this.porcentajes = [];
   }
 
-  eliminarPorcentaje(PorcentajeModel porcentaje) async {
-    await _porOper.deletePorcentaje(porcentaje.idPorcentaje);
-    this.suma = this.suma - porcentaje.porcentaje;
-    notifyListeners();
+  eliminarPorcentaje(int id, double valor, int idcon) async {
+/*     this.porcentajes.removeWhere((e) => e.idPorcentaje == id);
+    this.conceptos.removeWhere((e) => e.idConcepto == idcon); */
+    await _porOper.deletePorcentaje(id);
+    this.suma = this.suma - valor;
+    /* notifyListeners(); */
   }
 }

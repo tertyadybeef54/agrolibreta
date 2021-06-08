@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:agrolibreta_v2/src/routes/routes.dart';
-import 'package:agrolibreta_v2/src/pages/home_page.dart';
+import 'package:agrolibreta_v2/src/pages/home_folder/home_page.dart';
 
 import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
 
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
             const Locale('es', 'ES'), // *See Advanced Locales below*
           ],
           title: 'AgroLibreta',
-          initialRoute: 'login',
+          initialRoute: 'taps',
           routes: getAplicationRoutes(),
           onGenerateRoute: (RouteSettings settings) {
             return MaterialPageRoute(
