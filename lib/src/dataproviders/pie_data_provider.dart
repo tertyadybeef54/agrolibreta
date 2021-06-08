@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:agrolibreta_v2/src/data/porcentaje_operations.dart';
+import 'package:agrolibreta_v2/src/pages/informe_folder/crear_pdf_informe_page.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'Dart:math' as math;
@@ -82,6 +83,13 @@ class PieData with ChangeNotifier {
     if (this.cultivo != null) {
       List<Concepto> barraData1 = [];
       List<Concepto> barraData2 = [];
+
+      //datos para el pdf.
+      //###############################################################
+      sumasCultivo = []; //#############################################
+      sumasMr = []; //##################################################
+      //###############################################################
+
       final _conceptos = await _conOper.consultarConceptos();
       _conceptos.forEach((concepto) async {
         final suma = await _cosOper.sumaCostosByConcepto(
@@ -90,9 +98,16 @@ class PieData with ChangeNotifier {
             this.cultivo.fkidModeloReferencia,
             concepto.idConcepto.toString(),
             this.cultivo.presupuesto);
+        //datos para el pdf.
+        //###############################################################
+        sumasCultivo
+            .add(suma.round()); //########################################
+        sumasMr
+            .add(gastoIdeal.round()); //#######################################
+        //###############################################################
         print(suma);
         print(gastoIdeal);
-        print("####");
+        print("#### provider pie data datos de las barras");
         final nombre = concepto.nombreConcepto.substring(0, 5);
         final conTempR = new Concepto(nombre, suma);
         final conTempI = new Concepto(nombre, gastoIdeal);
