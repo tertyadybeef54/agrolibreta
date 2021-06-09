@@ -1,5 +1,5 @@
 import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
-import 'package:agrolibreta_v2/src/modelos/registro_usuarios_model.dart';
+import 'package:agrolibreta_v2/src/modelos/usuario_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -39,9 +39,9 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
         SizedBox(height: 10.0),
         Column(
           children: [
-            Text('Email ${usuario.email}'),
+            Text('Email: ${usuario.email}'),
             SizedBox(height: 10.0),
-            Text('Última sincronización ${usuario.fechaUltimaSincro}'),
+            Text('Última sincronización: ${usuario.fechaUltimaSincro}'),
             SizedBox(height: 10.0),
             _crearBoton(),
           ],
@@ -146,11 +146,11 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
           actions: <Widget>[
             TextButton(
               child: Text('Cancelar'),
-              onPressed: () => _actualizar(),
+              onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
               child: Text('Guardar'),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => _actualizar(), 
             )
           ],
         );
@@ -181,6 +181,9 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
           if (n == 3) {
             usuario.documento = int.parse(value);
           }
+          setState(() {
+            
+          });
         },
       ),
     );

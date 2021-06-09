@@ -1,5 +1,5 @@
 import 'package:agrolibreta_v2/src/data/usuario_operations.dart';
-import 'package:agrolibreta_v2/src/modelos/registro_usuarios_model.dart';
+import 'package:agrolibreta_v2/src/modelos/usuario_model.dart';
 import 'package:flutter/material.dart';
 
 UsuarioOperations _usuOper = new UsuarioOperations();
@@ -15,13 +15,15 @@ class UsuarioProvider with ChangeNotifier {
   getUsuarios() async {
     final resp = await _usuOper.consultarUsuario();
     this.usuarios = [...resp];
+    print('data provider usuarios');
+    print(resp);
     notifyListeners();
   }
 
   actualizarData(RegistroUsuariosModel nuevoUsuario) async {
     final res = await _usuOper.updateUsuarios(nuevoUsuario);
+    notifyListeners();
     print('actualizar usuario: ');
     print(res.toString());
   }
-
 }

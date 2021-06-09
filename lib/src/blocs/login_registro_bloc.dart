@@ -3,7 +3,7 @@ import 'package:agrolibreta_v2/src/blocs/validators.dart';
 import 'package:rxdart/rxdart.dart';
 
 
-class LoginRegistroBloc with Validators{
+class LoginRegistroBloc with Validators{ 
 
   final _emailController    = BehaviorSubject<String>();
   final _passwordController = BehaviorSubject<String>();

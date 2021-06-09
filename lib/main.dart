@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
             const Locale('es', 'ES'), // *See Advanced Locales below*
           ],
           title: 'AgroLibreta',
-          initialRoute: 'taps',
+          initialRoute: 'login',
           routes: getAplicationRoutes(),
           onGenerateRoute: (RouteSettings settings) {
             return MaterialPageRoute(

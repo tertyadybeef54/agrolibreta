@@ -13,16 +13,16 @@ String registroUsuariosModelToJson(RegistroUsuariosModel data) =>
 class RegistroUsuariosModel {
   RegistroUsuariosModel({
     this.idUsuario,
+    this.documento = 123,
+    this.password = '',
     this.nombres = '',
     this.apellidos = '',
-    this.documento = 123,
     this.email = '',
     this.fechaNacimiento = '00-00-0000',
-    this.password = '',
     this.fechaUltimaSincro = '',
   });
 
-  String idUsuario;
+  int idUsuario;
   String nombres;
   String apellidos;
   int documento;
