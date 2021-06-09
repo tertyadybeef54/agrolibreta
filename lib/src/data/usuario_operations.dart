@@ -1,4 +1,4 @@
-import 'package:agrolibreta_v2/src/modelos/registro_usuarios_model.dart';
+import 'package:agrolibreta_v2/src/modelos/usuario_model.dart';
 import 'package:agrolibreta_v2/src/providers/db_provider.dart';
 
 class UsuarioOperations {

@@ -131,8 +131,9 @@ class DBProvider {
         	password STRING NOT NULL,
         	nombres STRING NOT NULL,
         	apellidos STRING NOT NULL,
-        	correo STRING NOT NULL,
-        	fechaNacimiento STRING NOT NULL
+        	email STRING NOT NULL,
+        	fechaNacimiento STRING NOT NULL,
+          fechaUltimaSincro STRING NOT NULL
         ) 
       ''');
 //#################  modelo de referencia

@@ -14,7 +14,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cosData = Provider.of<CostosData>(context);
-
     final List<CultivoModel> cultivos = cosData.cultivos;
     cosData.obtenerCostosByConceptos();
 
