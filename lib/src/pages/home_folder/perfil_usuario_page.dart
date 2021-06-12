@@ -1,5 +1,9 @@
+import 'package:agrolibreta_v2/src/data/estados_operations.dart';
+import 'package:agrolibreta_v2/src/data/registro_fotografico_operations.dart';
 import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
+import 'package:agrolibreta_v2/src/modelos/sincro_model.dart';
 import 'package:agrolibreta_v2/src/modelos/usuario_model.dart';
+import 'package:agrolibreta_v2/src/providers/registro_usuarios_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -122,8 +126,19 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
           style: TextStyle(fontSize: 18.0),
         ),
       ),
-      onPressed: () {},
+      onPressed: _sincronizar,
     );
+  }
+
+  RegistroFotograficoOperations _regOper = new RegistroFotograficoOperations();
+  EstadosOperations _estOper = new EstadosOperations();
+  Future<void> _sincronizar() async {
+/*     UsersModel users = new UsersModel();
+    users.registrosFotograficos =
+        await _regOper.consultarRegistrosFotograficos();
+    users.estados = await _estOper.consultarEstados();
+    RegistroUsuariosProvider().subirDatos(users); */
+    RegistroUsuariosProvider().subirDatos();
   }
 
   void _editInfoAlert(
@@ -150,7 +165,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
             ),
             TextButton(
               child: Text('Guardar'),
-              onPressed: () => _actualizar(), 
+              onPressed: () => _actualizar(),
             )
           ],
         );
@@ -181,9 +196,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
           if (n == 3) {
             usuario.documento = int.parse(value);
           }
-          setState(() {
-            
-          });
+          setState(() {});
         },
       ),
     );
@@ -315,7 +328,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
                       icon: Icon(Icons.lock_outline_rounded),
                     ),
                     onChanged: (value) {
-                      if (value == nuevoPassword && passOk==true) {
+                      if (value == nuevoPassword && passOk == true) {
                         usuario.password = value;
                       }
                     },
