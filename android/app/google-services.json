@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "170659621285",
+    "firebase_url": "https://agrolibretav1-default-rtdb.firebaseio.com",
+    "project_id": "agrolibretav1",
+    "storage_bucket": "agrolibretav1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170659621285:android:c728adb3284e2521f7604c",
+        "android_client_info": {
+          "package_name": "com.example.agrolibreta_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "170659621285-envcipd38u9aj5dnsgv948qh83uoe3h4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtTbSiExo1MRS64l_ST0T7n6s_LwwdYxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "170659621285-envcipd38u9aj5dnsgv948qh83uoe3h4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
