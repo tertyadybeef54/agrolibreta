@@ -132,7 +132,7 @@ class PieData with ChangeNotifier {
         charts.Series(
           domainFn: (Concepto concepto, _) => concepto.concepto,
           measureFn: (Concepto concepto, _) => concepto.total,
-          id: 'modelo',
+          id: 'MR',
           data: barraData2,
           fillPatternFn: (_, __) => charts.FillPatternType.solid,
           fillColorFn: (Concepto concepto, _) =>

@@ -94,17 +94,17 @@ class _DetalleRegistroFotograficoPageState
         });
   }
 
-    Widget page(BuildContext context, RegistroFotograficoModel imagen,
+  Widget page(BuildContext context, RegistroFotograficoModel imagen,
       List<CostoModel> costos) {
     return RefreshIndicator(
       onRefresh: _refrescar,
-          child: ListView(
+      child: ListView(
         children: armarWidgets(context, costos, imagen),
       ),
     );
   }
 
-    List<Widget> armarWidgets(BuildContext context, List<CostoModel> costos,
+  List<Widget> armarWidgets(BuildContext context, List<CostoModel> costos,
       RegistroFotograficoModel imagen) {
     List<Widget> listado = [];
     listado.add(_heroimg(imagen));
@@ -153,7 +153,7 @@ class _DetalleRegistroFotograficoPageState
           ),
           TextButton(
               child: Text(
-                'Agregar',
+                'Añadir',
                 style: TextStyle(fontSize: 20.0),
               ),
               onPressed: () {
@@ -169,7 +169,7 @@ class _DetalleRegistroFotograficoPageState
     );
   }
 
-    void _confirmacion(BuildContext context) {
+  void _confirmacion(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -198,6 +198,7 @@ class _DetalleRegistroFotograficoPageState
   }
 
   Future<void> _eliminar(BuildContext context) async {
+    await _cosOper.updateCostobyImg(_idReg);
     await _regOper.deleteRegistroFotografico(_idReg);
     Navigator.pop(context);
     Navigator.pop(context);
@@ -221,9 +222,8 @@ class _DetalleRegistroFotograficoPageState
       ],
     );
   }
-  
-  void _actualizarCostos() async {
 
+  void _actualizarCostos() async {
     final regFotData =
         Provider.of<RegistrosFotograficosData>(context, listen: false);
     regFotData.actCosDESAso(_costosunSelecteds);
@@ -317,33 +317,32 @@ class _DetalleRegistroFotograficoPageState
 
   Widget criterioFuture(String fk, double ancho) {
     return FutureBuilder<String>(
-      future: _proActOper.consultarNombre(fk),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        Widget child;
-        if (snapshot.hasData) {
-          child = Text(snapshot.data);
-        } else if (snapshot.hasError) {
-          child = Text('nn');
-        } else {
-          child = SizedBox(
-            child: CircularProgressIndicator(
-              strokeWidth: 2.0,
-            ),
-            width: 10,
-            height: 10, //
+        future: _proActOper.consultarNombre(fk),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          Widget child;
+          if (snapshot.hasData) {
+            child = Text(snapshot.data);
+          } else if (snapshot.hasError) {
+            child = Text('nn');
+          } else {
+            child = SizedBox(
+              child: CircularProgressIndicator(
+                strokeWidth: 2.0,
+              ),
+              width: 10,
+              height: 10, //
+            );
+          }
+          return Container(
+            height: 25.0,
+            width: ancho,
+            margin: EdgeInsets.all(1.0),
+            decoration: BoxDecoration(
+                color: Colors.black12,
+                borderRadius: BorderRadius.circular(3.0)),
+            child: Center(child: child),
           );
-        }
-        return Container(
-          height: 25.0,
-          width: ancho,
-          margin: EdgeInsets.all(1.0),
-          decoration: BoxDecoration(
-              color: Colors.black12,
-              borderRadius: BorderRadius.circular(3.0)),
-          child: Center(child: child),
-        );
-      }
-    );
+        });
   }
 
   Widget _check(CostoModel costo, double ancho, int i) {
@@ -375,5 +374,4 @@ class _DetalleRegistroFotograficoPageState
   Future<void> _refrescar() async {
     setState(() {});
   }
-
 }

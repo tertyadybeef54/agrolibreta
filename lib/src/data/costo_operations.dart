@@ -44,6 +44,26 @@ class CostoOperations {
   }
 
 //otras consultas
+  Future<int> updateCostobyImg(int fkidregistroFotografico) async {
+    final db = await dbProvider.database;
+
+    final List<Map<String, dynamic>> res = await db.rawQuery('''
+      SELECT * FROM Costos WHERE fkidRegistroFotografico = '$fkidregistroFotografico'
+    ''');
+    List<CostoModel> costos = [];
+    if (res.isNotEmpty) {
+      costos = res.map((s) => CostoModel.fromJson(s)).toList();
+      costos.forEach((costo) async {
+        costo.fkidRegistroFotografico = '0';
+        final res = await db.update('Costos', costo.toJson(),
+            where: 'idCosto = ?', whereArgs: [costo.idCosto]);
+        print('costo actualizado: $res');
+      });
+      return 1;
+    }
+    return 0;
+  }
+
 //costo por id
   Future<CostoModel> getCostoById(int id) async {
     final db = await dbProvider.database;
@@ -205,7 +225,6 @@ class CostoOperations {
 
 //consulttar si el costo pertenece al registro fotografico
 
-
   Future<bool> registroFotografico() async {
     bool pertenece = false;
     return pertenece;
@@ -221,5 +240,4 @@ class CostoOperations {
         ? res.map((s) => CostoModel.fromJson(s)).toList()
         : [];
   }
-
 }
