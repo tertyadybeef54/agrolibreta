@@ -1,7 +1,5 @@
-import 'package:agrolibreta_v2/src/data/estados_operations.dart';
-import 'package:agrolibreta_v2/src/data/registro_fotografico_operations.dart';
+import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
-import 'package:agrolibreta_v2/src/modelos/sincro_model.dart';
 import 'package:agrolibreta_v2/src/modelos/usuario_model.dart';
 import 'package:agrolibreta_v2/src/providers/registro_usuarios_provider.dart';
 import 'package:flutter/material.dart';
@@ -130,15 +128,22 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
     );
   }
 
-  RegistroFotograficoOperations _regOper = new RegistroFotograficoOperations();
-  EstadosOperations _estOper = new EstadosOperations();
   Future<void> _sincronizar() async {
-/*     UsersModel users = new UsersModel();
-    users.registrosFotograficos =
-        await _regOper.consultarRegistrosFotograficos();
-    users.estados = await _estOper.consultarEstados();
-    RegistroUsuariosProvider().subirDatos(users); */
-    RegistroUsuariosProvider().subirDatos();
+    SincronizacionProvider().subirDatos(usuario.email);
+    _mostrarSnackbar(
+        'Espere mientras ve este letrero... Sus datos estan siendo sincronizados.');
+    SincronizacionProvider().bajarDatos(usuario.email);
+    Provider.of<CostosData>(context, listen: false).getCostos();
+
+  }
+
+  // metodo para crear el aviso de 'usuario guardado'
+  void _mostrarSnackbar(String mensaje) {
+    final snackbar = SnackBar(
+      content: Text(mensaje),
+      duration: Duration(seconds: 10),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   void _editInfoAlert(
@@ -290,7 +295,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
                       icon: Icon(Icons.lock_open_outlined),
                     ),
                     onChanged: (value) {
-                      if (usuario.password == value) {
+                      if ('${usuario.password}' == value) {
                         passOk = true;
                       }
                     },
@@ -329,7 +334,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
                     ),
                     onChanged: (value) {
                       if (value == nuevoPassword && passOk == true) {
-                        usuario.password = value;
+                        usuario.password = int.parse(value);
                       }
                     },
                   ),

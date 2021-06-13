@@ -1,6 +1,7 @@
 import 'package:agrolibreta_v2/src/data/estados_operations.dart';
 import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
 import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
 import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
 import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
 import 'package:flutter/material.dart';
@@ -24,15 +25,16 @@ class HomePage extends StatelessWidget {
           IconButton(
             iconSize: 40.0,
             icon: new Icon(Icons.account_circle),
-            onPressed: () => Navigator.pushNamed(context, 'perfilUsuario'),
+            onPressed: () {
+              Provider.of<UsuarioProvider>(context, listen: false).getUsuarios();
+              Navigator.pushNamed(context, 'perfilUsuario');
+            },
           ),
         ],
       ),
-      body:Container(
-        padding: EdgeInsets.all(15.0),
-        child: _crearListaDeCultivo(context, cultivos)
-      ),
-
+      body: Container(
+          padding: EdgeInsets.all(15.0),
+          child: _crearListaDeCultivo(context, cultivos)),
       floatingActionButton: _agregarCultivo(context),
     );
   }
@@ -81,15 +83,43 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 10.0),
-                Row(children:[Text('Nombre: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('$_nombre')]),
-                Row(children:[Text('Cultivo de: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('Arveja')]),
-                Row(children:[Text('Fecha: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('$_fecha')]),
+                Row(children: [
+                  Text('Nombre: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('$_nombre')
+                ]),
+                Row(children: [
+                  Text('Cultivo de: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('Arveja')
+                ]),
+                Row(children: [
+                  Text('Fecha: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('$_fecha')
+                ]),
                 ubicacion(_ubicacion),
                 estado(_estado),
-                Row(children:[Text('Área Sembrada: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('$_area')]),
-                Row(children:[Text('Presupuesto: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('$_presupuesto')]),
-                Row(children:[Text('Precio de Venta: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('$_precio')]),
-                Row(children:[Text('Id MR: ', style:TextStyle(fontWeight: FontWeight.bold)), Text('$_mR')]),
+                Row(children: [
+                  Text('Área Sembrada: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('$_area')
+                ]),
+                Row(children: [
+                  Text('Presupuesto: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('$_presupuesto')
+                ]),
+                Row(children: [
+                  Text('Precio de Venta: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('$_precio')
+                ]),
+                Row(children: [
+                  Text('Id MR: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('$_mR')
+                ]),
                 //SizedBox(height: 20.0),
                 _botonEntrar(context, cultivo),
               ],
@@ -107,19 +137,17 @@ class HomePage extends StatelessWidget {
             (BuildContext context, AsyncSnapshot<UbicacionModel> snapshot) {
           Widget child;
           if (snapshot.hasData) {
-            child = Row(
-              children:[
-                Text('Ubicación: ', style:TextStyle(fontWeight: FontWeight.bold)), 
-                Text('${snapshot.data.nombreUbicacion}')
-              ]
-            );
+            child = Row(children: [
+              Text('Ubicación: ',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text('${snapshot.data.nombreUbicacion}')
+            ]);
           } else if (snapshot.hasError) {
-            child = Row(
-              children:[
-                Text('Ubicación: ',style:TextStyle(fontWeight: FontWeight.bold)),
-                Text('No existe'),
-              ]
-            );
+            child = Row(children: [
+              Text('Ubicación: ',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text('No existe'),
+            ]);
           } else {
             child = SizedBox(
               child: CircularProgressIndicator(
@@ -141,19 +169,15 @@ class HomePage extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<EstadoModel> snapshot) {
           Widget child;
           if (snapshot.hasData) {
-            child = Row(
-              children:[
-                Text('Estado: ', style:TextStyle(fontWeight: FontWeight.bold)),
-                Text('${snapshot.data.nombreEstado}'),
-              ]
-            );
+            child = Row(children: [
+              Text('Estado: ', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text('${snapshot.data.nombreEstado}'),
+            ]);
           } else if (snapshot.hasError) {
-            child = Row(
-              children:[
-                Text('Estado: ', style:TextStyle(fontWeight: FontWeight.bold)),
-                Text('No existe'),
-              ]
-            );
+            child = Row(children: [
+              Text('Estado: ', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text('No existe'),
+            ]);
           } else {
             child = SizedBox(
               child: CircularProgressIndicator(

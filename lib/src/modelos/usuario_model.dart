@@ -14,7 +14,7 @@ class RegistroUsuariosModel {
   RegistroUsuariosModel({
     this.idUsuario,
     this.documento = 123,
-    this.password = '',
+    this.password,
     this.nombres = '',
     this.apellidos = '',
     this.email = '',
@@ -28,7 +28,7 @@ class RegistroUsuariosModel {
   int documento;
   String email;
   String fechaNacimiento;
-  String password;
+  int password;
   String fechaUltimaSincro;
 
   factory RegistroUsuariosModel.fromJson(Map<String, dynamic> json) =>

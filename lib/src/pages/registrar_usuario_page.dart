@@ -28,9 +28,9 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
   RegistroUsuariosModel registro =
       RegistroUsuariosModel(); // crear instancia para el modelo de registro a usuarios
   final registroUsuariosProvider =
-      new RegistroUsuariosProvider(); // crear instancia para el provider de registro a usuarios
+      new SincronizacionProvider(); // crear instancia para el provider de registro a usuarios
   bool passwordVisible = true; //variable para hacer el password visible
-
+  bool _error = true;
   //bloc
   final usuarioProvider = new UsuarioProvider();
 
@@ -75,7 +75,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
                   height: 55.0,
                 ),
                 Divider(),
-                Container(child: _confirmarPassword(), height: 55.0),
+                Container(child: _confirmarPassword(bloc), height: 55.0),
                 SizedBox(height: 30.0),
                 _crearBoton(bloc),
               ]))
@@ -98,6 +98,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
           icon: Icon(Icons.person_outline),
         ),
         onSaved: (value) => registro.nombres = value,
+        onChanged: (value) => registro.nombres = value,
         validator: (String value) {
           if (value.length < 3) {
             return 'Ingrese sus nombres completos';
@@ -121,6 +122,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
           icon: Icon(Icons.person),
         ),
         onSaved: (value) => registro.apellidos = value,
+        onChanged: (value) => registro.apellidos = value,
         validator: (String value) {
           if (value.length < 5) {
             return 'Ingrese sus apellidos completos';
@@ -143,6 +145,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
           icon: Icon(Icons.credit_card),
         ),
         onSaved: (value) => registro.documento = int.parse(value),
+        onChanged: (value) => registro.documento = int.parse(value),
         validator: (String value) {
           if (utils.isNumeric(value) && value.length > 5) {
             return null;
@@ -191,6 +194,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
       setState(() {
         _fecha = DateFormat('dd-MM-yyyy').format(picked);
         _inputFieldDateController.text = _fecha;
+        registro.fechaNacimiento = _fecha;
       });
     }
   }
@@ -246,44 +250,46 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
                         print(passwordVisible);
                       });
                     })),
-            onSaved: (value) => registro.password = value,
+            onSaved: (value) => registro.password = int.parse(value),
             onChanged: bloc.changePassword,
-            validator: (value) {
-              confirmPass = value;
-              return;
-            },
           );
         });
   }
 
 //input para confirmar el password
-  Widget _confirmarPassword() {
+  Widget _confirmarPassword(LoginRegistroBloc bloc) {
     return TextFormField(
-      validator: (value) {
-        if (value != confirmPass) {
-          return 'Las contraseñas no coinciden';
-        } else {
-          return null;
-        }
-      },
       obscureText: passwordVisible,
       style: TextStyle(fontSize: 20.0),
       textAlignVertical: TextAlignVertical.bottom,
       decoration: InputDecoration(
+        errorText: !_error?'no coinciden':null,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.0)),
         hintText: 'Confirmar Contraseña',
         labelText: 'Confirmar Contraseña',
-        icon: Icon(Icons.lock),
+        icon: Icon(Icons.lock_outline),
         suffixIcon: IconButton(
           icon: Icon(passwordVisible ? Icons.visibility_off : Icons.visibility),
           onPressed: () {
-            setState(() {
-              passwordVisible = !passwordVisible;
-              print(passwordVisible);
-            });
+            setState(
+              () {
+                passwordVisible = !passwordVisible;
+                print(passwordVisible);
+              },
+            );
           },
         ),
       ),
+      onChanged: (value) {
+        if (value == bloc.password) {
+          _error = true;
+        } else {
+          _error = false;
+        }
+        setState(() {
+          
+        });
+      },
     );
   }
 
@@ -302,8 +308,6 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
                 ),
                 onPressed: snapshot.hasData
                     ? () {
-                        _usuOper.nuevoUsuario(registro);
-                        _mostrarSnackbar('Usuario registrado');
                         _registrer(bloc, context);
                       }
                     : null),
@@ -321,15 +325,23 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
   }
 
   void _registrer(LoginRegistroBloc bloc, BuildContext context) async {
-    Map info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
-    if (info['ok']) {
-      Navigator.pop(context);
-      registro.idUsuario = 1; //como es un unico usuario siempre será uno
-      RegistroUsuariosProvider().crearUsuario(registro);
+    registro.email = bloc.email;
+    registro.password = int.parse(bloc.password);
+    final int idUsuario = await _usuOper.nuevoUsuario(registro);
+    if (idUsuario != 1) {
+      _mostrarSnackbar(
+          'YA EXISTE UN USUARIO PARA ESTE DISPOSITIVO, INICIE SESIÓN O RESTABLESCA LA APLICACIÓN');
     } else {
-      mostrarAlerta(context, info['mensaje']);
+      Map info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
+      _mostrarSnackbar('Usuario registrado');
+      if (info['ok']) {
+        SincronizacionProvider().subirDatos(registro.email);
+        Navigator.pop(context);
+      } else {
+        mostrarAlerta(context, info['mensaje']);
+      }
+      print('Email: ${bloc.email}');
+      print('Password: ${bloc.password}');
     }
-    print('Email: ${bloc.email}');
-    print('Password: ${bloc.password}');
   }
 }
