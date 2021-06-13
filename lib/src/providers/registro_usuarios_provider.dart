@@ -238,6 +238,65 @@ class SincronizacionProvider {
 
         _porOper.nuevoPorcentaje(porTemp);
       });
+      
+///bajar unidades de medida
+      final uni = await _uniOper.consultarUnidadesMedida();
+        final unidades = await snapshot.collection('UnidadesMedida').get();
+        unidades.docs.forEach((unidad) {
+          final UnidadMedidaModel uniTemp = new UnidadMedidaModel();
+          
+          final String idUnidadMedida = unidad["idUnidadMedida"].toString();
+          final String nombreUnidadMedida = unidad["nombreUnidadMedida"].toString();
+          final String descripcion = unidad["descripcion"].toString();
+
+          uniTemp.idUnidadMedida = int.parse(idUnidadMedida);
+          uniTemp.nombreUnidadMedida = nombreUnidadMedida;
+          uniTemp.descripcion = descripcion;
+
+          _uniOper.nuevoUnidadMedida(uniTemp);
+        },
+      );
+
+///bajar ubicaciones
+      final ubi = await _ubiOper.consultarUbicaciones();
+        final ubicaciones = await snapshot.collection('Ubicaciones').get();
+        unidades.docs.forEach((ubicacion) {
+          final UbicacionModel ubiTemp = new UbicacionModel();
+          
+          final String idUbicacion = ubicacion["idUbicacion"].toString();
+          final String nombreUbicacion = ubicacion["nombreUbicacion"].toString();
+          final String descripcion = ubicacion["descripcion"].toString();
+          final String estado = ubicacion["estado"].toString();
+
+          ubiTemp.idUbicacion = int.parse(idUbicacion);
+          ubiTemp.nombreUbicacion = nombreUbicacion;
+          ubiTemp.descripcion = descripcion;
+          ubiTemp.estado = estado;
+
+          _ubiOper.nuevaUbicacion(ubiTemp);
+        },
+      );
+
+/// bajar productoActividad
+      final proAct = await _proOper.consultarProductosActividades();
+        final produsActs = await snapshot.collection('ProductosActividades').get();
+        produsActs.docs.forEach((prodAct) {
+          final ProductoActividadModel prodActTemp = new ProductoActividadModel();
+
+          final String idProductoActividad = prodAct["idProductoActividad"].toString();
+          final String fkidConcepto = prodAct["fkidConcepto"].toString(),
+          final String fkidUnidadMedida = prodAct["fkidUnidadMedida"].toString(),
+          final String nombreProductoActividad = prodAct["nombreProductoActividad"].toString();
+
+          prodActTemp.idProductoActividad = int.parse(idProductoActividad);
+          prodActTemp.fkidConcepto = fkidConcepto;
+          prodActTemp.fkidUnidadMedida = fkidUnidadMedida;
+          prodActTemp.nombreProductoActividad = nombreProductoActividad;
+
+          _proOper.nuevoProductoActividad(prodActTemp);
+        },
+      );  
+
     }
     return true;
     /*        .collection('Estados')
@@ -306,4 +365,5 @@ class SincronizacionProvider {
     }
     return false;
   }
+
 }
