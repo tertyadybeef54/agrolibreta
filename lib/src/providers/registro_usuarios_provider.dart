@@ -8,7 +8,6 @@ import 'package:agrolibreta_v2/src/data/unidad_medida_operations.dart';
 import 'package:agrolibreta_v2/src/data/usuario_operations.dart';
 import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
-import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
 import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
 import 'package:agrolibreta_v2/src/modelos/porcentaje_model.dart';
 import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
@@ -149,23 +148,25 @@ class SincronizacionProvider {
         FirebaseFirestore.instance.collection('users').doc('$email');
 
     final cul = await _culOper.consultarCultivos();
-    print(cul);
+
     if (cul.length == 0) {
       final cultivos = await snapshot.collection('Cultivos').get();
       cultivos.docs.forEach((cultivo) {
         final CultivoModel culTemp = new CultivoModel();
 
-        final idCultivo = cultivo["idCultivo"].toString();
-        final fkidUbicacion = cultivo["fkidUbicacion"].toString();
-        final fkidEstado = cultivo["fkidEstado"].toString();
-        final fkidModeloReferencia = cultivo["fkidModeloReferencia"].toString();
-        final fkidProductoAgricola = cultivo["fkidProductoAgricola"].toString();
-        final nombreDistintivo = cultivo["nombreDistintivo"].toString();
-        final areaSembrada = cultivo["areaSembrada"].toString();
-        final fechaInicio = cultivo["fechaInicio"].toString();
-        final fechaFinal = cultivo["fechaFinal"].toString();
-        final presupuesto = cultivo["presupuesto"].toString();
-        final precioVentaIdeal = cultivo["precioVentaIdeal"].toString();
+        final String idCultivo = cultivo["idCultivo"].toString();
+        final String fkidUbicacion = cultivo["fkidUbicacion"].toString();
+        final String fkidEstado = cultivo["fkidEstado"].toString();
+        final String fkidModeloReferencia =
+            cultivo["fkidModeloReferencia"].toString();
+        final String fkidProductoAgricola =
+            cultivo["fkidProductoAgricola"].toString();
+        final String nombreDistintivo = cultivo["nombreDistintivo"].toString();
+        final String areaSembrada = cultivo["areaSembrada"].toString();
+        final String fechaInicio = cultivo["fechaInicio"].toString();
+        final String fechaFinal = cultivo["fechaFinal"].toString();
+        final String presupuesto = cultivo["presupuesto"].toString();
+        final String precioVentaIdeal = cultivo["precioVentaIdeal"].toString();
 
         culTemp.idCultivo = int.parse(idCultivo);
         culTemp.fkidUbicacion = fkidUbicacion;
@@ -181,6 +182,62 @@ class SincronizacionProvider {
 
         _culOper.nuevoCultivo(culTemp);
       });
+
+      final costos = await snapshot.collection('Costos').get();
+      costos.docs.forEach((costo) {
+        final CostoModel cosTemp = new CostoModel();
+        final String idCosto = costo["idCosto"].toString();
+        final String fkidProductoActividad =
+            costo["fkidProductoActividad"].toString();
+        final String fkidCultivo = costo["fkidCultivo"].toString();
+        final String fkidRegistroFotografico =
+            costo["fkidRegistroFotografico"].toString();
+        final String cantidad = costo["cantidad"].toString();
+        final String valorUnidad = costo["valorUnidad"].toString();
+        final String fecha = costo["fecha"].toString();
+
+        cosTemp.idCosto = int.parse(idCosto);
+        cosTemp.fkidProductoActividad = fkidProductoActividad;
+        cosTemp.fkidCultivo = fkidCultivo;
+        cosTemp.fkidRegistroFotografico = fkidRegistroFotografico;
+        cosTemp.cantidad = double.parse(cantidad);
+        cosTemp.valorUnidad = double.parse(valorUnidad);
+        cosTemp.fecha = int.parse(fecha);
+
+        _cosOper.nuevoCosto(cosTemp);
+      });
+
+      final modelos = await snapshot.collection('ModelosReferencia').get();
+      modelos.docs.forEach((modelo) {
+        final ModeloReferenciaModel modTemp = new ModeloReferenciaModel();
+        final String idModeloReferencia =
+            modelo["idModeloReferencia"].toString();
+        final String suma = modelo["suma"].toString();
+
+        modTemp.idModeloReferencia = int.parse(idModeloReferencia);
+        modTemp.suma = double.parse(suma);
+
+        _modOper.nuevoModeloReferencia(modTemp);
+      });
+
+      ///bajar porcentajes a la base de datos local
+      final porcentajes = await snapshot.collection('Porcentajes').get();
+      porcentajes.docs.forEach((porcentaj) {
+        final PorcentajeModel porTemp = new PorcentajeModel();
+
+        final String idPorcentaje = porcentaj["idPorcentaje"].toString();
+        final String fk2idModeloReferencia =
+            porcentaj["fk2idModeloReferencia"].toString();
+        final String fk2idConcepto = porcentaj["fk2idConcepto"].toString();
+        final String porcentaje = porcentaj["porcentaje"].toString();
+
+        porTemp.idPorcentaje = int.parse(idPorcentaje);
+        porTemp.fk2idModeloReferencia = fk2idModeloReferencia;
+        porTemp.fk2idConcepto = fk2idConcepto;
+        porTemp.porcentaje = double.parse(porcentaje);
+
+        _porOper.nuevoPorcentaje(porTemp);
+      });
     }
     return true;
     /*        .collection('Estados')
@@ -195,18 +252,17 @@ class SincronizacionProvider {
       estTemp.idEstado = i;
       estTemp.nombreEstado = nombre;
       print(estTemp.nombreEstado);
-    }); */
+    });
 
-/*     final idUser = await _usuOper.getUsuarioById(1);
+     final idUser = await _usuOper.getUsuarioById(1);
     final email = idUser.email;
     final db = FirebaseDatabase();
     //final userRef = db.ch
-    UsersModel users = new UsersModel(); */
+    UsersModel users = new UsersModel(); 
 
     //print(snapshot.docs[0].data());
     //.where("users", isEqualTo: "andres@gmail.com")
     //.snapshots();
-/* 
     final url = "$_url/users.json?oderBy='correo'&limitToFirst='andres'";
     final resp = await http.get(Uri.parse(url));
     final Map<String, dynamic> decodedData = json.decode(resp.body);
@@ -217,7 +273,6 @@ class SincronizacionProvider {
       //print(value);
       //print('################');
     }); */
-    //print(decodedData);
   }
 
   Future<bool> bajarUsuario(String correo) async {
