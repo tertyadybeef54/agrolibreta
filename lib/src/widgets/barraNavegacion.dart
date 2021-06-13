@@ -1,5 +1,4 @@
 import 'package:agrolibreta_v2/src/dataproviders/pie_data_provider.dart';
-import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -62,7 +61,6 @@ class _Paginas extends StatelessWidget {
     Provider.of<RegistrosFotograficosData>(context, listen: false);
     Provider.of<FiltrosCostosData>(context, listen: false);
     Provider.of<PieData>(context, listen: false);
-    Provider.of<UsuarioProvider>(context, listen: false);
     return PageView(
       controller: navegacionModel.pageController,
       physics: NeverScrollableScrollPhysics(),
