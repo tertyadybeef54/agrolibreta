@@ -26,15 +26,14 @@ class HomePage extends StatelessWidget {
             iconSize: 40.0,
             icon: new Icon(Icons.account_circle),
             onPressed: () {
-              Provider.of<UsuarioProvider>(context, listen: false).getUsuarios();
+              Provider.of<UsuarioProvider>(context, listen: false)
+                  .getUsuarios();
               Navigator.pushNamed(context, 'perfilUsuario');
             },
           ),
         ],
       ),
-      body: Container(
-          padding: EdgeInsets.all(15.0),
-          child: _crearListaDeCultivo(context, cultivos)),
+      body: _crearListaDeCultivo(context, cultivos),
       floatingActionButton: _agregarCultivo(context),
     );
   }
@@ -42,6 +41,7 @@ class HomePage extends StatelessWidget {
   Widget _crearListaDeCultivo(
       BuildContext context, List<CultivoModel> cultivos) {
     return ListView.builder(
+      padding: EdgeInsets.all(5.0),
       itemCount: cultivos.length,
       itemBuilder: (context, index) {
         return _crearCards(
@@ -66,6 +66,7 @@ class HomePage extends StatelessWidget {
     final _precio = cultivo.precioVentaIdeal.toString();
     final _mR = cultivo.fkidModeloReferencia;
     return Card(
+        color: _estado != '1' ? Colors.black12 : Colors.white,
         clipBehavior: Clip.antiAlias,
         elevation: 2.0,
         shape:

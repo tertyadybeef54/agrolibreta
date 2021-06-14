@@ -12,7 +12,7 @@ class PerfilUsuarioPage extends StatefulWidget {
 }
 
 class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
-  RegistroUsuariosModel usuario = new RegistroUsuariosModel();
+  RegistroUsuariosModel usuario = new RegistroUsuariosModel(nombres: 'espere en home mientras se cargan');
   bool passOk = false;
   String nuevoPassword;
   TextEditingController _inputFieldDateController = new TextEditingController();
@@ -20,7 +20,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
   @override
   Widget build(BuildContext context) {
     final usuarioData = Provider.of<UsuarioProvider>(context, listen: false);
-    usuario = usuarioData.usuarios[0];
+    if(usuarioData.usuarios.isNotEmpty){ usuario = usuarioData.usuarios[0];}
 
     return Scaffold(
       appBar: AppBar(
@@ -124,26 +124,76 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
           style: TextStyle(fontSize: 18.0),
         ),
       ),
-      onPressed: _sincronizar,
+      onPressed: ()=> _alerta(context),
     );
   }
 
-  Future<void> _sincronizar() async {
-    SincronizacionProvider().subirDatos(usuario.email);
-    _mostrarSnackbar(
-        'Espere mientras ve este letrero... Sus datos estan siendo sincronizados.');
-    SincronizacionProvider().bajarDatos(usuario.email);
-    Provider.of<CostosData>(context, listen: false).getCostos();
-
+  Future<bool> _sincronizar() async {
+    await SincronizacionProvider().subirDatos(usuario.email);
+    return SincronizacionProvider().bajarDatos(usuario.email);   
   }
 
-  // metodo para crear el aviso de 'usuario guardado'
-  void _mostrarSnackbar(String mensaje) {
-    final snackbar = SnackBar(
-      content: Text(mensaje),
-      duration: Duration(seconds: 10),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  void _alerta(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return FutureBuilder<bool>(
+            future: _sincronizar(),
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              List<Widget> children;
+              if (snapshot.hasData) {
+                children = <Widget>[
+                  const Icon(
+                    Icons.check_circle_outline,
+                    color: Colors.green,
+                    size: 60,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Text('Terminado, sus datos han sido cargados'),
+                  )
+                ];
+                Provider.of<CostosData>(context, listen: false).getCostos();
+              } else if (snapshot.hasError) {
+                children = <Widget>[
+                  const Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 60,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Text('Error: ${snapshot.error}'),
+                  )
+                ];
+              } else {
+                children = const <Widget>[
+                  SizedBox(
+                    child: CircularProgressIndicator(),
+                    width: 60,
+                    height: 60,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Sincronizando sus Datos, por favor espere a que termine...'),
+                  )
+                ];
+              }
+              return AlertDialog(
+                  content: Container(
+                    width: 300.0,
+                    height: 400.0,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: children,
+                  ),
+                ),
+              );
+            },
+          );
+        });
   }
 
   void _editInfoAlert(

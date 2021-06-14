@@ -275,12 +275,10 @@ class _Page2State extends State<Page2> {
   }
 
   _login(BuildContext context, LoginRegistroBloc bloc) async {
-    
-    
     Map info = await usuarioProvider.login(bloc.email, bloc.password);
 
     if (info['ok']) {
-      SincronizacionProvider().bajarUsuario(bloc.email);
+      await SincronizacionProvider().bajarUsuario(bloc.email);
       Navigator.pushReplacementNamed(context, 'taps');
     } else {
       mostrarAlerta(context, info['mensaje']);

@@ -150,6 +150,7 @@ class SincronizacionProvider {
     final cul = await _culOper.consultarCultivos();
 
     if (cul.length == 0) {
+      ///bajar cultivos
       final cultivos = await snapshot.collection('Cultivos').get();
       cultivos.docs.forEach((cultivo) {
         final CultivoModel culTemp = new CultivoModel();
@@ -183,6 +184,7 @@ class SincronizacionProvider {
         _culOper.nuevoCultivo(culTemp);
       });
 
+      ///bajar costos
       final costos = await snapshot.collection('Costos').get();
       costos.docs.forEach((costo) {
         final CostoModel cosTemp = new CostoModel();
@@ -207,6 +209,7 @@ class SincronizacionProvider {
         _cosOper.nuevoCosto(cosTemp);
       });
 
+      ///bajar modelos de referencia
       final modelos = await snapshot.collection('ModelosReferencia').get();
       modelos.docs.forEach((modelo) {
         final ModeloReferenciaModel modTemp = new ModeloReferenciaModel();
@@ -238,15 +241,16 @@ class SincronizacionProvider {
 
         _porOper.nuevoPorcentaje(porTemp);
       });
-      
-///bajar unidades de medida
-      final uni = await _uniOper.consultarUnidadesMedida();
-        final unidades = await snapshot.collection('UnidadesMedida').get();
-        unidades.docs.forEach((unidad) {
+
+      ///bajar unidades de medida
+      final unidades = await snapshot.collection('UnidadesMedida').get();
+      unidades.docs.forEach(
+        (unidad) {
           final UnidadMedidaModel uniTemp = new UnidadMedidaModel();
-          
+
           final String idUnidadMedida = unidad["idUnidadMedida"].toString();
-          final String nombreUnidadMedida = unidad["nombreUnidadMedida"].toString();
+          final String nombreUnidadMedida =
+              unidad["nombreUnidadMedida"].toString();
           final String descripcion = unidad["descripcion"].toString();
 
           uniTemp.idUnidadMedida = int.parse(idUnidadMedida);
@@ -257,36 +261,42 @@ class SincronizacionProvider {
         },
       );
 
-///bajar ubicaciones
-      final ubi = await _ubiOper.consultarUbicaciones();
-        final ubicaciones = await snapshot.collection('Ubicaciones').get();
-        unidades.docs.forEach((ubicacion) {
+      ///bajar ubicaciones
+      final ubicaciones = await snapshot.collection('Ubicaciones').get();
+      ubicaciones.docs.forEach(
+        (ubicacion) {
           final UbicacionModel ubiTemp = new UbicacionModel();
-          
+
           final String idUbicacion = ubicacion["idUbicacion"].toString();
-          final String nombreUbicacion = ubicacion["nombreUbicacion"].toString();
+          final String nombreUbicacion =
+              ubicacion["nombreUbicacion"].toString();
           final String descripcion = ubicacion["descripcion"].toString();
           final String estado = ubicacion["estado"].toString();
 
           ubiTemp.idUbicacion = int.parse(idUbicacion);
           ubiTemp.nombreUbicacion = nombreUbicacion;
           ubiTemp.descripcion = descripcion;
-          ubiTemp.estado = estado;
+          ubiTemp.estado = int.parse(estado);
 
           _ubiOper.nuevaUbicacion(ubiTemp);
         },
       );
 
-/// bajar productoActividad
-      final proAct = await _proOper.consultarProductosActividades();
-        final produsActs = await snapshot.collection('ProductosActividades').get();
-        produsActs.docs.forEach((prodAct) {
-          final ProductoActividadModel prodActTemp = new ProductoActividadModel();
+      /// bajar productoActividad
+      final produsActs =
+          await snapshot.collection('ProductosActividades').get();
+      produsActs.docs.forEach(
+        (prodAct) {
+          final ProductoActividadModel prodActTemp =
+              new ProductoActividadModel();
 
-          final String idProductoActividad = prodAct["idProductoActividad"].toString();
-          final String fkidConcepto = prodAct["fkidConcepto"].toString(),
-          final String fkidUnidadMedida = prodAct["fkidUnidadMedida"].toString(),
-          final String nombreProductoActividad = prodAct["nombreProductoActividad"].toString();
+          final String idProductoActividad =
+              prodAct["idProductoActividad"].toString();
+          final String fkidConcepto = prodAct["fkidConcepto"].toString();
+          final String fkidUnidadMedida =
+              prodAct["fkidUnidadMedida"].toString();
+          final String nombreProductoActividad =
+              prodAct["nombreProductoActividad"].toString();
 
           prodActTemp.idProductoActividad = int.parse(idProductoActividad);
           prodActTemp.fkidConcepto = fkidConcepto;
@@ -295,8 +305,7 @@ class SincronizacionProvider {
 
           _proOper.nuevoProductoActividad(prodActTemp);
         },
-      );  
-
+      );
     }
     return true;
     /*        .collection('Estados')
@@ -335,6 +344,12 @@ class SincronizacionProvider {
   }
 
   Future<bool> bajarUsuario(String correo) async {
+    final resp = await _usuOper.getUsuarioById(1);
+    //si ya esxiste un usuario en la base de datos no baja el usuario de nuevo
+    //y retorna false
+    if (resp != null) {
+      return false;
+    }
     await Firebase.initializeApp();
     final snapshot = await FirebaseFirestore.instance
         .collection('users')
@@ -365,5 +380,4 @@ class SincronizacionProvider {
     }
     return false;
   }
-
 }

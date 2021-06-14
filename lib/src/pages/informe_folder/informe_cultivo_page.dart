@@ -522,7 +522,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
             children: <Widget>[
               Center(
                   child: Text(
-                'Grafico1. Modelo de referencia y costos del cultivo',
+                'Grafico1. Costos presupuestados de MR y costos del cultivo',
                 style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
               )),
               Expanded(

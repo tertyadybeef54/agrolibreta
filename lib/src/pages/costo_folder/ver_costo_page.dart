@@ -45,6 +45,7 @@ class _VerCostoPageState extends State<VerCostoPage> {
         child: ListView(
           children: [
             ListTile(
+              leading: Icon(Icons.calendar_today),
               title: Row(
                 children: [
                   Text('Fecha: '),
@@ -53,6 +54,7 @@ class _VerCostoPageState extends State<VerCostoPage> {
               ),
             ),
             ListTile(
+              leading: Icon(Icons.label),
               title: Row(
                 children: [
                   Text('Cantidad: '),
@@ -61,6 +63,7 @@ class _VerCostoPageState extends State<VerCostoPage> {
               ),
             ),
             ListTile(
+              leading: Icon(Icons.square_foot),
               title: Row(
                 children: [
                   Text('Unidad: '),
@@ -69,14 +72,17 @@ class _VerCostoPageState extends State<VerCostoPage> {
               ),
             ),
             ListTile(
+              leading: Icon(Icons.label_important),
               title: Row(
                 children: [
+
                   Text('Nombre: '),
                   _criterioFuture(costo.fkidProductoActividad)
                 ],
               ),
             ),
             ListTile(
+              leading: Icon(Icons.label),
               title: Row(
                 children: [
                   Text('Valor Unidad: '),
@@ -85,6 +91,7 @@ class _VerCostoPageState extends State<VerCostoPage> {
               ),
             ),
             ListTile(
+              leading: Icon(Icons.label),
               title: Row(
                 children: [
                   Text('Valor Total: '),
@@ -93,6 +100,7 @@ class _VerCostoPageState extends State<VerCostoPage> {
               ),
             ),
             ListTile(
+              leading: Icon(Icons.grass),
               title: Row(
                 children: [
                   Text('Cultivo: '),
@@ -101,12 +109,13 @@ class _VerCostoPageState extends State<VerCostoPage> {
               ),
             ),
             Row(
-              mainAxisSize: MainAxisSize.min,
+              //mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   width: 10.0,
                 ),
-                TextButton(
+                ElevatedButton(
                   onPressed: () => _confirmacion(context),
                   child: Text('ELIMINAR'),
                 ),
