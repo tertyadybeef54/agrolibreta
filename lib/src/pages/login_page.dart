@@ -1,3 +1,4 @@
+import 'package:agrolibreta_v2/src/data/usuario_operations.dart';
 import 'package:agrolibreta_v2/src/providers/registro_usuarios_provider.dart';
 import 'package:agrolibreta_v2/src/providers/usuario_provider.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,8 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
+
+UsuarioOperations _usuOper = new UsuarioOperations();
 
 //Front end Primera pagina, la imagen de fonto y los titulos
 class Page1 extends StatelessWidget {
@@ -71,14 +74,36 @@ class MainContent extends StatelessWidget {
 class Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Image.asset('assets/login.jpg'),
-      alignment: Alignment.topCenter,
+    final circulo = Container(
+      width: 80.0,
+      height: 80.0,
       decoration: BoxDecoration(
-          gradient: LinearGradient(colors: <Color>[
-        Color.fromRGBO(48, 33, 17, 1.0),
-        Color.fromRGBO(92, 73, 52, 1.0),
-      ])),
+        borderRadius: BorderRadius.circular(100.0),
+        color: Color.fromRGBO(255, 255, 255, 0.3),
+      ),
+    );
+    return Stack(
+      children: [
+        Container(
+          alignment: Alignment.topCenter,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(colors: <Color>[
+            Color(0xff6b9b37),
+            Color(0xffcfff95),
+          ])),
+        ),
+        Positioned(top: 50.0, left: 50.0, child: circulo),
+        Positioned(top: 40.0, right: -40.0, child: circulo),
+        Positioned(top: 100.0, right: 110.0, child: circulo),
+        Positioned(top: 220.0, right: 5.0, child: circulo),
+        Positioned(top: 260.0, left: 10.0, child: circulo),
+        Positioned(bottom: 80.0, left: -20.0, child: circulo),
+        Positioned(bottom: 40.0, right: -20.0, child: circulo),
+        Positioned(bottom: 100.0, right: 80.0, child: circulo),
+        Positioned(bottom: 230.0, right: 5.0, child: circulo),
+        Positioned(bottom: 200.0, left: 80.0, child: circulo),
+        Positioned(bottom: -10.0, left: 120.0, child: circulo),
+      ],
     );
   }
 }
@@ -105,13 +130,13 @@ class _Page2State extends State<Page2> {
   Widget _crearFondo(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final fondoMarron = Container(
+    final fondoverde = Container(
       height: size.height * 0.4,
       width: double.infinity,
       decoration: BoxDecoration(
           gradient: LinearGradient(colors: <Color>[
-        Color.fromRGBO(48, 33, 17, 1.0),
-        Color.fromRGBO(92, 73, 52, 1.0),
+        Color(0xff6b9b37),
+        Color(0xffcfff95),
       ])),
     );
     final circulo = Container(
@@ -119,18 +144,19 @@ class _Page2State extends State<Page2> {
       height: 80.0,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100.0),
-        color: Color.fromRGBO(255, 255, 255, 0.05),
+        color: Color.fromRGBO(255, 255, 255, 0.3),
       ),
     );
 
     return Stack(
       children: <Widget>[
-        fondoMarron,
+        fondoverde,
         Positioned(top: 50.0, left: 50.0, child: circulo),
         Positioned(top: 40.0, right: -30.0, child: circulo),
         Positioned(top: 100.0, right: 50.0, child: circulo),
         Positioned(top: 230.0, right: 5.0, child: circulo),
-        Positioned(top: 240.0, left: 10.0, child: circulo),
+        Positioned(top: 200.0, left: 10.0, child: circulo),
+        Positioned(top: -70.0, left: 120.0, child: circulo),
         Container(
           padding: EdgeInsets.only(top: 80.0),
           child: Column(children: <Widget>[
@@ -275,15 +301,34 @@ class _Page2State extends State<Page2> {
   }
 
   _login(BuildContext context, LoginRegistroBloc bloc) async {
-    Map info = await usuarioProvider.login(bloc.email, bloc.password);
+    final resp = await _usuOper.getUsuarioById(1);
+    final password = resp.password.toString();
+    if (resp == null) {
+      Map info = await usuarioProvider.login(bloc.email, bloc.password);
 
-    if (info['ok']) {
-      await SincronizacionProvider().bajarUsuario(bloc.email);
-      Navigator.pushReplacementNamed(context, 'taps');
+      if (info['ok']) {
+        await SincronizacionProvider().bajarUsuario(bloc.email);
+        Navigator.pushReplacementNamed(context, 'taps');
+      } else {
+        mostrarAlerta(context, info['mensaje']);
+      }
+      print('Email: ${bloc.email}');
+      print('Password: ${bloc.password}');
     } else {
-      mostrarAlerta(context, info['mensaje']);
+      if (password == bloc.password) {
+        Navigator.pushReplacementNamed(context, 'taps');
+      } else {
+        _mostrarSnackbar(
+            'Contraseña incorrecta, el correo no es indispensable si ya ha iniciado sesión antes en este dispositivo.');
+      }
     }
-    print('Email: ${bloc.email}');
-    print('Password: ${bloc.password}');
+  }
+
+  void _mostrarSnackbar(String mensaje) {
+    final snackbar = SnackBar(
+      content: Text(mensaje),
+      duration: Duration(milliseconds: 2500),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 }

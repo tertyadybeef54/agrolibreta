@@ -10,7 +10,7 @@ import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
 
 ConceptoOperations _conOper = new ConceptoOperations();
 PorcentajeOperations _porOper = new PorcentajeOperations();
-ModelosReferenciaOperations _modOper = new ModelosReferenciaOperations(); 
+ModelosReferenciaOperations _modOper = new ModelosReferenciaOperations();
 
 //provider que para manejar datos de los modelosReferencia
 class ModeloReferenciaData with ChangeNotifier {
@@ -39,7 +39,6 @@ class ModeloReferenciaData with ChangeNotifier {
   }
 
   obtenerByID() {
-    
     this.modelosReferencia.forEach(
       (modelo) async {
         final _resp = await _porOper.consultarPorcentajesbyModeloReferencia(
@@ -66,6 +65,7 @@ class ModeloReferenciaData with ChangeNotifier {
 
   eliminarModelo(int idMr) async {
     await _modOper.deleteModeloReferencia(idMr);
+    this.getModelosReferencia();
     //await _porOper.deletePorcentajeByMR(idMr);
     //this.getModelosReferencia();
   }

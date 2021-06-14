@@ -55,7 +55,7 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
     for (var i = 0; i < porcentajes.length; i++) {
       listado.add(_conceptoPorcentaje(porcentajes[i], conceptos[i]));
     }
-    listado.add(_textoSumaBoton(suma));
+    listado.add(_textoSumaBoton(suma, porcentajes, conceptos));
     return listado;
   }
 
@@ -85,7 +85,7 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
     );
   }
 
-  Widget _textoSumaBoton(double suma) {
+  Widget _textoSumaBoton(double suma, List<PorcentajeModel> porcentajes, List<ConceptoModel> conceptos) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -99,14 +99,14 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
                 if (suma < 100) {
                   mostrarSnackbar(context, 'la suma debe ser 100%');
                 } else {
+                  final modData =
+                      Provider.of<ModeloReferenciaData>(context, listen: false);
+                  modData.nuevoConPorList(conceptos, porcentajes);
                   final porcentajesData =
                       Provider.of<PorcentajeData>(context, listen: false);
                   porcentajesData.reset();
-                  final modData =
-                      Provider.of<ModeloReferenciaData>(context, listen: false);
-                  modData.conceptosList = [];
-                  modData.porcentajesList = [];
-                  modData.obtenerByID();
+                  modData.getModelosReferencia();
+
                   Navigator.pop(context);
                 }
               },
