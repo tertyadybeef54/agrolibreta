@@ -13,12 +13,11 @@ class ModeloReferenciaList extends StatefulWidget {
 }
 
 class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
-
-
   @override
   Widget build(BuildContext context) {
-    final modelosReferenciaData = Provider.of<ModeloReferenciaData>(context, listen: false);
-
+    final modelosReferenciaData =
+        Provider.of<ModeloReferenciaData>(context, listen: false);
+    
     final List<ModeloReferenciaModel> modelosReferencia =
         modelosReferenciaData.modelosReferencia;
     final List<List<PorcentajeModel>> porcentajesList =
@@ -52,7 +51,7 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
             color: Colors.red,
           ),
           onDismissed: (direction) {
-            if(modelosReferencia[i].idModeloReferencia!=1){
+            if (modelosReferencia[i].idModeloReferencia != 1) {
               Provider.of<ModeloReferenciaData>(context, listen: false)
                   .eliminarModelo(modelosReferencia[i].idModeloReferencia);
             }
@@ -123,6 +122,7 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
   }
 
   Future<void> _refrescar() async {
-    setState(() {});
+    setState(() {
+    });
   }
 }
