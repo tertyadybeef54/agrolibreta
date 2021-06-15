@@ -1,6 +1,7 @@
 import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
 import 'package:agrolibreta_v2/src/modelos/usuario_model.dart';
+import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:agrolibreta_v2/src/providers/registro_usuarios_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -16,11 +17,13 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
       new RegistroUsuariosModel(nombres: 'espere en home mientras se cargan');
   bool passOk = false;
   String nuevoPassword;
+  final _prefs = new PreferenciasUsuario();
   TextEditingController _inputFieldDateController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final usuarioData = Provider.of<UsuarioProvider>(context, listen: false);
+    
     if (usuarioData.usuarios.isNotEmpty) {
       usuario = usuarioData.usuarios[0];
     }
@@ -434,11 +437,17 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
             ),
             TextButton(
               child: Text('Cerrar Sesion'),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => _cerrarsesion(),
             )
           ],
         );
       },
     );
+  }
+  
+  void _cerrarsesion(){
+    _prefs.password = '';
+    Navigator.of(context).pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
+
   }
 }

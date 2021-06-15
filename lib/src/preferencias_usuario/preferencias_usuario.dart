@@ -36,7 +36,14 @@ class PreferenciasUsuario {
   set token( String value ) {
     _prefs.setString('token', value);
   }
-  
+  // GET y SET del password
+  String get password {
+    return _prefs.getString('password') ?? '';
+  }
+
+  set password( String value ) {
+    _prefs.setString('password', value);
+  }
 
   // GET y SET de la última página
   get ultimaPagina {

@@ -15,23 +15,26 @@ class UsuarioProvider{
     'password' : password,
     'returnSecureToken' : true,
     };
+    try {
+      final resp = await  http.post(
+        Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$_firebaseToken') ,
+        body: json.encode(authData)
+      );
 
-    final resp = await http.post(
-      Uri.parse('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$_firebaseToken') ,
-      body: json.encode(authData)
-    );
+      Map<String, dynamic> decodedResp = json.decode(resp.body);
 
-    Map<String, dynamic> decodedResp = json.decode(resp.body);
+      print(decodedResp);
 
-    print(decodedResp);
-
-    if(decodedResp.containsKey('idToken')){
-
-      _prefs.token = decodedResp['idToken'];
-      //TODOO: Salvar el token en el storage
-      return {'ok' : true, 'token': decodedResp['idToken']};
-    }else{
-      return {'ok': false, 'mensaje': decodedResp['error']['message']};
+      if(decodedResp.containsKey('idToken')){
+        _prefs.token = decodedResp['idToken'];
+        //TODOO: Salvar el token en el storage
+        return {'ok' : true, 'token': decodedResp['idToken']};
+      }else{
+        return {'ok': false, 'mensaje': decodedResp['error']['message']};
+      }
+      
+    } catch (e) {
+      return {'ok': false, 'mensaje': 'Verifique su concexión a internet'};
     }
   }
 
