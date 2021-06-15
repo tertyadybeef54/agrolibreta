@@ -52,13 +52,13 @@ class _NuevoRegistroFotograficoPageState
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Center(
-            child: Column(
+        title: Column(
           children: [
             Text('Nuevo'),
             Text('Registro Fotografico'),
           ],
-        )),
+        ),
+        centerTitle: true,
         actions: <Widget>[
           IconButton(
             iconSize: 30.0,

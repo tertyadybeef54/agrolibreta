@@ -12,7 +12,8 @@ class PerfilUsuarioPage extends StatefulWidget {
 }
 
 class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
-  RegistroUsuariosModel usuario = new RegistroUsuariosModel(nombres: 'espere en home mientras se cargan');
+  RegistroUsuariosModel usuario =
+      new RegistroUsuariosModel(nombres: 'espere en home mientras se cargan');
   bool passOk = false;
   String nuevoPassword;
   TextEditingController _inputFieldDateController = new TextEditingController();
@@ -20,14 +21,15 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
   @override
   Widget build(BuildContext context) {
     final usuarioData = Provider.of<UsuarioProvider>(context, listen: false);
-    if(usuarioData.usuarios.isNotEmpty){ usuario = usuarioData.usuarios[0];}
+    if (usuarioData.usuarios.isNotEmpty) {
+      usuario = usuarioData.usuarios[0];
+    }
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Center(
-          child: Text('Perfil de Usuario'),
-        ),
+        title: Text('Perfil de Usuario'),
+        centerTitle: true,
       ),
       body: _listaInformacionUsuario(context),
     );
@@ -124,13 +126,13 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
           style: TextStyle(fontSize: 18.0),
         ),
       ),
-      onPressed: ()=> _alerta(context),
+      onPressed: () => _alerta(context),
     );
   }
 
   Future<bool> _sincronizar() async {
     await SincronizacionProvider().subirDatos(usuario.email);
-    return SincronizacionProvider().bajarDatos(usuario.email);   
+    return SincronizacionProvider().bajarDatos(usuario.email);
   }
 
   void _alerta(BuildContext context) {
@@ -176,14 +178,15 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 16),
-                    child: Text('Sincronizando sus Datos, por favor espere a que termine...'),
+                    child: Text(
+                        'Sincronizando sus Datos, por favor espere a que termine...'),
                   )
                 ];
               }
               return AlertDialog(
-                  content: Container(
-                    width: 300.0,
-                    height: 400.0,
+                content: Container(
+                  width: 300.0,
+                  height: 400.0,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -257,6 +260,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
     );
   }
 
+//editar fecha de nacimiento
   void _editFechaAlert(BuildContext context) {
     showDialog(
       context: context,
@@ -314,6 +318,9 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
 
     if (picked != null) {
       setState(() {
+        final DateTime datehoy = DateTime.now();
+        var local = datehoy.add(const Duration(hours: -6));
+        print(local.toString());
         usuario.fechaNacimiento = DateFormat('dd-MM-yyyy').format(picked);
         _inputFieldDateController.text = usuario.fechaNacimiento;
       });

@@ -16,6 +16,7 @@ import 'package:agrolibreta_v2/src/modelos/unidad_medida_model.dart';
 import 'package:agrolibreta_v2/src/modelos/usuario_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 //estas varibales son usadas para obtener todos los datos de la base de datos
 //para posteriormente enviarlas a firebase cloudstore
@@ -117,8 +118,13 @@ class SincronizacionProvider {
             .set(modelo.toJson());
       }
     });
+
+    final DateTime fecha = new DateTime.now();
     final List<RegistroUsuariosModel> usuario =
         await _usuOper.consultarUsuario();
+    usuario[0].fechaUltimaSincro = DateFormat('dd-MM-yyyyTHH:mm').format(fecha).toString();
+    _usuOper.updateUsuarios(usuario[0]);
+    print(usuario[0].fechaUltimaSincro);
     await dbFirestore
         .collection('Usuario')
         .doc('${usuario[0].idUsuario}')

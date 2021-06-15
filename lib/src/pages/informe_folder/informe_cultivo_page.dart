@@ -78,7 +78,8 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
               indicatorColor: Color(0xff1b5e20),
               tabs: tabs,
             ),
-            title: Center(child: Text('Informe del cultivo')),
+            title: Text('Informe del cultivo'),
+            centerTitle: true,
             actions: <Widget>[
               IconButton(
                   iconSize: 40.0,
