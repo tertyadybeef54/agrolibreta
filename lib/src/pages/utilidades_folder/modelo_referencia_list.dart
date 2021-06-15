@@ -28,7 +28,8 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Center(child: Text('Modelos de Referencia')),
+        title: Text('Modelos de Referencia'),
+        centerTitle: true,
       ),
       body: _modeloReferenciaTiles(
           context, modelosReferencia, porcentajesList, conceptosList),

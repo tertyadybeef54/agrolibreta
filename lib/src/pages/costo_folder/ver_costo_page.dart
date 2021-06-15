@@ -28,9 +28,9 @@ class _VerCostoPageState extends State<VerCostoPage> {
     _idCosto = costo.idCosto;
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text('Detalles del costo'),
-        ),
+        title: Text('Detalles del costo'),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
         actions: [
           IconButton(
               icon: Icon(Icons.edit),

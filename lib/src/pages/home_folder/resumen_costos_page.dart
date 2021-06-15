@@ -76,9 +76,8 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
   Widget _appBar(BuildContext context, String nombreCul, int idCul) {
     return AppBar(
       automaticallyImplyLeading: false,
-      title: Center(
-        child: Text(nombreCul),
-      ),
+      title: Text(nombreCul),
+      centerTitle: true,
       actions: <Widget>[
         IconButton(
           iconSize: 40.0,

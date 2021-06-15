@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Center(child: Text('        Mis Cultivos')),
+        title:Text('Mis Cultivos'),
         actions: <Widget>[
           IconButton(
             iconSize: 40.0,

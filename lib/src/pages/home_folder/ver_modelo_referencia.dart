@@ -14,7 +14,8 @@ class VerModeloReferencia extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Center(child: Text('Modelo de referencia: $idMr')),
+        title: Text('Modelo de referencia: $idMr'),
+        centerTitle: true,
       ),
       body: Stack(
         children: [

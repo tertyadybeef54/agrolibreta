@@ -41,7 +41,8 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Center(child: Text('Informacion Genaral del Cultivo')),
+        title: Text('Informacion Genaral del Cultivo'),
+        centerTitle: true,
       ),
       body: listaInfoCultivo(context, culTemp, costosTotales),
     );

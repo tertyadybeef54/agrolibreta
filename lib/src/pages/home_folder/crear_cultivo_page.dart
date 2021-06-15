@@ -69,12 +69,8 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Center(
-          child: Text(
-            'Registrar cultivo',
-            style: _style,
-          ),
-        ),
+        title:Text('Registrar cultivo'),
+        centerTitle: true,
       ),
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 5.0),

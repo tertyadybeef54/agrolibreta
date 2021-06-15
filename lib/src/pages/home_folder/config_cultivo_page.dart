@@ -18,7 +18,8 @@ class ConfigCultivoPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Center(child: Text('Configuración Cultivo')),
+        centerTitle: true,
+        title: Text('Configuración Cultivo'),
       ),
       body: ListView(
           children: <Widget>[
