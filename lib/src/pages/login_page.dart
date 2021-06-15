@@ -1,4 +1,4 @@
-import 'package:agrolibreta_v2/src/data/usuario_operations.dart';
+import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:agrolibreta_v2/src/providers/registro_usuarios_provider.dart';
 import 'package:agrolibreta_v2/src/providers/usuario_provider.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +22,6 @@ class LoginPage extends StatelessWidget {
     );
   }
 }
-
-UsuarioOperations _usuOper = new UsuarioOperations();
 
 //Front end Primera pagina, la imagen de fonto y los titulos
 class Page1 extends StatelessWidget {
@@ -117,7 +115,7 @@ class Page2 extends StatefulWidget {
 class _Page2State extends State<Page2> {
   final usuarioProvider = new UsuarioProvider();
   bool passwordVisible = true;
-
+  final _prefs = new PreferenciasUsuario();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -301,19 +299,22 @@ class _Page2State extends State<Page2> {
   }
 
   _login(BuildContext context, LoginRegistroBloc bloc) async {
-    final resp = await _usuOper.getUsuarioById(1);
-    final password = resp.password.toString();
-    if (resp == null) {
-      Map info = await usuarioProvider.login(bloc.email, bloc.password);
-
-      if (info['ok']) {
-        await SincronizacionProvider().bajarUsuario(bloc.email);
-        Navigator.pushReplacementNamed(context, 'taps');
-      } else {
-        mostrarAlerta(context, info['mensaje']);
-      }
-      print('Email: ${bloc.email}');
-      print('Password: ${bloc.password}');
+    final password = _prefs.password;
+    //si el password no esta guardado localmente
+    //else compare el passwod con el ingresado
+    if (password == '') {
+        Map info = await usuarioProvider.login(bloc.email, bloc.password);
+        if (info['ok']) {
+          _mostrarSnackbar('cargando datos...');
+          await SincronizacionProvider().bajarUsuario(bloc.email);
+          _prefs.password = bloc.password;
+          Navigator.pushReplacementNamed(context, 'taps');
+        } else {
+          mostrarAlerta(context, info['mensaje']);
+        }
+        print('Email: ${bloc.email}');
+        print('Password: ${bloc.password}');
+ 
     } else {
       if (password == bloc.password) {
         Navigator.pushReplacementNamed(context, 'taps');

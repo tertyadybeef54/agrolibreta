@@ -7,7 +7,7 @@ class UsuarioOperations {
   final dbProvider = DBProvider.db;
 
 //C - crear
-   Future<int> nuevoUsuario(RegistroUsuariosModel nuevoUsuario) async {
+  Future<int> nuevoUsuario(RegistroUsuariosModel nuevoUsuario) async {
     final db = await dbProvider.database;
     final res = await db.insert('Usuario', nuevoUsuario.toJson());
     // Es el ID del último registro insertado;
@@ -48,5 +48,19 @@ class UsuarioOperations {
         await db.query('Usuario', where: 'idUsuario = ?', whereArgs: [id]);
     print(res);
     return res.isNotEmpty ? RegistroUsuariosModel.fromJson(res.first) : null;
+  }
+
+  Future<String> password(int id) async {
+    final db = await dbProvider.database;
+    final res =
+        await db.query('Usuario', where: 'idUsuario = ?', whereArgs: [id]);
+    RegistroUsuariosModel usuario = new RegistroUsuariosModel();
+    String password= '1';
+    if (res.isNotEmpty) {
+      usuario = RegistroUsuariosModel.fromJson(res.first);
+      password = usuario.password.toString();
+      return password;
+    }
+    return password;
   }
 }

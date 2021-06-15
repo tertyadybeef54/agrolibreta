@@ -138,7 +138,7 @@ class DBProvider {
       ''');
 //#################  modelo de referencia
       await db.rawInsert('''
-        INSERT INTO ModelosReferencia(suma) VALUES(0)
+        INSERT INTO ModelosReferencia(suma) VALUES(100)
       ''');
 //################# conceptos
       await db.rawInsert('''
@@ -226,19 +226,13 @@ class DBProvider {
       ''');
 //################ productos actividades
       await db.rawInsert('''
+        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("1", "1", "Rabo de gallo")
+      ''');
+      await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("2", "2", "Gallinaza")
       ''');
       await db.rawInsert('''
-        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("4", "5", "Alambre")
-      ''');
-      await db.rawInsert('''
-        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("4", "5", "Cabuya")
-      ''');
-      await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("2", "2", "Triple 15")
-      ''');
-      await db.rawInsert('''
-        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("1", "1", "Rabo de gallo")
       ''');
       await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("3", "3", "Metarex")
@@ -247,16 +241,22 @@ class DBProvider {
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("3", "1", "Dinate")
       ''');
       await db.rawInsert('''
-        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Tutorar")
+        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("4", "5", "Alambre")
+      ''');
+      await db.rawInsert('''
+        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("4", "5", "Cabuya")
       ''');
       await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Arar")
       ''');
       await db.rawInsert('''
+        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Tutorar")
+      ''');
+      await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Fumigar")
       ''');
       await db.rawInsert('''
-        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Recoleccion")
+        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Recolectar")
       ''');
 
       print('base creada');
