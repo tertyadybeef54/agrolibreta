@@ -29,6 +29,17 @@ class ProductoActividadOperations {
         : [];
   }
 
+  Future<List<ProductoActividadModel>> consultarProductosActividadesOrder() async {
+    final db = await dbProvider.database;
+    final res = await db.rawQuery('''
+      SELECT *FROM ProductosActividades ORDER BY nombreProductoActividad
+    ''');
+
+    return res.isNotEmpty
+        ? res.map((s) => ProductoActividadModel.fromJson(s)).toList()
+        : [];
+  }
+
 //U - actualizar
   Future<int> updateProductosActividades(
       ProductoActividadModel nuevoProductoActividad) async {

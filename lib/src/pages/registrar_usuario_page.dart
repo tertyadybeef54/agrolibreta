@@ -188,6 +188,18 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
       initialDate: new DateTime.now(),
       firstDate: new DateTime(1910),
       lastDate: new DateTime.now(),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color(0xff6b9b37),// header background color
+              onPrimary: Colors.white, // header text color
+              onSurface: Colors.black,
+            ),
+          ),
+          child: child,
+        );
+      },
     );
 
     if (picked != null) {
@@ -308,6 +320,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
                 ),
                 onPressed: snapshot.hasData
                     ? () {
+                            _mostrarSnackbar('Verificando sus datos, por favor espere.');
                         _registrer(bloc, context);
                       }
                     : null),
@@ -335,7 +348,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
       Map info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
       _mostrarSnackbar('Usuario registrado');
       if (info['ok']) {
-        SincronizacionProvider().subirDatos(registro.email);
+        SincronizacionProvider().subirUser(registro.email);
         Navigator.pop(context);
       } else {
         mostrarAlerta(context, info['mensaje']);

@@ -60,7 +60,8 @@ class _CostosPageState extends State<CostosPage> {
   List<ProductoActividadModel> proActs = [];
 //variables de los filtros
   String _fechaDesde = '20210101';
-  String _fechaHasta = '30219999'; //DateFormat('yyyyMMdd').format(DateTime.now());
+  String _fechaHasta =
+      '30219999'; //DateFormat('yyyyMMdd').format(DateTime.now());
 
 //para meter todos los widget que se mostraran en la pantalla por medio del listview builder
   List<Widget> listado = [];
@@ -75,27 +76,27 @@ class _CostosPageState extends State<CostosPage> {
     });
     _armarWidgets(context, costos);
     return Scaffold(
-      appBar: _appBar(),
-      body: 
-          RefreshIndicator(
-            onRefresh: _refrescar,
-                      child: ListView.builder(
-        padding:
+      appBar: AppBar(
+        title: Text('Buscar costos por:'),
+        centerTitle: true,
+    ),
+      body: RefreshIndicator(
+        onRefresh: _refrescar,
+        child: ListView.builder(
+          padding:
               EdgeInsets.only(left: 0.0, right: 0.0, top: 10.0, bottom: 20.0),
-        itemCount: costos.length + 2,
-        itemBuilder: (context, index) {
+          itemCount: costos.length + 2,
+          itemBuilder: (context, index) {
             return listado[index];
-        },
+          },
+        ),
       ),
-          ),
-      //filtros(),
-      //],
-      //),
       floatingActionButton: _botonFiltrar(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   }
-
+//se agregan todas las partes que se presentaran en la panttalla
+//para presentalas en un list view y se permita hacer scroll
   void _armarWidgets(BuildContext context, List<CostoModel> costos) {
     listado = [];
     listado.add(filtros());
@@ -104,15 +105,7 @@ class _CostosPageState extends State<CostosPage> {
       listado.add(_costo(costo, context));
     });
   }
-
-  Widget _appBar() {
-    return AppBar(
-      title: Center(
-        child: Text('Buscar costos por:'),
-      ),
-    );
-  }
-
+//boton que permite reaalizar la consulta despues de seleccionar algun criterio, 
   Widget _botonFiltrar(BuildContext context) {
     final filData = Provider.of<FiltrosCostosData>(context, listen: false);
     final String idCul = _selectedCultivo != null
@@ -126,16 +119,14 @@ class _CostosPageState extends State<CostosPage> {
         : 'todos';
 
     return FloatingActionButton(
-
       child: Icon(Icons.search, size: 28.0),
-
       onPressed: () {
         filData.filtrar(idCul, _fechaDesde, _fechaHasta, idPro, idCon);
         setState(() {});
       },
     );
   }
-
+//parte superior de la vista donde se presentan los filtros
   Widget filtros() {
     return Column(
       children: [
@@ -237,7 +228,7 @@ class _CostosPageState extends State<CostosPage> {
       });
     }
   }
-
+//picked para seleccionar la fecha hasta donde va realizar la consulta
   Widget _fFechaHasta(BuildContext context) {
     return Container(
       height: 30.0,
@@ -263,7 +254,7 @@ class _CostosPageState extends State<CostosPage> {
       children: [
         SizedBox(width: 5.0),
         FutureBuilder<List<ProductoActividadModel>>(
-          future: _proActOper.consultarProductosActividades(),
+          future: _proActOper.consultarProductosActividadesOrder(),
           builder: (context, snapshot) {
             return snapshot.hasData
                 ? ProductosActividadesDropdowun(snapshot.data, callback)
@@ -339,7 +330,7 @@ class _CostosPageState extends State<CostosPage> {
     final fecha = costo.fecha.toString();
     final fechaDate = DateTime.tryParse(fecha);
     final fechaFormatted = DateFormat('dd-MM-yy').format(fechaDate);
-
+    final registroFoto = costo.fkidRegistroFotografico;
     return GestureDetector(
         child: Row(
           children: <Widget>[
@@ -349,7 +340,8 @@ class _CostosPageState extends State<CostosPage> {
             criterio(fechaFormatted, ancho * 0.15),
             criterio(costo.cantidad.toString(), ancho * 0.07),
             criterioUnidad(costo.fkidProductoActividad, ancho * 0.15),
-            criterioFuture(costo.fkidProductoActividad, ancho * 0.30),
+            criterioFuture(
+                costo.fkidProductoActividad, ancho * 0.30, registroFoto),
             criterio(costo.valorUnidad.toString(), ancho * 0.12),
             criterio(
                 (costo.cantidad * costo.valorUnidad).toString(), ancho * 0.14),
@@ -363,6 +355,7 @@ class _CostosPageState extends State<CostosPage> {
         });
   }
 
+//dibuja los bloques que no necesitan resolver futurew
   Widget criterio(String valor, double ancho) {
     return Container(
       height: 25.0,
@@ -374,6 +367,7 @@ class _CostosPageState extends State<CostosPage> {
     );
   }
 
+//dibuja los bloques del encabezado de la tabla
   Widget criterioTitulos(String valor, double ancho) {
     return Container(
       height: 25.0,
@@ -386,13 +380,19 @@ class _CostosPageState extends State<CostosPage> {
     );
   }
 
-  Widget criterioFuture(String fk, double ancho) {
+//dibuja los bloques de los nombres de los costos, resolviendo un future
+  Widget criterioFuture(String fk, double ancho, String registroFoto) {
     return FutureBuilder<String>(
         future: _proActOper.consultarNombre(fk),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           Widget child;
           if (snapshot.hasData) {
-            child = Text(snapshot.data);
+            child = Text(
+              snapshot.data,
+              style: registroFoto != '0'
+                  ? TextStyle(fontWeight: FontWeight.bold)
+                  : TextStyle(),
+            );
           } else if (snapshot.hasError) {
             child = Text('nn');
           } else {
@@ -414,7 +414,7 @@ class _CostosPageState extends State<CostosPage> {
               child: Center(child: child));
         });
   }
-
+//dibuja los bloques de las unidades de medida, resolviendo un future
   Widget criterioUnidad(String fk, double ancho) {
     return FutureBuilder<String>(
         future: _proActOper.consultarNombreUnidad(fk),
@@ -443,7 +443,8 @@ class _CostosPageState extends State<CostosPage> {
               child: Center(child: child));
         });
   }
-    Future <void> _refrescar() async{
+//actualizar la vista si se han realizado cambios receintes
+  Future<void> _refrescar() async {
     setState(() {});
   }
 }

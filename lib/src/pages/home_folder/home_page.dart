@@ -86,41 +86,41 @@ class HomePage extends StatelessWidget {
               children: [
                 SizedBox(height: 10.0),
                 Row(children: [
-                  Text('Nombre: ',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('$_nombre')
+                  Text('Nombre: '),
+                  Text('$_nombre',
+                      style: TextStyle(fontWeight: FontWeight.bold))
                 ]),
                 Row(children: [
-                  Text('Cultivo de: ',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('Arveja')
+                  Text('Cultivo de: '),
+                  Text('Arveja',
+                      style: TextStyle(fontWeight: FontWeight.bold))
                 ]),
                 Row(children: [
-                  Text('Fecha: ',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('$_fecha')
+                  Text('Fecha: '),
+                  Text('$_fecha',
+                      style: TextStyle(fontWeight: FontWeight.bold))
                 ]),
                 ubicacion(_ubicacion),
                 estado(_estado),
                 Row(children: [
-                  Text('Área Sembrada: ',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('$_area')
+                  Text('Área Sembrada: '),
+                  Text('$_area',
+                      style: TextStyle(fontWeight: FontWeight.bold))
                 ]),
                 Row(children: [
-                  Text('Presupuesto: ',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('$_presupuesto')
+                  Text('Presupuesto: '),
+                  Text('$_presupuesto',
+                      style: TextStyle(fontWeight: FontWeight.bold))
                 ]),
                 Row(children: [
-                  Text('Precio de Venta: ',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('$_precio')
+                  Text('Precio de Venta: '),
+                  Text('$_precio',
+                      style: TextStyle(fontWeight: FontWeight.bold))
                 ]),
                 Row(children: [
-                  Text('Id MR: ',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('$_mR')
+                  Text('Id MR: '),
+                  Text('$_mR',
+                      style: TextStyle(fontWeight: FontWeight.bold))
                 ]),
                 //SizedBox(height: 20.0),
                 _botonEntrar(context, cultivo),
@@ -140,15 +140,15 @@ class HomePage extends StatelessWidget {
           Widget child;
           if (snapshot.hasData) {
             child = Row(children: [
-              Text('Ubicación: ',
+              Text('Ubicación: '),
+              Text('${snapshot.data.nombreUbicacion}',
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              Text('${snapshot.data.nombreUbicacion}')
             ]);
           } else if (snapshot.hasError) {
             child = Row(children: [
-              Text('Ubicación: ',
+              Text('Ubicación: '),
+              Text('No existe',
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              Text('No existe'),
             ]);
           } else {
             child = SizedBox(
@@ -172,13 +172,15 @@ class HomePage extends StatelessWidget {
           Widget child;
           if (snapshot.hasData) {
             child = Row(children: [
-              Text('Estado: ', style: TextStyle(fontWeight: FontWeight.bold)),
-              Text('${snapshot.data.nombreEstado}'),
+              Text('Estado: '),
+              Text('${snapshot.data.nombreEstado}',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
             ]);
           } else if (snapshot.hasError) {
             child = Row(children: [
-              Text('Estado: ', style: TextStyle(fontWeight: FontWeight.bold)),
-              Text('No existe'),
+              Text('Estado: '),
+              Text('No existe',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
             ]);
           } else {
             child = SizedBox(

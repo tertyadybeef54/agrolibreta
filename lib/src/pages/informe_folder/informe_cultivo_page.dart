@@ -155,7 +155,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 8.0),
-          Text('Cultivo: ', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('Cultivo: '),
           _seleccioneCultivo(),
           SizedBox(width: 10.0),
           _botonFiltrar(context),
@@ -174,30 +174,30 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           SizedBox(width: 10.0),
           estado(cultivo.fkidEstado),
           SizedBox(width: 10.0),
-          Text('MR:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text('${cultivo.fkidModeloReferencia}'),
+          Text('MR:'),
+          Text('${cultivo.fkidModeloReferencia}', style: TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 10.0),
-          Text('Cultivo de:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text('Arveja.'),
+          Text('Cultivo de:'),
+          Text('Arveja.', style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(width: 8.0),
-          Text('Area sembrada:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text('${cultivo.areaSembrada.toString()} m2'),
+          Text('Area sembrada:'),
+          Text('${cultivo.areaSembrada.toString()} m2', style: TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 10.0),
-          Text('Fecha Inicial:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text('${cultivo.fechaInicio}'),
+          Text('Fecha Inicial:'),
+          Text('${cultivo.fechaInicio}', style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(width: 10.0),
-          Text('Final:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text('${cultivo.fechaFinal}'),
+          Text('Final:'),
+          Text('${cultivo.fechaFinal}', style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(width: 8.0),
         ],
       ),
@@ -205,11 +205,11 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 10.0),
-          Text('Presupuesto:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text('${cultivo.presupuesto.toString()}'),
+          Text('Presupuesto:'),
+          Text('${cultivo.presupuesto.toString()}', style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(width: 10.0),
-          Text('Venta ideal:', style: TextStyle(fontWeight: FontWeight.bold)),
-          Text('${cultivo.precioVentaIdeal.toString()}'),
+          Text('Venta ideal:'),
+          Text('${cultivo.precioVentaIdeal.toString()}', style: TextStyle(fontWeight: FontWeight.bold)),
         ],
       )
     ]);
@@ -250,8 +250,8 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
             _ubicacion = '';
           }
           return Row(children: [
-            Text('Ubicacion:', style: TextStyle(fontWeight: FontWeight.bold)),
-            Text(' $_ubicacion.'),
+            Text('Ubicacion:'),
+            Text(' $_ubicacion.', style: TextStyle(fontWeight: FontWeight.bold)),
           ]);
         });
   }
@@ -273,8 +273,8 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
             _estado = '';
           }
           return Row(children: [
-            Text('Estado:', style: TextStyle(fontWeight: FontWeight.bold)),
-            Text('$_estado.'),
+            Text('Estado:'),
+            Text('$_estado.', style: TextStyle(fontWeight: FontWeight.bold)),
           ]);
         });
   }

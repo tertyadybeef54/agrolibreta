@@ -119,7 +119,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
         Icon(Icons.label_important, color: Colors.black45),
         SizedBox(width: 30.0),
         FutureBuilder<List<ProductoActividadModel>>(
-          future: proActOper.consultarProductosActividades(),
+          future: proActOper.consultarProductosActividadesOrder(),
           builder: (context, snapshot) {
             return snapshot.hasData
                 ? ProductosActividadesDropdowun(snapshot.data, callback)

@@ -23,7 +23,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
   @override
   Widget build(BuildContext context) {
     final usuarioData = Provider.of<UsuarioProvider>(context, listen: false);
-    
+
     if (usuarioData.usuarios.isNotEmpty) {
       usuario = usuarioData.usuarios[0];
     }
@@ -157,9 +157,21 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: Text('Terminado, sus datos han sido cargados'),
-                  )
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      setState(() {});
+                    },
+                    child: Text(' OK!'),
+                  ),
                 ];
                 Provider.of<CostosData>(context, listen: false).getCostos();
+                final DateTime datehoy = DateTime.now();
+                final local = datehoy.add(const Duration(hours: -6));
+                final String strFecha =
+                    DateFormat('dd-MM-yyyy  HH:mm').format(local);
+                usuario.fechaUltimaSincro = strFecha;
               } else if (snapshot.hasError) {
                 children = <Widget>[
                   const Icon(
@@ -188,8 +200,8 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
               }
               return AlertDialog(
                 content: Container(
-                  width: 300.0,
-                  height: 400.0,
+                  width: 250.0,
+                  height: 200.0,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -317,13 +329,22 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
       initialDate: new DateTime.now(),
       firstDate: new DateTime(1910),
       lastDate: new DateTime.now(),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color(0xff6b9b37),// header background color
+              onPrimary: Colors.white, // header text color
+              onSurface: Colors.black,
+            ),
+          ),
+          child: child,
+        );
+      },
     );
 
     if (picked != null) {
       setState(() {
-        final DateTime datehoy = DateTime.now();
-        var local = datehoy.add(const Duration(hours: -6));
-        print(local.toString());
         usuario.fechaNacimiento = DateFormat('dd-MM-yyyy').format(picked);
         _inputFieldDateController.text = usuario.fechaNacimiento;
       });
@@ -444,10 +465,10 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
       },
     );
   }
-  
-  void _cerrarsesion(){
-    _prefs.password = '';
-    Navigator.of(context).pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
 
+  void _cerrarsesion() {
+    _prefs.password = '';
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
   }
 }

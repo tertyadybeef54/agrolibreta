@@ -369,6 +369,18 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
       initialDate: new DateTime.now(),
       firstDate: new DateTime.now(),
       lastDate: new DateTime(2050),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color(0xff6b9b37),// header background color
+              onPrimary: Colors.white, // header text color
+              onSurface: Colors.black,
+            ),
+          ),
+          child: child,
+        );
+      },
     );
 
     if (picked != null) {
