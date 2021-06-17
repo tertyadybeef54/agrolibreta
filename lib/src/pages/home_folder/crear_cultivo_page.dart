@@ -51,7 +51,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
 
   //estilo de texto letra tamaño 20
   final _style = new TextStyle(
-    fontSize: 20.0,
+    fontSize: 18.0,
   );
   TextEditingController controlFecha = new TextEditingController();
 
@@ -83,7 +83,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
           _seleccioneMR(),
           Divider(),
           Text(
-            'Seleccione la ubicacion para el cultivo: ',
+            'Seleccione la ubicación para el cultivo: ',
             style: _style,
           ),
           _seleccionarUbicacionCultivo(),
@@ -91,7 +91,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
           _input('Nombre distintivo para el cultivo', '',
               'Ejemplo: Arveja con Luis', TextInputType.name, 1),
           Divider(),
-          _input('Area a sembrar en metros cuadrados', '10000',
+          _input('Área a sembrar en metros cuadrados', '10000',
               'Ejemplo: 10000', TextInputType.number, 2),
           Divider(),
           _fecha(context),
@@ -169,14 +169,14 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
           return AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Registrar ubicacion'),
+            title: Text('Registrar ubicación'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _inputI('', 'llanito', 'Nombre de la ubicacion',
+                _inputI('', 'llanito', 'Nombre de la ubicación',
                     TextInputType.name, 4),
                 Divider(),
-                _inputI('', 'llanito del norte', 'Descripcion',
+                _inputI('', 'llanito del norte', 'Descripción',
                     TextInputType.text, 5),
               ],
             ),

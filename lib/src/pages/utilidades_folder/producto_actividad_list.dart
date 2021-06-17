@@ -5,14 +5,15 @@ import 'package:provider/provider.dart';
 
 import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
 import 'package:agrolibreta_v2/src/dataproviders/productos_actividades_data_provider.dart';
-
+//vista donde se  listan todos los productos y actividades que existen
+//está pendiente la implementacion para eliminarlos.
 class ProductoActividadList extends StatelessWidget {
   final UnidadMedidaOperations _uniOper = new UnidadMedidaOperations();
   @override
   Widget build(BuildContext context) {
     //provider de datos
     final productoActividadData =
-        Provider.of<ProductoActividadData>(context, listen: false);
+        Provider.of<ProductoActividadData>(context);
     final List<ProductoActividadModel> productosActividades =
         productoActividadData.productosActividades;
 
@@ -21,7 +22,9 @@ class ProductoActividadList extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Center(child: Text('Productos y actividades')),
       ),
-      body: _unidadesMedidaTiles(productosActividades),
+      body: RefreshIndicator(
+        onRefresh:() => Provider.of<ProductoActividadData>(context, listen: false).getProductoActividad(),
+        child: _unidadesMedidaTiles(productosActividades)),
     );
   }
 
@@ -32,15 +35,15 @@ class ProductoActividadList extends StatelessWidget {
       itemBuilder: (_, i) => _listTile(productosActividades[i]),
     );
   }
-
+//items
   Widget _listTile(ProductoActividadModel productoActividad) {
     return Column(
       children: [
         ListTile(
           leading: Icon(Icons.label_important),
           title: Text(
-              '${productoActividad.idProductoActividad.toString()}. ${productoActividad.nombreProductoActividad}'),
-          subtitle: ubicacion(productoActividad.fkidUnidadMedida),
+              '${productoActividad.nombreProductoActividad}'),
+          subtitle: unidadMedida(productoActividad.fkidUnidadMedida),
           //onTap: () {},
         ),
         Divider(),
@@ -49,7 +52,7 @@ class ProductoActividadList extends StatelessWidget {
   }
 
 //tengo la llave foranea del id de la unidad de medida
-  Widget ubicacion(String fkunidad) {
+  Widget unidadMedida(String fkunidad) {
     return FutureBuilder<UnidadMedidaModel>(
         future: _uniOper.getUnidadMedidaById(int.parse(fkunidad)),
         builder:

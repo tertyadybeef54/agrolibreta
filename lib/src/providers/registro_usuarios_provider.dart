@@ -122,7 +122,7 @@ class SincronizacionProvider {
     final DateTime fecha = new DateTime.now();
     final List<RegistroUsuariosModel> usuario =
         await _usuOper.consultarUsuario();
-    usuario[0].fechaUltimaSincro = DateFormat('dd-MM-yyyyTHH:mm').format(fecha).toString();
+    usuario[0].fechaUltimaSincro = DateFormat('dd-MM-yyyy  HH:mm').format(fecha).toString();
     _usuOper.updateUsuarios(usuario[0]);
     print(usuario[0].fechaUltimaSincro);
     await dbFirestore
@@ -145,6 +145,27 @@ class SincronizacionProvider {
     final resp = await http.put(Uri.parse(url), body: usersModelToJson(users));
     final decodedData = json.decode(resp.body);
     print(decodedData); */
+  }
+
+
+
+  Future<bool> subirUser(String email) async {
+    print('subir user nuevo');
+    await Firebase.initializeApp();
+    final dbFirestore =
+        FirebaseFirestore.instance.collection('users').doc('$email');
+    final DateTime fecha = new DateTime.now();
+    final List<RegistroUsuariosModel> usuario =
+        await _usuOper.consultarUsuario();
+    usuario[0].fechaUltimaSincro = DateFormat('dd-MM-yyyy  HH:mm').format(fecha).toString();
+    _usuOper.updateUsuarios(usuario[0]);
+    print(usuario[0].fechaUltimaSincro);
+    await dbFirestore
+        .collection('Usuario')
+        .doc('${usuario[0].idUsuario}')
+        .set(usuario[0].toJson());
+
+    return true;
   }
 
   Future<bool> bajarDatos(String email) async {

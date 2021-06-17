@@ -13,18 +13,8 @@ class ProductoActividadData with ChangeNotifier {
     this.getProductoActividad();
   }
   getProductoActividad() async {
-    final resp = await _proActOper.consultarProductosActividades();
+    final resp = await _proActOper.consultarProductosActividadesOrder();
     this.productosActividades = [...resp];
     notifyListeners();
   }
-
-  anadirUbicacion(String nombre, String descripcion) async {
-    final nuevoProAct = new ProductoActividadModel(); 
-    final _id = await _proActOper.nuevoProductoActividad(nuevoProAct);
-    //asignar el id de la base de datos al local
-    nuevoProAct.idProductoActividad = _id;
-    this.productosActividades.add(nuevoProAct);
-    notifyListeners();
-  }
-
 }

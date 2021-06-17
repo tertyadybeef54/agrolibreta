@@ -68,16 +68,34 @@ Future<Uint8List> buildPdf(PdfPageFormat format) async {
   //final _mR = _cultivo.fkidModeloReferencia;
 
   // );
-
+final totalReal = 
+sumasCultivo[0]+
+sumasCultivo[1]+
+sumasCultivo[2]+
+sumasCultivo[3]+
+sumasCultivo[4]+
+sumasCultivo[5]+
+sumasCultivo[6]+
+sumasCultivo[7];
+final totalideal = 
+sumasMr[0]+
+sumasMr[1]+
+sumasMr[2]+
+sumasMr[3]+
+sumasMr[4]+
+sumasMr[5]+
+sumasMr[6]+
+sumasMr[7];
   List dataTable = [
-    ['Semilla', sumasCultivo[0], sumasMr[0]],
+    ['Semi', sumasCultivo[0], sumasMr[0]],
     ['Abo-fert', sumasCultivo[1], sumasMr[1]],
     ['Plag-herb', sumasCultivo[2], sumasMr[2]],
     ['Mat-emp', sumasCultivo[3], sumasMr[3]],
-    ['Maquinaria', sumasCultivo[4], sumasMr[4]],
+    ['Maqui', sumasCultivo[4], sumasMr[4]],
     ['Mano-obra', sumasCultivo[5], sumasMr[5]],
-    ['Transporte', sumasCultivo[6], sumasMr[6]],
+    ['Transp', sumasCultivo[6], sumasMr[6]],
     ['Otros', sumasCultivo[7], sumasMr[7]],
+    ['total', totalReal, totalideal],
   ];
 
   // Some summary maths
@@ -158,10 +176,15 @@ Future<Uint8List> buildPdf(PdfPageFormat format) async {
 
   // Data table
   final table = pw.Table.fromTextArray(
-    border: null,
+    border: pw.TableBorder(
+        left: pw.BorderSide(),
+        right: pw.BorderSide(),
+        top: pw.BorderSide(),
+        bottom: pw.BorderSide(),
+        verticalInside: pw.BorderSide()),
     headers: tableHeaders,
     data: List<List<dynamic>>.generate(
-      dataTable.length,
+      9,
       (index) => <dynamic>[
         dataTable[index][0],
         dataTable[index][2],
@@ -241,6 +264,9 @@ Future<Uint8List> buildPdf(PdfPageFormat format) async {
                           style: pw.TextStyle(fontSize: 15.0)),
                       pw.Text('Universidad Industrial de Santander',
                           style: pw.TextStyle(fontSize: 15.0)),
+                      pw.Text(
+                          'Autores: Deisy Rangel Florez y Andres Javier Cuadros Sanabria',
+                          style: pw.TextStyle(fontSize: 15.0)),
                     ]),
                 pw.SizedBox(height: 20.0),
                 pw.Center(
@@ -251,16 +277,10 @@ Future<Uint8List> buildPdf(PdfPageFormat format) async {
                 pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
+                      pw.Row(
+                          children: [pw.Text('Nombre: '), pw.Text('$_nombre')]),
                       pw.Row(children: [
-                        pw.Text('Nombre:',
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.Text('$_nombre')
-                      ]),
-                      pw.Row(children: [
-                        pw.Text('Ubicación:',
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.Text('Ubicación: '),
                         pw.Text('$_ubicacion')
                       ])
                     ]),
@@ -268,31 +288,21 @@ Future<Uint8List> buildPdf(PdfPageFormat format) async {
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
                       pw.Row(children: [
-                        pw.Text('Cultivo:',
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.Text('Cultivo de: '),
                         pw.Text('Arveja')
                       ]),
-                      pw.Row(children: [
-                        pw.Text('Estado:',
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.Text('$_estado')
-                      ])
+                      pw.Row(
+                          children: [pw.Text('Estado: '), pw.Text('$_estado')])
                     ]),
                 pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
                       pw.Row(children: [
-                        pw.Text('Fecha:',
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.Text('Fecha inicial: '),
                         pw.Text('$_fecha')
                       ]),
                       pw.Row(children: [
-                        pw.Text('Area sembrada:',
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.Text('Area sembrada: '),
                         pw.Text('$_area')
                       ])
                     ]),
@@ -300,15 +310,11 @@ Future<Uint8List> buildPdf(PdfPageFormat format) async {
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
                       pw.Row(children: [
-                        pw.Text('Fecha final: ',
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.Text('Fecha final: '),
                         pw.Text('$_fechaFinal')
                       ]),
                       pw.Row(children: [
-                        pw.Text('Presupuesto:',
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.Text('Presupuesto: '),
                         pw.Text('$_presupuesto')
                       ]),
                     ]),
@@ -318,9 +324,7 @@ Future<Uint8List> buildPdf(PdfPageFormat format) async {
                     pw.Row(children: [pw.Text('')]),
                     pw.Row(
                       children: [
-                        pw.Text('Precio de Venta:',
-                            style:
-                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.Text('Precio de Venta:'),
                         pw.Text('$_precio')
                       ],
                     ),
@@ -386,12 +390,27 @@ Future<Uint8List> buildPdf(PdfPageFormat format) async {
                   );
                 }),
               ),
-              //pw.SizedBox(height: 20.0),
+            ],
+          ),
+        );
+      },
+    ),
+  );
+  //tabla 1
+  doc.addPage(
+    pw.Page(
+      pageFormat: format,
+      build: (pw.Context context) {
+
+        return pw.Padding(
+          padding: pw.EdgeInsets.all(50.0),
+          child: pw.Column(
+            children: [
               pw.Center(
                   child: pw.Text('Tabla 1. Costos ideales menos costos reales',
                       style: pw.TextStyle(
                           fontSize: 18.0, fontWeight: pw.FontWeight.bold))),
-              pw.SizedBox(height: 20.0),
+              pw.SizedBox(height: 10.0),
               pw.Expanded(child: table),
             ],
           ),
@@ -408,11 +427,11 @@ Future<Uint8List> buildPdf(PdfPageFormat format) async {
       //theme: theme,
       build: (pw.Context context) {
         return pw.Padding(
-          padding: pw.EdgeInsets.all(50.0),
+          padding: pw.EdgeInsets.all(30.0),
           child: pw.Column(
             children: [
               pw.Center(
-                  child: pw.Text('Tabla 1. Costos del cultivo',
+                  child: pw.Text('Tabla 2. Costos del cultivo',
                       style: pw.TextStyle(
                           fontSize: 18.0, fontWeight: pw.FontWeight.bold))),
               pw.SizedBox(height: 20.0),
