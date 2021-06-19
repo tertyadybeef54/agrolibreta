@@ -30,7 +30,7 @@ class CultivoModel {
   String fkidModeloReferencia;
   String fkidProductoAgricola;
   String nombreDistintivo;
-  double areaSembrada;
+  int areaSembrada;
   String fechaInicio;
   String fechaFinal;
   int presupuesto;

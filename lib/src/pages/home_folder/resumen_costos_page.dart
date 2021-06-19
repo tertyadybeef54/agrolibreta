@@ -91,11 +91,11 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
 
   Widget _concepto(
       String concepto,
-      double totalCosto,
-      double totalCostoSugerido,
+      int totalCosto,
+      int totalCostoSugerido,
       String concepto2,
-      double totalCosto2,
-      double totalCostoSugerido2,
+      int totalCosto2,
+      int totalCostoSugerido2,
       int n) {
     //colores, verde si esta bajo el presupuesto y rojo caso contrario
     TextStyle color1;

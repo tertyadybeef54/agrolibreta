@@ -48,7 +48,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         fkidModeloReferencia: '1',
         fkidProductoAgricola: '1',
         nombreDistintivo: '',
-        areaSembrada: 0.0,
+        areaSembrada: 0,
         fechaInicio: '',
         fechaFinal: '',
         presupuesto: 0,
@@ -65,12 +65,12 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     final tabs = [
       Tab(icon: Icon(Icons.assignment)),
       Tab(icon: Icon(Icons.equalizer)),
-      Tab(icon: Icon(Icons.donut_small)),
+      //Tab(icon: Icon(Icons.donut_small)),
     ];
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
-        length: 3,
+        length: 2,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Color(0xff9ccc65),
@@ -98,7 +98,8 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
             children: [
               _tapUno(context, costos),
               _graficarBarras(),
-              _graficarDona(),
+              //_graficarBarras(),
+              //_graficarDona(),
             ],
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -325,7 +326,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         criterioUnidad(costo.fkidProductoActividad, ancho * 0.15),
         criterioFuture(costo.fkidProductoActividad, ancho * 0.30),
         criterio(costo.valorUnidad.toString(), ancho * 0.12),
-        criterio((costo.cantidad * costo.valorUnidad).toString(), ancho * 0.14),
+        criterio((costo.cantidad * costo.valorUnidad).round().toString(), ancho * 0.14),
         SizedBox(
           width: 5.0,
         )
@@ -451,62 +452,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
 
 //############################################
   //grafica de la dona
-  Widget _graficarDona() {
-    final pieData = Provider.of<PieData>(context, listen: false);
-    final _seriesPieData = pieData.seriesPieData;
-    if (_seriesPieData == null) {
-      return Container();
-    }
-    return Padding(
-      padding: EdgeInsets.all(20.0),
-      child: Container(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Center(
-                child: Text(
-                    'Grafico 2. Porcentaje de costos por conceptos del cultivo',
-                    style:
-                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
-              ),
-              SizedBox(height: 10.0),
-              Expanded(
-                child: charts.PieChart(
-                  _seriesPieData,
-                  animate: true,
-                  animationDuration: Duration(seconds: 2),
-                  behaviors: [
-                    new charts.DatumLegend(
-                      outsideJustification:
-                          charts.OutsideJustification.endDrawArea,
-                      horizontalFirst: false,
-                      desiredMaxRows: 4,
-                      //cellPadding: new EdgeInsets.only(),
-                      entryTextStyle: charts.TextStyleSpec(
-                        color: charts.MaterialPalette.purple.shadeDefault,
-                        fontFamily: 'Georgia',
-                        fontSize: 11,
-                      ),
-                    )
-                  ],
-                  defaultRenderer: new charts.ArcRendererConfig(
-                    arcWidth: 100,
-                    arcRendererDecorators: [
-                      new charts.ArcLabelDecorator(
-                        labelPosition: charts.ArcLabelPosition.inside,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
+ 
 //#############################################
 //brafico de barras camparar cultivo con MR
   Widget _graficarBarras() {
@@ -541,4 +487,60 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
       ),
     );
   }
+   Widget _graficarDona() {
+    final pieData = Provider.of<PieData>(context, listen: false);
+    final _seriesPieData = pieData.seriesPieData;
+    if (_seriesPieData == null) {
+      return Container();
+    }
+    return Padding(
+      padding: EdgeInsets.all(20.0),
+      child: Container(
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Center(
+                child: Text(
+                    'Grafico 2. Porcentaje de costos por conceptos del cultivo',
+                    style:
+                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
+              ),
+              SizedBox(height: 10.0),
+              Expanded(
+                child: charts.PieChart(
+                  _seriesPieData,
+                  animate: true,
+                  behaviors: [
+                    new charts.DatumLegend(
+                      outsideJustification:
+                          charts.OutsideJustification.endDrawArea,
+                      horizontalFirst: false,
+                      desiredMaxRows: 4,
+                      //cellPadding: new EdgeInsets.only(),
+                      entryTextStyle: charts.TextStyleSpec(
+                        color: charts.MaterialPalette.purple.shadeDefault,
+                        fontFamily: 'Georgia',
+                        fontSize: 11,
+                      ),
+                    )
+                  ],
+                  animationDuration: Duration(seconds: 2),
+                  defaultRenderer: new charts.ArcRendererConfig(
+                    arcWidth: 100,
+                    arcRendererDecorators: [
+                      new charts.ArcLabelDecorator(
+                        labelPosition: charts.ArcLabelPosition.inside,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
 }

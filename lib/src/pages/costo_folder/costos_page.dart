@@ -70,10 +70,6 @@ class _CostosPageState extends State<CostosPage> {
   Widget build(BuildContext context) {
     final filData = Provider.of<FiltrosCostosData>(context);
     final costos = filData.costos;
-    costos.forEach((e) {
-      print(
-          '${e.idCosto}, ${e.fecha}, can: ${e.cantidad}, idpro: ${e.fkidProductoActividad}, ${e.valorUnidad}, ${e.fkidCultivo}');
-    });
     _armarWidgets(context, costos);
     return Scaffold(
       appBar: AppBar(
@@ -344,7 +340,7 @@ class _CostosPageState extends State<CostosPage> {
                 costo.fkidProductoActividad, ancho * 0.30, registroFoto),
             criterio(costo.valorUnidad.toString(), ancho * 0.12),
             criterio(
-                (costo.cantidad * costo.valorUnidad).toString(), ancho * 0.14),
+                (costo.cantidad * costo.valorUnidad).round().toString(), ancho * 0.14),
             SizedBox(
               width: 5.0,
             )

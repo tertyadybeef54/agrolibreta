@@ -333,7 +333,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: Color(0xff6b9b37),// header background color
+              primary: Color(0xff6b9b37), // header background color
               onPrimary: Colors.white, // header text color
               onSurface: Colors.black,
             ),
@@ -467,7 +467,8 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
   }
 
   void _cerrarsesion() {
-    _prefs.password = '';
+    //_prefs.password = '';
+    _prefs.ultimaPagina = 'login';
     Navigator.of(context)
         .pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
   }

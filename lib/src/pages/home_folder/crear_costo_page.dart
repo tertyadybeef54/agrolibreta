@@ -99,7 +99,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
           _input('Cantidad de unidades o jornales', 'Ejemplo: 5', TextInputType.number, 1),
           Divider(),
           _input(
-              'Valor Unidad o jornal', 'Ejemplo: 5700', TextInputType.number, 2),
+              'Valor Unidad o jornal', 'Ejemplo: 5700', TextInputType.numberWithOptions(decimal: false), 2),
           _valorTotal(),
           Divider(),
           _fecha(context),
@@ -374,7 +374,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
         decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
           hintText: '',
-          labelText: 'fecha',
+          labelText: 'fecha: día-mes-año',
           helperText: 'Seleccione fecha de compra',
           icon: Icon(Icons.calendar_today),
           suffixIcon: Icon(Icons.touch_app),
@@ -443,7 +443,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
       fkidCultivo: fkidCultivo,
       fkidRegistroFotografico: "0",
       cantidad: _cantidad,
-      valorUnidad: _valorUnidad,
+      valorUnidad: _valorUnidad.round(),
       fecha: int.parse(_fechaC),
     );
     cosOper.nuevoCosto(costoTemp);

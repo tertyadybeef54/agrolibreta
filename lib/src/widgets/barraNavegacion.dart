@@ -42,9 +42,9 @@ class _Navegacion extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.dns), label: 'Utilidades'),
           BottomNavigationBarItem(
               icon: Icon(Icons.collections), label: 'Galeria'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'costos'),
           BottomNavigationBarItem(
               icon: Icon(Icons.content_paste_rounded), label: 'Informes'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'costos'),
         ],
         selectedLabelStyle: TextStyle(color: Color(0xff1b5e20)),
         onTap: (index) => navegacionModel.paginaActual = index);
@@ -70,8 +70,8 @@ class _Paginas extends StatelessWidget {
         HomePage(),
         UtilidadesPage(),
         GaleriaRegistrosFotograficosPage(),
-        InformeCultivoPage(),
         CostosPage(),
+        InformeCultivoPage(),
       ],
     );
   }

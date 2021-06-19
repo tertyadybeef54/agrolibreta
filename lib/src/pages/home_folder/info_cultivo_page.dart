@@ -298,7 +298,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
         ),
         onChanged: (value) {
           if (n == 1) {
-            culTemp.areaSembrada = double.parse(value);
+            culTemp.areaSembrada = int.parse(value);
           }
           if (n == 2) {
             culTemp.presupuesto = int.parse(value);

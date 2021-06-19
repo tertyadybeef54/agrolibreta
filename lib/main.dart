@@ -29,6 +29,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  final prefs = new PreferenciasUsuario();
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
             const Locale('es', 'ES'), // *See Advanced Locales below*
           ],
           title: 'AgroLibreta',
-          initialRoute: 'login',
+          initialRoute: prefs.ultimaPagina,
           routes: getAplicationRoutes(),
           onGenerateRoute: (RouteSettings settings) {
             return MaterialPageRoute(

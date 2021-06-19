@@ -62,18 +62,17 @@ class PorcentajeOperations {
         : [];
   }
 
-  Future<double> getPorcenByMRyConcep(
+  Future<int> getPorcenByMRyConcep(
       String fkidMR, String fkidCon, int presupuesto) async {
     final db = await dbProvider.database;
     final res = await db.rawQuery('''
       SELECT * FROM Porcentajes WHERE fk2idModeloReferencia == $fkidMR AND fk2idConcepto == $fkidCon
     ''');
-    double valor = 0.0;
+    int valor = 0;
     
     if(res.isNotEmpty){
       final porcentaje = PorcentajeModel.fromJson(res.first);
-      valor = porcentaje.porcentaje * presupuesto * 0.01;
-      valor = num.parse(valor.toStringAsFixed(1));
+      valor = (porcentaje.porcentaje * presupuesto * 0.01).round();
     }
 
     return valor;
