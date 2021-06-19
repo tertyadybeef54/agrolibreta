@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:agrolibreta_v2/src/blocs/login_registro_bloc.dart';
 import 'package:agrolibreta_v2/src/blocs/provider.dart';
 import 'package:agrolibreta_v2/src/utils/utils.dart';
+import 'package:flutter/services.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -27,6 +28,10 @@ class LoginPage extends StatelessWidget {
 class Page1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+        SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
     return Stack(
       children: [
         Background(),

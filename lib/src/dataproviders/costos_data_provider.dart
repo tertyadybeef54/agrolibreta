@@ -17,9 +17,9 @@ final PorcentajeOperations _porOper = new PorcentajeOperations();
 //provider para manejar los datos relacionados a los costos
 class CostosData with ChangeNotifier {
   
-  List<List<double>> sumasList = [];
+  List<List<int>> sumasList = [];
   List<List<ConceptoModel>> conceptosList = [];
-  List<List<double>> sugeridosList = [];
+  List<List<int>> sugeridosList = [];
 
   List<CultivoModel> cultivos = [];
   List<CostoModel> costos = [];
@@ -44,7 +44,7 @@ class CostosData with ChangeNotifier {
       String fkidUbicacion,
       String fkidModeloReferencia,
       String nombreDistintivo,
-      double areaSembrada,
+      int areaSembrada,
       String fechaInicio,
       int presupuesto) async {
     final CultivoModel cultivo = new CultivoModel(
@@ -74,16 +74,16 @@ class CostosData with ChangeNotifier {
         this.cultivos.forEach((e) {
           //print(e.nombreDistintivo);
 
-          final List<double> sumTemp = [];
+          final List<int> sumTemp = [];
           final List<ConceptoModel> conTemp = [];
-          final List<double> sugTemp = [];
+          final List<int> sugTemp = [];
 
           this.conceptos.forEach((e2) async {
-            final double resp = await _cosOper.sumaCostosByConcepto(
+            final int resp = await _cosOper.sumaCostosByConcepto(
                 e.idCultivo, e2.idConcepto.toString());
             //if (resp != -1.0) {}//aca se puede aplicar condicional para modelos de referencia con cantidad de conceptos variable, para este prototipo siempre seran 8 conceptos fijos
             //print('entró al if');
-            final double sug = await _porOper.getPorcenByMRyConcep(
+            final int sug = await _porOper.getPorcenByMRyConcep(
                 e.fkidModeloReferencia,
                 e2.idConcepto.toString(),
                 e.presupuesto);

@@ -57,7 +57,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
 
   //valores para crear el cultivo, el id es automatico
   String _nombreDistintivo = 'Nn'; //nn sin especificar
-  double _areaSembrada = 1;
+  int _areaSembrada = 1;
   String _fechaInicio = 'Nf';
   int _presupuesto = 1;
   //variables para crear la ubicacion
@@ -92,12 +92,12 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
               'Ejemplo: Arveja con Luis', TextInputType.name, 1),
           Divider(),
           _input('Área a sembrar en metros cuadrados', '10000',
-              'Ejemplo: 10000', TextInputType.number, 2),
+              'Ejemplo: 10000', TextInputType.numberWithOptions(decimal: false), 2),
           Divider(),
           _fecha(context),
           Divider(),
           _input('Presupuesto estimado', '5000000', 'Ejemplo: 5000000',
-              TextInputType.number, 3),
+              TextInputType.numberWithOptions(decimal: false), 3),
           Divider(),
           _guardar(context),
         ],
@@ -248,7 +248,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
               _nombreDistintivo = valor;
             }
             if (n == 2) {
-              _areaSembrada = double.parse(valor);
+              _areaSembrada = int.parse(valor);
             }
             if (n == 3) {
               _presupuesto = int.parse(valor);
@@ -269,8 +269,8 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
         controller: controlFecha,
         decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-          hintText: 'fecha',
-          labelText: 'fecha',
+          hintText: 'fecha día-mes-año',
+          labelText: 'fecha día-mes-año',
           helperText: 'Seleccione fecha de inicio del cultivo',
           icon: Icon(Icons.calendar_today),
           suffixIcon: Icon(Icons.touch_app),
@@ -284,21 +284,6 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
   }
 
   _selectDate(BuildContext context) async {
-    //------------------------ para pruebas
-    // final ModeloReferenciaModel modeloReferencia = new ModeloReferenciaModel(
-    //   suma: 0,
-    // );
-    // final EstadoModel estado = new EstadoModel(
-    //   nombreEstado: 'activo',
-    // );
-    // final productoagricola = new ProductoAgricolaModel(
-    //   nombreProducto: 'arveja',
-    // );
-    // modelosReferenciaOperations.nuevoModeloReferencia(modeloReferencia);
-    // estadosOperations.nuevoEstado(estado);
-    // productoAgricolaOperations.nuevoProductoAgricola(productoagricola);
-
-    //---------------------------
 
     DateTime picked = await showDatePicker(
       context: context,

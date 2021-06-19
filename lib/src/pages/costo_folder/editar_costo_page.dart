@@ -303,7 +303,7 @@ class EditarCostoPageState extends State<EditarCostoPage> {
             _costoTemp.cantidad = double.parse(valor);
           }
           if (n == 2) {
-            _costoTemp.valorUnidad = double.parse(valor);
+            _costoTemp.valorUnidad = int.parse(valor);
           }
         },
       ),

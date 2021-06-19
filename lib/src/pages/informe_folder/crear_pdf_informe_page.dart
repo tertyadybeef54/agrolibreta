@@ -25,7 +25,7 @@ String informeFechaCultivo;
 String informeFechaFinalCultivo;
 String informeUbicacionCultivo;
 String informeEstadoCultivo;
-double informeAreaCultivo;
+int informeAreaCultivo;
 int informePresupuestoCultivo;
 double informePrecioIdealCultivo;
 
@@ -372,10 +372,16 @@ sumasMr[7];
           child: pw.Column(
             children: [
               pw.Chart(
-                title: pw.Text(
+                title: pw.Column(
+                  children: [
+                    pw.Text(
                     'Grafico 2. Porcentaje de costos por conceptos del cultivo',
                     style: pw.TextStyle(
                         fontSize: 18.0, fontWeight: pw.FontWeight.bold)),
+                    pw.SizedBox(height: 30.0),
+                    pw.Text('Para entender mejor el siguiente grafico piense en el siguiente ejemplo: si para el concepto mano de obra aparece un valor del 50 porciento en la grafica quiere decir que de la suma del valor total de todos los costos la mitad se destinó para dicho concepto'),
+                  ]
+                ),
                 grid: pw.PieGrid(),
                 datasets: List<pw.Dataset>.generate(dataTable.length, (index) {
                   final data = dataTable[index];
@@ -410,7 +416,9 @@ sumasMr[7];
                   child: pw.Text('Tabla 1. Costos ideales menos costos reales',
                       style: pw.TextStyle(
                           fontSize: 18.0, fontWeight: pw.FontWeight.bold))),
-              pw.SizedBox(height: 10.0),
+              pw.SizedBox(height: 25.0),
+              pw.Text('Tenga en cuenta que si el valor de la diferencia es positivo significa algo favorable, en caso de que la diferencia presente un valor negativo significa algo desfavorable ya que los costos superan el presupuesto inicial'),
+              pw.SizedBox(height: 30.0),
               pw.Expanded(child: table),
             ],
           ),

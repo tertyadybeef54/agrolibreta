@@ -73,18 +73,18 @@ class CostoOperations {
   }
 
 //Suma de costos por concepto
-  Future<double> sumaCostosByConcepto(int idCultivo, String idConcepto) async {
+  Future<int> sumaCostosByConcepto(int idCultivo, String idConcepto) async {
     final db = await dbProvider.database;
     final List<Map<String, dynamic>> res = await db.rawQuery('''
 
       SELECT * FROM Costos WHERE fkidProductoActividad IN (SELECT idProductoActividad FROM ProductosActividades WHERE fkidConcepto = '$idConcepto') AND fkidCultivo = '$idCultivo'
     
     ''');
-    double suma = 0;
+    int suma = 0;
     if (res.isNotEmpty) {
       final costos = res.map((s) => CostoModel.fromJson(s)).toList();
       costos.forEach((costo) {
-        suma += costo.cantidad * costo.valorUnidad;
+        suma += (costo.cantidad * costo.valorUnidad).round();
       });
     }
     return suma;

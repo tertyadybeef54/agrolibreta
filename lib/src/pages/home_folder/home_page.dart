@@ -4,7 +4,9 @@ import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
 import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
 import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
+import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
@@ -12,8 +14,15 @@ import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 class HomePage extends StatelessWidget {
   final UbicacionesOperations _ubiOper = new UbicacionesOperations();
   final EstadosOperations _estOper = new EstadosOperations();
+  final prefs = new PreferenciasUsuario();
+  
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    prefs.ultimaPagina = 'taps';
     final cosData = Provider.of<CostosData>(context);
     final List<CultivoModel> cultivos = cosData.cultivos;
     cosData.obtenerCostosByConceptos();
@@ -41,6 +50,7 @@ class HomePage extends StatelessWidget {
 
   Widget _crearListaDeCultivo(
       BuildContext context, List<CultivoModel> cultivos) {
+    
     return ListView.builder(
       padding: EdgeInsets.all(5.0),
       itemCount: cultivos.length,

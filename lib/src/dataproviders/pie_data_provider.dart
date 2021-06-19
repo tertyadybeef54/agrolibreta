@@ -153,7 +153,7 @@ class PorcConcepto {
 
 class Concepto {
   String concepto;
-  double total;
+  int total;
 
   Concepto(this.concepto, this.total);
 }

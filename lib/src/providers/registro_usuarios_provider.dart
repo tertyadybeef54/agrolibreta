@@ -202,12 +202,11 @@ class SincronizacionProvider {
         culTemp.fkidModeloReferencia = fkidModeloReferencia;
         culTemp.fkidProductoAgricola = fkidProductoAgricola;
         culTemp.nombreDistintivo = nombreDistintivo;
-        culTemp.areaSembrada = double.parse(areaSembrada);
+        culTemp.areaSembrada = int.parse(areaSembrada);
         culTemp.fechaInicio = fechaInicio;
         culTemp.fechaFinal = fechaFinal;
         culTemp.presupuesto = int.parse(presupuesto);
         culTemp.precioVentaIdeal = double.parse(precioVentaIdeal);
-
         _culOper.nuevoCultivo(culTemp);
       });
 
@@ -230,7 +229,7 @@ class SincronizacionProvider {
         cosTemp.fkidCultivo = fkidCultivo;
         cosTemp.fkidRegistroFotografico = fkidRegistroFotografico;
         cosTemp.cantidad = double.parse(cantidad);
-        cosTemp.valorUnidad = double.parse(valorUnidad);
+        cosTemp.valorUnidad = int.parse(valorUnidad);
         cosTemp.fecha = int.parse(fecha);
 
         _cosOper.nuevoCosto(cosTemp);
