@@ -53,8 +53,8 @@ class PorcentajeData with ChangeNotifier {
   }
 
   eliminarPorcentaje(int id, double valor, int idcon) async {
-/*     this.porcentajes.removeWhere((e) => e.idPorcentaje == id);
-    this.conceptos.removeWhere((e) => e.idConcepto == idcon); */
+    this.porcentajes.removeWhere((e) => e.idPorcentaje == id);
+    this.conceptos.removeWhere((e) => e.idConcepto == idcon); 
     await _porOper.deletePorcentaje(id);
     this.suma = this.suma - valor;
     /* notifyListeners(); */
