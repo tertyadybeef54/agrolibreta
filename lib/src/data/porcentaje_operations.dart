@@ -69,20 +69,21 @@ class PorcentajeOperations {
       SELECT * FROM Porcentajes WHERE fk2idModeloReferencia == $fkidMR AND fk2idConcepto == $fkidCon
     ''');
     int valor = 0;
-    
-    if(res.isNotEmpty){
+
+    if (res.isNotEmpty) {
       final porcentaje = PorcentajeModel.fromJson(res.first);
       valor = (porcentaje.porcentaje * presupuesto * 0.01).round();
     }
 
     return valor;
   }
- 
-  //D - borrar un registros
-  Future<int> deletePorcentajeByMR(int idMr) async {
+
+  //D - borrar porcentajes
+  Future<int> deletePorcentajesByMR(int idMr) async {
     final db = await dbProvider.database;
-    final res = await db
-        .delete('Porcentajes', where: 'fk2idModeloReferencia = ?', whereArgs: [idMr]);
+    final res = await db.delete('Porcentajes',
+        where: 'fk2idModeloReferencia = ?', whereArgs: [idMr]);
+    print('eliminado: ' + res.toString());
     return res;
   }
 }

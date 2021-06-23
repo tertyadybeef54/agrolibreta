@@ -146,11 +146,10 @@ class DBProvider {
         INSERT INTO Conceptos(nombreConcepto) VALUES("Semilla")
       ''');
       await db.rawInsert('''
-        INSERT INTO Conceptos(nombreConcepto) VALUES("Abono y fertilizantes")
+        INSERT INTO Conceptos(nombreConcepto) VALUES("Abonos y fertilizantes")
       ''');
       await db.rawInsert('''
-        INSERT INTO Conceptos(nombreConcepto) VALUES("Plaguicidas y herbicidas")
-
+        INSERT INTO Conceptos(nombreConcepto) VALUES("Plaguicidas")
       ''');
       await db.rawInsert('''
         INSERT INTO Conceptos(nombreConcepto) VALUES("Materiales y Empaques")

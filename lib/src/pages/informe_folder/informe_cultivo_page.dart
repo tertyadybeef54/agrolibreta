@@ -487,7 +487,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
       ),
     );
   }
-   Widget _graficarDona() {
+/*    Widget _graficarDona() {
     final pieData = Provider.of<PieData>(context, listen: false);
     final _seriesPieData = pieData.seriesPieData;
     if (_seriesPieData == null) {
@@ -541,6 +541,6 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         ),
       ),
     );
-  }
+  } */
 
 }

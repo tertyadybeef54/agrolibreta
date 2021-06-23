@@ -16,14 +16,30 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
   @override
   Widget build(BuildContext context) {
     final modelosReferenciaData =
-        Provider.of<ModeloReferenciaData>(context, listen: false);
-    
+        Provider.of<ModeloReferenciaData>(context, listen: true);
+
     final List<ModeloReferenciaModel> modelosReferencia =
         modelosReferenciaData.modelosReferencia;
     final List<List<PorcentajeModel>> porcentajesList =
         modelosReferenciaData.porcentajesList;
     final List<List<ConceptoModel>> conceptosList =
         modelosReferenciaData.conceptosList;
+
+   /*  modelosReferencia.forEach((element) {
+      print('########modelo: ' + element.idModeloReferencia.toString());
+      conceptosList[element.idModeloReferencia-1].forEach((c) {
+          print(c.nombreConcepto);
+        });
+     
+    });
+    modelosReferencia.forEach((element) {
+      print('######## Modelo: ' + element.idModeloReferencia.toString());
+      porcentajesList[element.idModeloReferencia-1].forEach((c) {
+          print(c.porcentaje);
+        });
+     
+    }); */
+
 
     return Scaffold(
       appBar: AppBar(
@@ -42,9 +58,9 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
       List<ModeloReferenciaModel> modelosReferencia,
       List<List<PorcentajeModel>> porcentajesList,
       List<List<ConceptoModel>> conceptosList) {
-    return RefreshIndicator(
-      onRefresh: _refrescar,
-      child: ListView.builder(
+    return /* RefreshIndicator(
+      onRefresh: _refrescar, */
+      /* child:  */ListView.builder(
         itemCount: modelosReferencia.length,
         itemBuilder: (_, i) => Dismissible(
           key: UniqueKey(),
@@ -54,13 +70,13 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
           onDismissed: (direction) {
             if (modelosReferencia[i].idModeloReferencia != 1) {
               Provider.of<ModeloReferenciaData>(context, listen: false)
-                  .eliminarModelo(modelosReferencia[i].idModeloReferencia);
+                  .eliminarModelo(modelosReferencia[i].idModeloReferencia, porcentajesList[i], conceptosList[i]);
             }
           },
           child: _card(modelosReferencia[i].idModeloReferencia,
               porcentajesList[i], conceptosList[i]),
         ),
-      ),
+      /* ), */
     );
   }
 
@@ -74,7 +90,6 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
       'MR: $i',
       style: TextStyle(fontWeight: FontWeight.bold),
     ));
-    //hijos.add(Divider(color: Colors.black, height: 2.0,));
     if (porcentajes.length != 0) {
       for (int i = 0; i < porcentajes.length; i++) {
         final Row row = Row(
@@ -113,17 +128,12 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
-        final modelosReferenciaData =
-            Provider.of<ModeloReferenciaData>(context, listen: false);
-        modelosReferenciaData
-            .anadirModeloReferencia(0); //crea modelo de referencia
         Navigator.pushNamed(context, 'crearModeloReferencia');
       },
     );
   }
 
-  Future<void> _refrescar() async {
-    setState(() {
-    });
-  }
+/*   Future<void> _refrescar() async {
+    setState(() {});
+  } */
 }
