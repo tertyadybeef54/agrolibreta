@@ -64,7 +64,8 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   //variables para crear un registro de costo
   //int _fkidCultivo = 1;
   double _cantidad = 1;
-  double _valorUnidad = 0;
+  double _valorTotal = 0;
+  
   String _fechaC;
   //variables para la creacion de el producto actividad
   String _nombreProductoActividad = '';
@@ -72,10 +73,6 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   String _nombreUnidadMedida = '';
   String _descripcionUnidadMedida = '';
 
-  // cuando crea una nueva ubicacion el estado es 1=activo
-  // String _nombreConcepto = "semilla";
-  // String _nombreUnidadMedida = "bulto";
-  // String _pathFoto = "data/img/image.jpg";
 
   @override
   Widget build(BuildContext context) {
@@ -96,11 +93,23 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
           ),
           _seleccioneProductoActividad(),
           Divider(),
-          _input('Cantidad de unidades o jornales', 'Ejemplo: 5', TextInputType.number, 1),
+          Row(
+            children: [
+              Icon(Icons.square_foot, color: Colors.black54,),
+              SizedBox(
+                width: 10.0,
+              ),
+              Text('Unidad de medida: '),
+              _unidad()
+            ],
+          ),
           Divider(),
-          _input(
-              'Valor Unidad o jornal', 'Ejemplo: 5700', TextInputType.numberWithOptions(decimal: false), 2),
-          _valorTotal(),
+          _input('Cantidad de unidades o jornales', 'Ejemplo: 5',
+              TextInputType.number, 1),
+          Divider(),
+          _input('Valor Total en pesos', 'Ejemplo: \$100000',
+              TextInputType.numberWithOptions(decimal: false), 2),
+          _valorUnitario(),
           Divider(),
           _fecha(context),
           Divider(),
@@ -145,6 +154,28 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     );
   }
 
+  Widget _unidad() {
+    if (_selectedProductoActividad == null) {
+      return Text('Seleccione un producto o actividad');
+    }
+    print(_selectedProductoActividad.fkidUnidadMedida);
+    ProductoActividadOperations _proActOper = new ProductoActividadOperations();
+    return FutureBuilder<String>(
+        future: _proActOper
+            .consultarNombreUnidad(_selectedProductoActividad.idProductoActividad.toString()),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          Widget child;
+          if (snapshot.hasData) {
+            child = Text(snapshot.data);
+          } else if (snapshot.hasError) {
+            child = Text('Seleccione un producto o actividad');
+          } else {
+            child = Text('Seleccione un producto o actividad'); //
+          }
+          return child;
+        });
+  }
+
   // registrar un nuevo producto actividad si no existe
   void _registrarProductoActividad(BuildContext context) {
     showDialog(
@@ -152,23 +183,24 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
         barrierDismissible: true,
         builder: (context) {
           return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
             title: Text('Registrar nuevo producto o actividad'),
             content: Column(
               //mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 _seleccioneUnidadMedida(),
-                SizedBox(height:10.0),
+                SizedBox(height: 10.0),
                 _inputI('', 'Nombre', TextInputType.name, 3),
-                SizedBox(height:10.0),
+                SizedBox(height: 10.0),
                 _seleccioneConcepto(),
               ],
             ),
             actions: [
               TextButton(
-              child: Text('Cancelar'),
-              onPressed: () => Navigator.of(context).pop(),
+                child: Text('Cancelar'),
+                onPressed: () => Navigator.of(context).pop(),
               ),
               TextButton(
                 onPressed: () {
@@ -194,8 +226,8 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   Widget _seleccioneConcepto() {
     return Row(
       children: [
-        Icon(Icons.grass_rounded, color:Colors.black45),
-        SizedBox(width:13.0),
+        Icon(Icons.grass_rounded, color: Colors.black45),
+        SizedBox(width: 13.0),
         FutureBuilder<List<ConceptoModel>>(
           //debe consultar solo los conceptos que estan relacionados con ese cultivo
           future: conOper.consultarConceptos(),
@@ -214,8 +246,8 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.square_foot, color:Colors.black45),
-        SizedBox(width:13.0),
+        Icon(Icons.square_foot, color: Colors.black45),
+        SizedBox(width: 13.0),
         FutureBuilder<List<UnidadMedidaModel>>(
           future: uniMedOper.consultarUnidadesMedida(),
           builder: (context, snapshot) {
@@ -263,8 +295,8 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
             ),
             actions: [
               TextButton(
-              child: Text('Cancelar'),
-              onPressed: () => Navigator.of(context).pop(),
+                child: Text('Cancelar'),
+                onPressed: () => Navigator.of(context).pop(),
               ),
               TextButton(
                   onPressed: () {
@@ -287,7 +319,8 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   //###############################################
   // ingresar el nombre 1.distintivo, 2.area sembrada 3.presupuesto y 4. nombre ubicacion 5. descripcion ubicacion
   // Se debe agrgar condicion de solo enteros para 2 y 3
-  Widget _input(String descripcion,  String labeltext, TextInputType tipotext, int n) {
+  Widget _input(
+      String descripcion, String labeltext, TextInputType tipotext, int n) {
     var inputDecoration = InputDecoration(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
       labelText: labeltext,
@@ -310,7 +343,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
               _cantidad = double.parse(valor);
             }
             if (n == 2) {
-              _valorUnidad = double.parse(valor);
+              _valorTotal = double.parse(valor);
             }
           });
         },
@@ -319,17 +352,18 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   }
 
   //calcular valor total
-  Widget _valorTotal() {
+  Widget _valorUnitario() {
     setState(() {});
-    double total = _valorUnidad * _cantidad;
+    int _valorUnidad = (_valorTotal / _cantidad).round();
     return Text(
-      'Total: ${total.toString()}',
+      'Valor unitario: \$ ${_valorUnidad.toString()}',
       textAlign: TextAlign.right,
     );
   }
 
   //input internos
-  Widget _inputI(String descripcion, String labeltext, TextInputType tipotext, int n) {
+  Widget _inputI(
+      String descripcion, String labeltext, TextInputType tipotext, int n) {
     var inputDecoration = InputDecoration(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
       //hintText: hilabel,
@@ -388,7 +422,6 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   }
 
   _selectDate(BuildContext context) async {
- 
     DateTime picked = await showDatePicker(
       context: context,
       initialDate: new DateTime.now(),
@@ -399,7 +432,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: Color(0xff6b9b37),// header background color
+              primary: Color(0xff6b9b37), // header background color
               onPrimary: Colors.white, // header text color
               onSurface: Colors.black,
             ),
@@ -425,12 +458,14 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
       child: Column(
         children: [
           ElevatedButton(
-                child: Text('Guardar', style: TextStyle(fontSize: 18.0),),
-                onPressed: () {
-                  _save(context, fkidCultivo);
-                  Navigator.pop(context);
-                }
-          ),
+              child: Text(
+                'Guardar',
+                style: TextStyle(fontSize: 18.0),
+              ),
+              onPressed: () {
+                _save(context, fkidCultivo);
+                Navigator.pop(context);
+              }),
         ],
       ),
     );
@@ -443,7 +478,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
       fkidCultivo: fkidCultivo,
       fkidRegistroFotografico: "0",
       cantidad: _cantidad,
-      valorUnidad: _valorUnidad.round(),
+      valorUnidad: (_valorTotal/_cantidad).round(),
       fecha: int.parse(_fechaC),
     );
     cosOper.nuevoCosto(costoTemp);

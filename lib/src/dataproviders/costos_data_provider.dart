@@ -27,7 +27,6 @@ class CostosData with ChangeNotifier {
 
   CostosData() {
     this.getCostos();
-    //this.getModelosReferencia();
   }
   getCostos() async {
     final resp = await _cosOper.consultarCostos();
@@ -72,7 +71,6 @@ class CostosData with ChangeNotifier {
     if (conceptosList.length == 0) {
       if (cultivos.length > 0) {
         this.cultivos.forEach((e) {
-          //print(e.nombreDistintivo);
 
           final List<int> sumTemp = [];
           final List<ConceptoModel> conTemp = [];
@@ -81,8 +79,6 @@ class CostosData with ChangeNotifier {
           this.conceptos.forEach((e2) async {
             final int resp = await _cosOper.sumaCostosByConcepto(
                 e.idCultivo, e2.idConcepto.toString());
-            //if (resp != -1.0) {}//aca se puede aplicar condicional para modelos de referencia con cantidad de conceptos variable, para este prototipo siempre seran 8 conceptos fijos
-            //print('entró al if');
             final int sug = await _porOper.getPorcenByMRyConcep(
                 e.fkidModeloReferencia,
                 e2.idConcepto.toString(),
@@ -92,11 +88,8 @@ class CostosData with ChangeNotifier {
             conTemp.add(e2);
             
             sugTemp.add(sug);
-
-            //print(              ' ${e2.nombreConcepto}: ${resp.toString()} sugerido: ${sug.toString()}');
           });
-          /* if (sumTemp != []) {
-          } */
+
           this.conceptosList.add(conTemp);
           
           this.sumasList.add(sumTemp);
@@ -114,57 +107,4 @@ class CostosData with ChangeNotifier {
     this.cultivos = [...cul];
     notifyListeners();
   }
-
-/* 
-  List<ModeloReferenciaModel> modelosReferencia = []; //se almacenan MRs
-  //List<ConceptoModel> conceptos = [];  // almacena conceptos
-  List<List<PorcentajeModel>> porcentajesList =
-      []; //almacena listas de porcentajes
-  int id; //para controlar el ultimo modelo de referencia creado
-
-  getModelosReferencia() async {
-    final _resp = await _modOper.consultarModelosReferencia();
-    this.modelosReferencia = [..._resp];
-    notifyListeners();
-  } */
-
-  /*  anadirModeloReferencia(double sum) async {
-    final nuevoMR = new ModeloReferenciaModel(suma: sum);
-    final _id = await _modOper.nuevoModeloReferencia(nuevoMR);
-    //asignar el id de la base de datos al modelo
-    nuevoMR.idModeloReferencia = _id;
-    this.modelosReferencia.add(nuevoMR);
-    this.id = _id;
-    notifyListeners();
-  } */
-
-/* //obtiene una lista de porcentajes y una lista de conceptos por cada modelo de referencia.
-  obtenerByID() {
-    this.modelosReferencia.forEach(
-      (modelo) async {
-        final _resp = await _porOper.consultarPorcentajesbyModeloReferencia(
-            modelo.idModeloReferencia.toString());
-
-        List<ConceptoModel> conceptos = []; //lista temporal de conceptos
-        _resp.forEach((porcentaje) async {
-          final _resp2 = await _conOper
-              .getConceptoById(int.parse(porcentaje.fk2idConcepto));
-          conceptos.add(_resp2);
-        });
-        this.conceptosList.add(conceptos); //se añade la lista de conceptos
-        this.porcentajesList.add(_resp); //añade la lista de porcentajes
-      },
-    );
-  }
-
-  nuevoConPorList(
-      List<ConceptoModel> conceptos, List<PorcentajeModel> porcentajes) {
-    this.conceptosList.add(conceptos); //se añade la lista de conceptos
-    this.porcentajesList.add(porcentajes); //añade la lista de porcentajes
-    notifyListeners();
-  }
-
-  refrescar() {
-    notifyListeners();
-  } */
 }

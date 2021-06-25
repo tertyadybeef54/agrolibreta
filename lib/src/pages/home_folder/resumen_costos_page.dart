@@ -11,6 +11,7 @@ class ResumencostosPage extends StatefulWidget {
 }
 
 class _ResumencostosPageState extends State<ResumencostosPage> {
+  int total = 0;
   @override
   Widget build(BuildContext context) {
     final CultivoModel cultivoArg = ModalRoute.of(context).settings.arguments;
@@ -30,6 +31,10 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     _sumasAll.forEach((element) {
       print(element.toString());
     });
+
+    _sumasAll[idCul-1].forEach((element) {
+      total += element;
+    });
     _conceptosAll.forEach((element) {
       element.forEach((e) {
         print(e.nombreConcepto);
@@ -41,42 +46,40 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
 
     return Scaffold(
       appBar: _appBar(context, nombreCul, idCul),
-      body: Stack(
-        children: <Widget>[
-          RefreshIndicator(
-            onRefresh: _refrescar,
-            child: ListView.builder(
-              padding:
-                  EdgeInsets.only(left: 0.0, right: 0.0, top: 25.0, bottom: 20.0),
-              itemCount: 4,
-              itemBuilder: (context, i) {
-                if (_conceptosAll.length > 0) {
+      body: RefreshIndicator(
+        onRefresh: _refrescar,
+        child: ListView.builder(
+          padding: EdgeInsets.only(
+              left: 0.0, right: 0.0, top: 25.0, bottom: 20.0),
+          itemCount: 4,
+          itemBuilder: (context, i) {
+            if (_conceptosAll.length > 0) {
                   return _concepto(
-                      _conceptosAll[idCul - 1][i].nombreConcepto,
-                      _sumasAll[idCul - 1][i],
-                      _sugeridos[idCul - 1][i],
-                      _conceptosAll[idCul - 1][4 + i].nombreConcepto,
-                      _sumasAll[idCul - 1][4 + i],
-                      _sugeridos[idCul - 1][4 + i],i+1);
-                } else
-                  return Center(
-                    child: Text('Actualizar'),
-                  );
-              },
-            ),
-          ),
-          //_refrescar(context),
-        ],
+              _conceptosAll[idCul - 1][i].nombreConcepto,
+              _sumasAll[idCul - 1][i],
+              _sugeridos[idCul - 1][i],
+              _conceptosAll[idCul - 1][4 + i].nombreConcepto,
+              _sumasAll[idCul - 1][4 + i],
+              _sugeridos[idCul - 1][4 + i],
+              i + 1);
+        } else
+          return Center(
+            child: Text('Actualizar'),
+          );
+        },
       ),
-      floatingActionButton: _botonNuevoCosto(context, idCul),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    ),
+    floatingActionButton: _botonNuevoCosto(context, idCul),
+    floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
   Widget _appBar(BuildContext context, String nombreCul, int idCul) {
     return AppBar(
       automaticallyImplyLeading: false,
-      title: Text(nombreCul),
+      title: Column(children: [
+        Text(nombreCul),Text('Total: ' + total.toString()),
+      ],),
       centerTitle: true,
       actions: <Widget>[
         IconButton(
@@ -89,14 +92,8 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     );
   }
 
-  Widget _concepto(
-      String concepto,
-      int totalCosto,
-      int totalCostoSugerido,
-      String concepto2,
-      int totalCosto2,
-      int totalCostoSugerido2,
-      int n) {
+  Widget _concepto(String concepto, int totalCosto, int totalCostoSugerido,
+      String concepto2, int totalCosto2, int totalCostoSugerido2, int n) {
     //colores, verde si esta bajo el presupuesto y rojo caso contrario
     TextStyle color1;
     TextStyle color2;
@@ -136,21 +133,17 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
                   fit: BoxFit.cover,
                 ),
                 SizedBox(height: 5.0),
-                Text(concepto, style:TextStyle(fontWeight: FontWeight.bold)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:[
-                    Text('Total: ', style:TextStyle(fontWeight: FontWeight.bold)),
-                    Text('${totalCosto.toString()}', style: color1)
-                  ]
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:[
-                  Text('Límite: ', style:TextStyle(fontWeight: FontWeight.bold)),
+                Text(concepto, style: TextStyle(fontWeight: FontWeight.bold)),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text('Total: \$',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('${totalCosto.toString()}', style: color1)
+                ]),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text('Límite: \$',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   Text('${totalCostoSugerido.toString()}')
-                  ]
-                ),
+                ]),
                 SizedBox(height: 5.0)
               ],
             ),
@@ -174,21 +167,17 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
                   fit: BoxFit.cover,
                 ),
                 SizedBox(height: 5.0),
-                Text(concepto2, style:TextStyle(fontWeight: FontWeight.bold)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:[
-                    Text('Total: ', style:TextStyle(fontWeight: FontWeight.bold)), 
-                    Text('${totalCosto2.toString()}', style: color2)
-                  ]
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:[
-                    Text('Límite: ', style:TextStyle(fontWeight: FontWeight.bold)),
-                    Text('${totalCostoSugerido2.toString()}')
-                  ]
-                ),
+                Text(concepto2, style: TextStyle(fontWeight: FontWeight.bold)),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text('Total: \$',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('${totalCosto2.toString()}', style: color2)
+                ]),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Text('Límite: \$',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('${totalCostoSugerido2.toString()}')
+                ]),
                 SizedBox(height: 5.0)
               ],
             ),
@@ -206,7 +195,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     );
   }
 
-  Future <void> _refrescar() async{
+  Future<void> _refrescar() async {
     setState(() {});
   }
 }

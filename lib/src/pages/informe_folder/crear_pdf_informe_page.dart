@@ -27,7 +27,7 @@ String informeUbicacionCultivo;
 String informeEstadoCultivo;
 int informeAreaCultivo;
 int informePresupuestoCultivo;
-double informePrecioIdealCultivo;
+int informePrecioIdealCultivo;
 
 List<int> sumasCultivo = [];
 List<int> sumasMr = [];
