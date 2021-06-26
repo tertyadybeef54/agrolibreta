@@ -19,7 +19,6 @@ class ModeloReferenciaData with ChangeNotifier {
   List<List<ConceptoModel>> conceptosList = []; //almacena listas de conceptos
   //almacena listas de porcentajes
   List<List<PorcentajeModel>> porcentajesList = [];
-  int id; //para controlar el ultimo modelo de referencia creado
 
   ModeloReferenciaData() {
     this.getModelosReferencia();
@@ -29,13 +28,75 @@ class ModeloReferenciaData with ChangeNotifier {
     this.modelosReferencia = [..._resp];
   }
 
-  anadirModeloReferencia(double sum) async {
-    final nuevoMR = new ModeloReferenciaModel(suma: sum);
+  anadirModeloReferencia(
+      double _semilla,
+      double _fertilizantes,
+      double _plaguicidas,
+      double _materiales,
+      double _maquinaria,
+      double _manoObra,
+      double _transporte,
+      double _otros) async {
+    final nuevoMR = new ModeloReferenciaModel(suma: 100);
     final _id = await _modOper.nuevoModeloReferencia(nuevoMR);
     //asignar el id de la base de datos al modelo
     nuevoMR.idModeloReferencia = _id;
     this.modelosReferencia.add(nuevoMR);
-    this.id = _id;
+    final nuevoPor = new PorcentajeModel(
+        fk2idModeloReferencia: _id.toString(),
+        fk2idConcepto: '1',
+        porcentaje: _semilla);
+    await _porOper.nuevoPorcentaje(nuevoPor);
+
+    final nuevoPor2 = new PorcentajeModel(
+        fk2idModeloReferencia: _id.toString(),
+        fk2idConcepto: '2',
+        porcentaje: _fertilizantes);
+    await _porOper.nuevoPorcentaje(nuevoPor2);
+
+    final nuevoPor3 = new PorcentajeModel(
+        fk2idModeloReferencia: _id.toString(),
+        fk2idConcepto: '3',
+        porcentaje: _plaguicidas);
+    await _porOper.nuevoPorcentaje(nuevoPor3);
+
+    final nuevoPor4 = new PorcentajeModel(
+        fk2idModeloReferencia: _id.toString(),
+        fk2idConcepto: '4',
+        porcentaje: _materiales);
+    await _porOper.nuevoPorcentaje(nuevoPor4);
+
+    final nuevoPor5 = new PorcentajeModel(
+        fk2idModeloReferencia: _id.toString(),
+        fk2idConcepto: '5',
+        porcentaje: _maquinaria);
+    await _porOper.nuevoPorcentaje(nuevoPor5);
+
+    final nuevoPor6 = new PorcentajeModel(
+        fk2idModeloReferencia: _id.toString(),
+        fk2idConcepto: '6',
+        porcentaje: _manoObra);
+    await _porOper.nuevoPorcentaje(nuevoPor6);
+
+    final nuevoPor7 = new PorcentajeModel(
+        fk2idModeloReferencia: _id.toString(),
+        fk2idConcepto: '7',
+        porcentaje: _transporte);
+    await _porOper.nuevoPorcentaje(nuevoPor7);
+
+    final nuevoPor8 = new PorcentajeModel(
+        fk2idModeloReferencia: _id.toString(),
+        fk2idConcepto: '8',
+        porcentaje: _otros);
+    await _porOper.nuevoPorcentaje(nuevoPor8);
+    final _resp =
+        await _porOper.consultarPorcentajesbyModeloReferencia(_id.toString());
+
+    final _resp2 = await _conOper.consultarConceptos(); //lista temporal de conceptos
+    this.conceptosList.add(_resp2); //se añade la lista de conceptos
+    this.porcentajesList.add(_resp); //añade la lista de porcentajes
+    notifyListeners();
+    print('provider modelo referencia nuevo mr');
   }
 
   obtenerByID() {
@@ -44,29 +105,22 @@ class ModeloReferenciaData with ChangeNotifier {
         final _resp = await _porOper.consultarPorcentajesbyModeloReferencia(
             modelo.idModeloReferencia.toString());
 
-        List<ConceptoModel> _conceptos = []; //lista temporal de conceptos
-        _resp.forEach((porcentaje) async {
-          final _resp2 = await _conOper
-              .getConceptoById(int.parse(porcentaje.fk2idConcepto));
-          _conceptos.add(_resp2);
-        });
-        this.conceptosList.add(_conceptos); //se añade la lista de conceptos
+        final _resp2 = await _conOper.consultarConceptos();
+        this.conceptosList.add(_resp2); //se añade la lista de conceptos
         this.porcentajesList.add(_resp); //añade la lista de porcentajes
       },
     );
-    print('provider modelo referencia');
+    print('provider modelo referencia ob');
   }
 
-  nuevoConPorList(
-      List<ConceptoModel> conceptos, List<PorcentajeModel> porcentajes) {
-    this.conceptosList.add(conceptos); //se añade la lista de conceptos
-    this.porcentajesList.add(porcentajes); //añade la lista de porcentajes
-  }
-
-  eliminarModelo(int idMr) async {
+  eliminarModelo(int idMr, List<PorcentajeModel> porcentajes,
+      List<ConceptoModel> conceptos) async {
     await _modOper.deleteModeloReferencia(idMr);
     this.getModelosReferencia();
-    //await _porOper.deletePorcentajeByMR(idMr);
-    //this.getModelosReferencia();
+    await _porOper.deletePorcentajesByMR(idMr);
+    this.conceptosList.removeWhere((element) => element == conceptos);
+    this.porcentajesList.removeWhere((element) => element == porcentajes);
+    print('provider modelo referencia eliminado');
+    notifyListeners();
   }
 }

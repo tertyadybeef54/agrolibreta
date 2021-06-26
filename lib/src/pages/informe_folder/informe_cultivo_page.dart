@@ -38,6 +38,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     });
   }
 
+  int total = 0;
   @override
   void initState() {
     super.initState();
@@ -62,6 +63,10 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     final pieData = Provider.of<PieData>(context, listen: false);
     pieData.generarData();
     pieData.generarDataMRCul();
+    total = 0;
+    costos.forEach((element) {
+      total += (element.cantidad * element.valorUnidad).round();
+    });
     final tabs = [
       Tab(icon: Icon(Icons.assignment)),
       Tab(icon: Icon(Icons.equalizer)),
@@ -134,7 +139,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     informeValUni = []; //###########################
     informeVtotal = []; //###########################
     //#############################################################
-    
+
     costos.forEach((costo) {
       listado.add(_costo(costo, context));
     });
@@ -147,7 +152,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     informeFechaCultivo = cultivo.fechaInicio; //##############
     informeAreaCultivo = cultivo.areaSembrada; //##############
     informePresupuestoCultivo = cultivo.presupuesto; //########
-    informePrecioIdealCultivo = cultivo.precioVentaIdeal; //###
+    informePrecioIdealCultivo = cultivo.precioVentaIdeal.round(); //###
     //#########################################################
 
     return Column(children: [
@@ -176,18 +181,20 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           estado(cultivo.fkidEstado),
           SizedBox(width: 10.0),
           Text('MR:'),
-          Text('${cultivo.fkidModeloReferencia}', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('${cultivo.fkidModeloReferencia}',
+              style: TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 10.0),
-          Text('Cultivo de:'),
-          Text('Arveja.', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('Total : \$'),
+          Text('$total ', style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(width: 8.0),
           Text('Area sembrada:'),
-          Text('${cultivo.areaSembrada.toString()} m2', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('${cultivo.areaSembrada.toString()} m2',
+              style: TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
       Row(
@@ -195,10 +202,12 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         children: [
           SizedBox(width: 10.0),
           Text('Fecha Inicial:'),
-          Text('${cultivo.fechaInicio}', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('${cultivo.fechaInicio}',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(width: 10.0),
           Text('Final:'),
-          Text('${cultivo.fechaFinal}', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('${cultivo.fechaFinal}',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(width: 8.0),
         ],
       ),
@@ -206,11 +215,13 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(width: 10.0),
-          Text('Presupuesto:'),
-          Text('${cultivo.presupuesto.toString()}', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('Presupuesto: \$'),
+          Text('${cultivo.presupuesto.toString()}',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(width: 10.0),
-          Text('Venta ideal:'),
-          Text('${cultivo.precioVentaIdeal.toString()}', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text('Venta ideal: \$'),
+          Text('${cultivo.precioVentaIdeal.round().toString()}',
+              style: TextStyle(fontWeight: FontWeight.bold)),
         ],
       )
     ]);
@@ -252,7 +263,8 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           }
           return Row(children: [
             Text('Ubicacion:'),
-            Text(' $_ubicacion.', style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(' $_ubicacion.',
+                style: TextStyle(fontWeight: FontWeight.bold)),
           ]);
         });
   }
@@ -326,7 +338,8 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         criterioUnidad(costo.fkidProductoActividad, ancho * 0.15),
         criterioFuture(costo.fkidProductoActividad, ancho * 0.30),
         criterio(costo.valorUnidad.toString(), ancho * 0.12),
-        criterio((costo.cantidad * costo.valorUnidad).round().toString(), ancho * 0.14),
+        criterio((costo.cantidad * costo.valorUnidad).round().toString(),
+            ancho * 0.14),
         SizedBox(
           width: 5.0,
         )
@@ -452,7 +465,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
 
 //############################################
   //grafica de la dona
- 
+
 //#############################################
 //brafico de barras camparar cultivo con MR
   Widget _graficarBarras() {
@@ -487,7 +500,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
       ),
     );
   }
-   Widget _graficarDona() {
+/*    Widget _graficarDona() {
     final pieData = Provider.of<PieData>(context, listen: false);
     final _seriesPieData = pieData.seriesPieData;
     if (_seriesPieData == null) {
@@ -541,6 +554,6 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         ),
       ),
     );
-  }
+  } */
 
 }

@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.agrolibreta_v2">
+    package="com.andresdeisy.agrolibreta_v2">
    <application
-        android:label="agrolibreta_v2"
-        android:icon="@mipmap/ic_launcher">
+        android:label="AgroLibreta"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

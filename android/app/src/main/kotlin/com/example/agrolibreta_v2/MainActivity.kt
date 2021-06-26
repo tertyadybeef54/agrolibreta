@@ -1,4 +1,4 @@
-package com.example.agrolibreta_v2
+package com.andresdeisy.agrolibreta_v2
 
 import io.flutter.embedding.android.FlutterActivity
 

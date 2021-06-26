@@ -1,4 +1,211 @@
 import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class CrearModeloReferencia extends StatefulWidget {
+  @override
+  _CrearModeloReferenciaState createState() => _CrearModeloReferenciaState();
+}
+
+class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
+  double _semilla = 0;
+  double _fertilizantes = 0;
+  double _plaguicidas = 0;
+  double _materiales = 0;
+  double _maquinaria = 0;
+  double _manoObra = 0;
+  double _transporte = 0;
+  double _otros = 0;
+  double _suma = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        title: Column(
+          children: [
+            Text('Nuevo modelo de referencia'),
+            Text('Cree sus porcentajes'),
+          ],
+        ),
+      ),
+      body: _body(context),
+    );
+  }
+
+  Widget _body(BuildContext context) {
+    return ListView(
+      padding: EdgeInsets.all(10.0),
+      children: [
+        _conceptoInput('Semilla: ', '3.9', 1),
+        SizedBox(
+          height: 10.0,
+        ),
+        _conceptoInput('abonos y fertilizantes: ', '17.7', 2),
+        SizedBox(
+          height: 10.0,
+        ),
+        _conceptoInput('Plaguicidas: ', '12.1', 3),
+        SizedBox(
+          height: 10.0,
+        ),
+        _conceptoInput('Materiales y empaques', '6.7', 4),
+        SizedBox(
+          height: 10.0,
+        ),
+        _conceptoInput('Maquinaria', '6.5', 5),
+        SizedBox(
+          height: 10.0,
+        ),
+        _conceptoInput('Mano de obra', '46.1', 6),
+        SizedBox(
+          height: 10.0,
+        ),
+        _conceptoInput('Transporte', '1.5', 7),
+        SizedBox(
+          height: 10.0,
+        ),
+        _conceptoInput('Otros', '5.5', 8),
+        _textoSumaBoton(context),
+      ],
+    );
+  }
+
+  Widget _conceptoInput(String concepto, String label, int n) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          children: [
+            Row(
+              children: [
+                Icon(Icons.grass),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Text(concepto),
+              ],
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            Row(
+              children: [
+                _input1(label, n),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Text('%'),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _input1(String label, int n) {
+    String label2 = 'Ej: ' + label;
+    var inputDecoration = InputDecoration(
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+      hintText: label,
+      labelText: label2,
+    );
+    return Container(
+      width: 100.0,
+      child: TextField(
+        textAlignVertical: TextAlignVertical.bottom,
+        keyboardType: TextInputType.number,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: inputDecoration,
+        onChanged: (value) {
+          if (n == 1) {
+            _semilla = double.parse(value);
+          }
+          if (n == 2) {
+            _fertilizantes = double.parse(value);
+          }
+          if (n == 3) {
+            _plaguicidas = double.parse(value);
+          }
+          if (n == 4) {
+            _materiales = double.parse(value);
+          }
+          if (n == 5) {
+            _maquinaria = double.parse(value);
+          }
+          if (n == 6) {
+            _manoObra = double.parse(value);
+          }
+          if (n == 7) {
+            _transporte = double.parse(value);
+          }
+          if (n == 8) {
+            _otros = double.parse(value);
+          }
+          setState(() {});
+        },
+      ),
+    );
+  }
+
+  Widget _textoSumaBoton(BuildContext context) {
+    final modData = Provider.of<ModeloReferenciaData>(context, listen: false);
+    _suma = _semilla +
+        _fertilizantes +
+        _plaguicidas +
+        _materiales +
+        _maquinaria +
+        _manoObra +
+        _transporte +
+        _otros;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text('debe ser 100 y lleva: ${_suma.toString()} %'),
+          SizedBox(
+            height: 10.0,
+          ),
+          ElevatedButton(
+              onPressed: () {
+                if (_suma != 100) {
+                  mostrarSnackbar(context, 'la suma debe ser 100 %');
+                } else {
+                  modData.anadirModeloReferencia(
+                      _semilla,
+                      _fertilizantes,
+                      _plaguicidas,
+                      _materiales,
+                      _maquinaria,
+                      _manoObra,
+                      _transporte,
+                      _otros);
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('Finalizar')),
+          SizedBox(
+            height: 30.0,
+          )
+        ],
+      ),
+    );
+  }
+
+  void mostrarSnackbar(BuildContext context, String mensaje) {
+    final snackbar = SnackBar(
+      content: Text(mensaje),
+      duration: Duration(milliseconds: 2500),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+}
+
+/* import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
 import 'package:agrolibreta_v2/src/modelos/porcentaje_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +237,7 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
     final double suma = porcentajesData.suma;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Center(
           child: Column(
             children: [
@@ -61,7 +269,7 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
 
   Widget _conceptoPorcentaje(
       PorcentajeModel porcentaje, ConceptoModel concepto) {
-    return Dismissible(
+    return Dismissible( 
       key: UniqueKey(),
       onDismissed: (direction) {
         Provider.of<PorcentajeData>(context, listen: false).eliminarPorcentaje(
@@ -233,230 +441,4 @@ class _CrearModeloReferenciaState extends State<CrearModeloReferencia> {
   Future<void> _refrescar() async {
     setState(() {});
   }
-}
-
-/* // ignore: must_be_immutable
-class CrearModeloReferencia extends StatelessWidget {
-  //operaciones CRUD porcentajes y conceptos
-  final ConceptoOperations conOper = new ConceptoOperations();
-
-  List<PorcentajeModel> _porcentajes = [];
-  List<ConceptoModel> _conceptos = [];
-  double _porcentaje = 0.0; // valor del porcentaje asignado
-  //variables para crear nuevo concepto
-  //String _nombreConcepto = ''; //nombre asignado al concepto
-
-  ConceptoModel _selectedConcepto; //concepto seleccionado en el dropdown
-  callback(selectedConcepto) {
-    _selectedConcepto = selectedConcepto;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final porcentajesData = Provider.of<PorcentajeData>(context, listen: false); 
-
-//aca esta el problema de que ponga los datos del anterior modelo de referencia
-    final porcentajes = porcentajesData.porcentajes;
-    final conceptos = porcentajesData.conceptos;
-    final suma = porcentajesData.suma;
-    _porcentajes = porcentajes;
-    _conceptos = conceptos;
-
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Center(
-          child: Column(
-            children: [
-              Text('Nuevo modelo de referencia'),
-              Text('Cree sus porcentajes'),
-            ],
-          ),
-        ),
-      ),
-      body: Stack(
-        children: [
-          ListView.builder(
-            padding: EdgeInsets.only(
-                left: 30.0, right: 30.0, top: 20.0, bottom: 90.0),
-            itemCount: porcentajes.length,
-            itemBuilder: (context, index) {
-              return Dismissible(
-                key: UniqueKey(),
-                onDismissed: (direction) {
-                  Provider.of<PorcentajeData>(context, listen: false)
-                      .eliminarPorcentaje(porcentajes[index].idPorcentaje, porcentajes[index].porcentaje, conceptos[index].idConcepto);
-                  _porcentajes.removeWhere(
-                      (e) => e.idPorcentaje == porcentajes[index-1].porcentaje);
-                  _conceptos.removeWhere(
-                      (e) => e.idConcepto == conceptos[index-1].idConcepto);
-                },
-                background: Container(
-                  child: Text('Eliminar'),
-                  color: Colors.red,
-                ),
-                child: Card(
-                  child: ListTile(
-                    leading: Icon(Icons.grass_rounded),
-                    title: Text(
-                        '${conceptos[index].nombreConcepto}: ${porcentajes[index].porcentaje} %'),
-                    trailing: Icon(
-                      Icons.arrow_left,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-          _sumaBoton(context, suma, conceptos, porcentajes),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          _crearItem(context, suma);
-        },
-      ),
-    );
-  }
-
-//Registrar un nuevo porcentaje
-  void _crearItem(BuildContext context, double suma) {
-    final modelosReferenciaData =
-    Provider.of<ModeloReferenciaData>(context, listen: false);
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-//providers
-
-
-        final porcentajesData =
-            Provider.of<PorcentajeData>(context, listen: false);
-        print('ultimo MR creado: ${modelosReferenciaData.id.toString()}');
-
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('Registrar Porcentaje'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _seleccioneConcepto(context),
-              Divider(),
-              _input('Valor del porcentaje', '10', '', TextInputType.number),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                final double sumaTemp = suma + _porcentaje;
-                if (sumaTemp < 100) {
-                  porcentajesData.anadirPorcentaje(
-                      modelosReferenciaData.id, _porcentaje, _selectedConcepto);
-/*                   _porcentajes.add(new PorcentajeModel(porcentaje: _porcentaje));
-                  _conceptos.add(new ConceptoModel(
-                    idConcepto: _selectedConcepto.idConcepto,
-                    nombreConcepto: _selectedConcepto.nombreConcepto
-                    ),
-                  ); */
-                  Navigator.pop(context);
-                } else {
-                  mostrarSnackbar2(context, 'la suma no debe superar el 100%');
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('Guardar'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void mostrarSnackbar2(BuildContext context, String mensaje) {
-    final snackbar = SnackBar(
-      content: Text(mensaje),
-      duration: Duration(milliseconds: 2500),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-  }
-
-  //##########################################
-  //dropdown para seleccionar un concepto ya creado
-  Widget _seleccioneConcepto(BuildContext context) {
-    return Row(
-      children: [
-        FutureBuilder<List<ConceptoModel>>(
-          future: conOper.consultarConceptos(),
-          builder: (context, snapshot) {
-            return snapshot.hasData
-                ? ConceptoDropdown(snapshot.data, callback) //selected concepto
-                : Text('sin conceptos');
-          },
-        ),
-      ],
-    );
-  }
-
-  //#######################################################
-  //input para el porcentaje
-  Widget _input(String descripcion, String hilabel, String labeltext,
-      TextInputType tipotext) {
-    var inputDecoration = InputDecoration(
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-      hintText: hilabel,
-      labelText: labeltext,
-      helperText: descripcion,
-      icon: Icon(Icons.drive_file_rename_outline),
-    );
-    return Container(
-      padding: EdgeInsets.only(bottom: 5.0),
-      height: 60.0,
-      width: double.infinity,
-      child: TextField(
-        textAlignVertical: TextAlignVertical.bottom,
-        keyboardType: tipotext,
-        textCapitalization: TextCapitalization.sentences,
-        decoration: inputDecoration,
-        onChanged: (valor) {
-          _porcentaje = double.parse(valor);
-        },
-      ),
-    );
-  }
-
-  // widges que muestra la suma restante y el boton
-  Widget _sumaBoton(BuildContext context, double suma,
-      List<ConceptoModel> conceptos, List<PorcentajeModel> porcentajes) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text('debe ser 100 y lleva: ${suma.toString()} %'),
-          SizedBox(
-            height: 10.0,
-          ),
-          ElevatedButton(
-              onPressed: () {
-                final porcentajesData =
-                    Provider.of<PorcentajeData>(context, listen: false);
-                final modData =
-                    Provider.of<ModeloReferenciaData>(context, listen: false);
-                modData.nuevoConPorList(_conceptos, _porcentajes);
-
-                porcentajesData.reset();
-
-                Navigator.pop(context);
-              },
-              child: Text('Finalizar')),
-          SizedBox(
-            height: 30.0,
-          )
-        ],
-      ),
-    );
-  }
-}
- */
+} */

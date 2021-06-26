@@ -29,7 +29,8 @@ class ProductoActividadOperations {
         : [];
   }
 
-  Future<List<ProductoActividadModel>> consultarProductosActividadesOrder() async {
+  Future<List<ProductoActividadModel>>
+      consultarProductosActividadesOrder() async {
     final db = await dbProvider.database;
     final res = await db.rawQuery('''
       SELECT *FROM ProductosActividades ORDER BY nombreProductoActividad
@@ -79,13 +80,14 @@ class ProductoActividadOperations {
     }
     return nombre;
   }
+
   //consultar en nombre de la unidad de medida que pertenece al costo
-    Future<String> consultarNombreUnidad(String fkProdAct) async {
+  Future<String> consultarNombreUnidad(String fkProdAct) async {
     final db = await dbProvider.database;
     final res = await db.rawQuery('''
     SELECT * FROM UnidadesMedida WHERE idUnidadMedida IN (SELECT fkidUnidadMedida FROM ProductosActividades WHERE idProductoActividad = $fkProdAct)
     ''');
-    String unidad = 'nn';
+    String unidad = 'Nn';
     if (res.isNotEmpty) {
       final unidadTemp = UnidadMedidaModel.fromJson(res.first);
       unidad = unidadTemp.nombreUnidadMedida;

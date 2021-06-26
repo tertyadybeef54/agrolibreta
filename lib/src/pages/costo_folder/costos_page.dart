@@ -75,13 +75,13 @@ class _CostosPageState extends State<CostosPage> {
       appBar: AppBar(
         title: Text('Buscar costos por:'),
         centerTitle: true,
-    ),
+      ),
       body: RefreshIndicator(
         onRefresh: _refrescar,
         child: ListView.builder(
           padding:
               EdgeInsets.only(left: 0.0, right: 0.0, top: 10.0, bottom: 20.0),
-          itemCount: costos.length + 2,
+          itemCount: costos.length + 3,
           itemBuilder: (context, index) {
             return listado[index];
           },
@@ -91,17 +91,23 @@ class _CostosPageState extends State<CostosPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   }
+
 //se agregan todas las partes que se presentaran en la panttalla
 //para presentalas en un list view y se permita hacer scroll
   void _armarWidgets(BuildContext context, List<CostoModel> costos) {
     listado = [];
     listado.add(filtros());
     listado.add(titulos(context));
+    int total = 0;
     costos.forEach((costo) {
       listado.add(_costo(costo, context));
+      total += (costo.cantidad * costo.valorUnidad).round();
+      
     });
+    listado.add(_costo2(total, context));
   }
-//boton que permite reaalizar la consulta despues de seleccionar algun criterio, 
+
+//boton que permite reaalizar la consulta despues de seleccionar algun criterio,
   Widget _botonFiltrar(BuildContext context) {
     final filData = Provider.of<FiltrosCostosData>(context, listen: false);
     final String idCul = _selectedCultivo != null
@@ -122,6 +128,7 @@ class _CostosPageState extends State<CostosPage> {
       },
     );
   }
+
 //parte superior de la vista donde se presentan los filtros
   Widget filtros() {
     return Column(
@@ -141,11 +148,14 @@ class _CostosPageState extends State<CostosPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(width: 8.0),
-            Icon(Icons.calendar_today),
+            Icon(
+              Icons.calendar_today,
+              color: Colors.black54,
+            ),
             SizedBox(width: 8.0),
-            Text('Desde:'),
+            Text('Desde: '),
             _fFechaDesde(context),
-            Text(' hasta:'),
+            Text(' hasta: '),
             _fFechaHasta(context),
           ],
         ),
@@ -224,6 +234,7 @@ class _CostosPageState extends State<CostosPage> {
       });
     }
   }
+
 //picked para seleccionar la fecha hasta donde va realizar la consulta
   Widget _fFechaHasta(BuildContext context) {
     return Container(
@@ -339,8 +350,8 @@ class _CostosPageState extends State<CostosPage> {
             criterioFuture(
                 costo.fkidProductoActividad, ancho * 0.30, registroFoto),
             criterio(costo.valorUnidad.toString(), ancho * 0.12),
-            criterio(
-                (costo.cantidad * costo.valorUnidad).round().toString(), ancho * 0.14),
+            criterio((costo.cantidad * costo.valorUnidad).round().toString(),
+                ancho * 0.14),
             SizedBox(
               width: 5.0,
             )
@@ -410,6 +421,7 @@ class _CostosPageState extends State<CostosPage> {
               child: Center(child: child));
         });
   }
+
 //dibuja los bloques de las unidades de medida, resolviendo un future
   Widget criterioUnidad(String fk, double ancho) {
     return FutureBuilder<String>(
@@ -438,6 +450,35 @@ class _CostosPageState extends State<CostosPage> {
                   borderRadius: BorderRadius.circular(3.0)),
               child: Center(child: child));
         });
+  }
+
+  Widget _costo2(int total, BuildContext context) {
+    final double ancho = MediaQuery.of(context).size.width;
+    return Container(
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            width: 5.0,
+          ),
+          criterioTitulos2(ancho * 0.15),
+          criterioTitulos2(ancho * 0.07),
+          criterioTitulos2(ancho * 0.15),
+          criterioTitulos2(ancho * 0.30),
+          criterioTitulos2(ancho * 0.12),
+          criterioTitulos(total.toString(), ancho * 0.14),
+          SizedBox(
+            width: 5.0,
+          )
+        ],
+      ),
+    );
+  }
+  Widget criterioTitulos2(double ancho) {
+    return Container(
+      height: 25.0,
+      width: ancho,
+      margin: EdgeInsets.all(1.0),
+    );
   }
 //actualizar la vista si se han realizado cambios receintes
   Future<void> _refrescar() async {

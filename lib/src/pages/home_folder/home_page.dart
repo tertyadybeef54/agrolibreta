@@ -74,7 +74,7 @@ class HomePage extends StatelessWidget {
     final _estado = cultivo.fkidEstado;
     final _area = cultivo.areaSembrada.toString();
     final _presupuesto = cultivo.presupuesto.toString();
-    final _precio = cultivo.precioVentaIdeal.toString();
+    final _precio = cultivo.precioVentaIdeal.round().toString();
     final _mR = cultivo.fkidModeloReferencia;
     return Card(
         color: _estado != '1' ? Colors.black12 : Colors.white,

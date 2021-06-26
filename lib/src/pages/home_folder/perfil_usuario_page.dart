@@ -1,9 +1,15 @@
-import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
+/* import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/pie_data_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/porcentajes_data_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/registro_fotograficos_data.dart'; */
 import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
 import 'package:agrolibreta_v2/src/modelos/usuario_model.dart';
 import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:agrolibreta_v2/src/providers/registro_usuarios_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -148,6 +154,12 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               List<Widget> children;
               if (snapshot.hasData) {
+/*                 Provider.of<ModeloReferenciaData>(context, listen: false);
+                Provider.of<CostosData>(context, listen: false);
+                Provider.of<RegistrosFotograficosData>(context, listen: false);
+                Provider.of<FiltrosCostosData>(context, listen: false);
+                Provider.of<PieData>(context, listen: false);
+                Provider.of<UsuarioProvider>(context, listen: false); */
                 children = <Widget>[
                   const Icon(
                     Icons.check_circle_outline,
@@ -156,17 +168,17 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
-                    child: Text('Terminado, sus datos han sido cargados'),
+                    child: Text(
+                        'Terminado, por favor precione OK! para salir y vuelva a entrar'),
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
-                      setState(() {});
+                      SystemNavigator.pop();
                     },
                     child: Text(' OK!'),
                   ),
                 ];
-                Provider.of<CostosData>(context, listen: false).getCostos();
+                //Provider.of<CostosData>(context, listen: false).getCostos();
                 final DateTime datehoy = DateTime.now();
                 final local = datehoy.add(const Duration(hours: -6));
                 final String strFecha =
@@ -415,7 +427,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
                     ),
                     onChanged: (value) {
                       if (value == nuevoPassword && passOk == true) {
-                        usuario.password = int.parse(value);
+                        usuario.password = value;
                       }
                     },
                   ),

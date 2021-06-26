@@ -122,7 +122,8 @@ class SincronizacionProvider {
     final DateTime fecha = new DateTime.now();
     final List<RegistroUsuariosModel> usuario =
         await _usuOper.consultarUsuario();
-    usuario[0].fechaUltimaSincro = DateFormat('dd-MM-yyyy  HH:mm').format(fecha).toString();
+    usuario[0].fechaUltimaSincro =
+        DateFormat('dd-MM-yyyy  HH:mm').format(fecha).toString();
     _usuOper.updateUsuarios(usuario[0]);
     print(usuario[0].fechaUltimaSincro);
     await dbFirestore
@@ -140,14 +141,7 @@ class SincronizacionProvider {
           .set(modelo.toJson());
     }); */
 
-/*     final idUser = 1;
-    final url = '$_url/users/-MbnC5JNGx218pLFceQv.json?auth=${_prefs.token}';
-    final resp = await http.put(Uri.parse(url), body: usersModelToJson(users));
-    final decodedData = json.decode(resp.body);
-    print(decodedData); */
   }
-
-
 
   Future<bool> subirUser(String email) async {
     print('subir user nuevo');
@@ -157,7 +151,8 @@ class SincronizacionProvider {
     final DateTime fecha = new DateTime.now();
     final List<RegistroUsuariosModel> usuario =
         await _usuOper.consultarUsuario();
-    usuario[0].fechaUltimaSincro = DateFormat('dd-MM-yyyy  HH:mm').format(fecha).toString();
+    usuario[0].fechaUltimaSincro =
+        DateFormat('dd-MM-yyyy  HH:mm').format(fecha).toString();
     _usuOper.updateUsuarios(usuario[0]);
     print(usuario[0].fechaUltimaSincro);
     await dbFirestore
@@ -178,7 +173,7 @@ class SincronizacionProvider {
 
     if (cul.length == 0) {
       ///bajar cultivos
-      final cultivos = await snapshot.collection('Cultivos').get();
+       final cultivos = await snapshot.collection('Cultivos').get();
       cultivos.docs.forEach((cultivo) {
         final CultivoModel culTemp = new CultivoModel();
 
@@ -196,19 +191,21 @@ class SincronizacionProvider {
         final String presupuesto = cultivo["presupuesto"].toString();
         final String precioVentaIdeal = cultivo["precioVentaIdeal"].toString();
 
+        double areaSembrada2 = double.parse(areaSembrada);
+
         culTemp.idCultivo = int.parse(idCultivo);
         culTemp.fkidUbicacion = fkidUbicacion;
         culTemp.fkidEstado = fkidEstado;
         culTemp.fkidModeloReferencia = fkidModeloReferencia;
         culTemp.fkidProductoAgricola = fkidProductoAgricola;
         culTemp.nombreDistintivo = nombreDistintivo;
-        culTemp.areaSembrada = int.parse(areaSembrada);
+        culTemp.areaSembrada = areaSembrada2.round();
         culTemp.fechaInicio = fechaInicio;
         culTemp.fechaFinal = fechaFinal;
         culTemp.presupuesto = int.parse(presupuesto);
         culTemp.precioVentaIdeal = double.parse(precioVentaIdeal);
         _culOper.nuevoCultivo(culTemp);
-      });
+      }); 
 
       ///bajar costos
       final costos = await snapshot.collection('Costos').get();
@@ -224,12 +221,13 @@ class SincronizacionProvider {
         final String valorUnidad = costo["valorUnidad"].toString();
         final String fecha = costo["fecha"].toString();
 
+        final double valorUnidad2 = double.parse(valorUnidad);
         cosTemp.idCosto = int.parse(idCosto);
         cosTemp.fkidProductoActividad = fkidProductoActividad;
         cosTemp.fkidCultivo = fkidCultivo;
         cosTemp.fkidRegistroFotografico = fkidRegistroFotografico;
         cosTemp.cantidad = double.parse(cantidad);
-        cosTemp.valorUnidad = int.parse(valorUnidad);
+        cosTemp.valorUnidad = valorUnidad2.round();
         cosTemp.fecha = int.parse(fecha);
 
         _cosOper.nuevoCosto(cosTemp);
@@ -288,7 +286,7 @@ class SincronizacionProvider {
       );
 
       ///bajar ubicaciones
-      final ubicaciones = await snapshot.collection('Ubicaciones').get();
+       final ubicaciones = await snapshot.collection('Ubicaciones').get();
       ubicaciones.docs.forEach(
         (ubicacion) {
           final UbicacionModel ubiTemp = new UbicacionModel();
@@ -306,7 +304,7 @@ class SincronizacionProvider {
 
           _ubiOper.nuevaUbicacion(ubiTemp);
         },
-      );
+      ); 
 
       /// bajar productoActividad
       final produsActs =
@@ -334,39 +332,6 @@ class SincronizacionProvider {
       );
     }
     return true;
-    /*        .collection('Estados')
-        .get();
-
-    snapshot.docs.forEach((estados) {
-      final EstadoModel estTemp = new EstadoModel();
-      final id = estados.data()['idEstado'].toString();
-      final nombre = estados.data()['nombreEstado'].toString();
-
-      int i = int.parse(id);
-      estTemp.idEstado = i;
-      estTemp.nombreEstado = nombre;
-      print(estTemp.nombreEstado);
-    });
-
-     final idUser = await _usuOper.getUsuarioById(1);
-    final email = idUser.email;
-    final db = FirebaseDatabase();
-    //final userRef = db.ch
-    UsersModel users = new UsersModel(); 
-
-    //print(snapshot.docs[0].data());
-    //.where("users", isEqualTo: "andres@gmail.com")
-    //.snapshots();
-    final url = "$_url/users.json?oderBy='correo'&limitToFirst='andres'";
-    final resp = await http.get(Uri.parse(url));
-    final Map<String, dynamic> decodedData = json.decode(resp.body);
-    if (decodedData == null) {
-      return false;
-    }
-    decodedData.forEach((key, value) {
-      //print(value);
-      //print('################');
-    }); */
   }
 
   Future<bool> bajarUsuario(String correo) async {
@@ -395,7 +360,7 @@ class SincronizacionProvider {
       final String fechaUltimaSincro = snapshot['fechaUltimaSincro'].toString();
 
       _usuTemp.documento = int.parse(documento);
-      _usuTemp.password = int.parse(password);
+      _usuTemp.password = password;
       _usuTemp.nombres = nombres;
       _usuTemp.apellidos = apellidos;
       _usuTemp.email = email;

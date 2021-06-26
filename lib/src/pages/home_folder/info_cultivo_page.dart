@@ -309,7 +309,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
     );
   }
 
-//alerta de fecha de inicial Y final
+//alerta de fecha inicial Y final
   void _editFechaAlert(BuildContext context, String titulo, int n) {
     showDialog(
       context: context,
