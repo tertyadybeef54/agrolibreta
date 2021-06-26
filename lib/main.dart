@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
             const Locale('es', 'ES'), // *See Advanced Locales below*
           ],
           title: 'AgroLibreta',
-          initialRoute: 'login', //prefs.ultimaPagina,
+          initialRoute: prefs.ultimaPagina,
           routes: getAplicationRoutes(),
           onGenerateRoute: (RouteSettings settings) {
             return MaterialPageRoute(
