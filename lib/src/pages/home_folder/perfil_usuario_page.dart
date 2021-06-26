@@ -427,7 +427,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
                     ),
                     onChanged: (value) {
                       if (value == nuevoPassword && passOk == true) {
-                        usuario.password = int.parse(value);
+                        usuario.password = value;
                       }
                     },
                   ),

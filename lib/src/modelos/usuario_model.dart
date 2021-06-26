@@ -28,7 +28,7 @@ class RegistroUsuariosModel {
   int documento;
   String email;
   String fechaNacimiento;
-  int password;
+  String password;
   String fechaUltimaSincro;
 
   factory RegistroUsuariosModel.fromJson(Map<String, dynamic> json) =>

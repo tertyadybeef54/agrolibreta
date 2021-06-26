@@ -86,23 +86,38 @@ sumasMr[4]+
 sumasMr[5]+
 sumasMr[6]+
 sumasMr[7];
-  List dataTable = [
-    ['Semi', sumasCultivo[0], sumasMr[0]],
-    ['Abo-fert', sumasCultivo[1], sumasMr[1]],
-    ['Plag-herb', sumasCultivo[2], sumasMr[2]],
-    ['Mat-emp', sumasCultivo[3], sumasMr[3]],
-    ['Maqui', sumasCultivo[4], sumasMr[4]],
-    ['Mano-obra', sumasCultivo[5], sumasMr[5]],
-    ['Transp', sumasCultivo[6], sumasMr[6]],
-    ['Otros', sumasCultivo[7], sumasMr[7]],
-    ['total', totalReal, totalideal],
-  ];
 
-  // Some summary maths
-  //convertir el valor umerico en un porcentaje
-  final expense = dataTable
-      .map((e) => e[1] as num)
-      .reduce((value, element) => value + element);
+
+List dataTable = [
+  ['Semi', sumasCultivo[0], sumasMr[0]],
+  ['Abo-fert', sumasCultivo[1], sumasMr[1]],
+  ['Plag-herb', sumasCultivo[2], sumasMr[2]],
+  ['Mat-emp', sumasCultivo[3], sumasMr[3]],
+  ['Maqui', sumasCultivo[4], sumasMr[4]],
+  ['Mano-obra', sumasCultivo[5], sumasMr[5]],
+  ['Transp', sumasCultivo[6], sumasMr[6]],
+  ['Otros', sumasCultivo[7], sumasMr[7]],
+];
+List dataTable3 = [
+  ['Semi', sumasCultivo[0], sumasMr[0]],
+  ['Abo-fert', sumasCultivo[1], sumasMr[1]],
+  ['Plag-herb', sumasCultivo[2], sumasMr[2]],
+  ['Mat-emp', sumasCultivo[3], sumasMr[3]],
+  ['Maqui', sumasCultivo[4], sumasMr[4]],
+  ['Mano-obra', sumasCultivo[5], sumasMr[5]],
+  ['Transp', sumasCultivo[6], sumasMr[6]],
+  ['Otros', sumasCultivo[7], sumasMr[7]],
+  ['total', totalReal, totalideal],
+];
+
+// Some summary maths
+//convertir el valor umerico en un porcentaje
+final expense = dataTable
+    .map((e) => e[1] as num)
+    .reduce((value, element) => value + element);
+
+
+
 
   // Top bar chart
   final chart1 = pw.Chart(
@@ -174,8 +189,9 @@ sumasMr[7];
     ],
   );
 
-  // Data table
-  final table = pw.Table.fromTextArray(
+
+//date table favorable desfavorable
+  final table3 = pw.Table.fromTextArray(
     border: pw.TableBorder(
         left: pw.BorderSide(),
         right: pw.BorderSide(),
@@ -186,10 +202,10 @@ sumasMr[7];
     data: List<List<dynamic>>.generate(
       9,
       (index) => <dynamic>[
-        dataTable[index][0],
-        dataTable[index][2],
-        dataTable[index][1],
-        (dataTable[index][2] as num) - (dataTable[index][1] as num),
+        dataTable3[index][0],
+        dataTable3[index][2],
+        dataTable3[index][1],
+        (dataTable3[index][2] as num) - (dataTable3[index][1] as num),
       ],
     ),
     headerStyle: pw.TextStyle(
@@ -210,6 +226,10 @@ sumasMr[7];
     cellAlignment: pw.Alignment.centerRight,
     cellAlignments: {0: pw.Alignment.centerLeft},
   );
+
+
+
+
 
 //date table 2 datos de los costos
   final table2 = pw.Table.fromTextArray(
@@ -244,6 +264,11 @@ sumasMr[7];
     cellAlignment: pw.Alignment.centerRight,
     cellAlignments: {0: pw.Alignment.centerLeft},
   );
+
+
+
+
+
   // primera pagina con los datos del cultivo y la grafica de barras
   doc.addPage(
     pw.Page(
@@ -288,8 +313,8 @@ sumasMr[7];
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
                       pw.Row(children: [
-                        pw.Text('Cultivo de: '),
-                        pw.Text('Arveja')
+                        pw.Text('Total: \$'),
+                        pw.Text(totalReal.toString())
                       ]),
                       pw.Row(
                           children: [pw.Text('Estado: '), pw.Text('$_estado')])
@@ -419,7 +444,7 @@ sumasMr[7];
               pw.SizedBox(height: 25.0),
               pw.Text('Tenga en cuenta que si el valor de la diferencia es positivo significa algo favorable, en caso de que la diferencia presente un valor negativo significa algo desfavorable ya que los costos superan el presupuesto inicial'),
               pw.SizedBox(height: 30.0),
-              pw.Expanded(child: table),
+              pw.Expanded(child: table3),
             ],
           ),
         );

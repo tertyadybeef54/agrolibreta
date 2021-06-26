@@ -141,11 +141,6 @@ class SincronizacionProvider {
           .set(modelo.toJson());
     }); */
 
-/*     final idUser = 1;
-    final url = '$_url/users/-MbnC5JNGx218pLFceQv.json?auth=${_prefs.token}';
-    final resp = await http.put(Uri.parse(url), body: usersModelToJson(users));
-    final decodedData = json.decode(resp.body);
-    print(decodedData); */
   }
 
   Future<bool> subirUser(String email) async {
@@ -365,7 +360,7 @@ class SincronizacionProvider {
       final String fechaUltimaSincro = snapshot['fechaUltimaSincro'].toString();
 
       _usuTemp.documento = int.parse(documento);
-      _usuTemp.password = int.parse(password);
+      _usuTemp.password = password;
       _usuTemp.nombres = nombres;
       _usuTemp.apellidos = apellidos;
       _usuTemp.email = email;

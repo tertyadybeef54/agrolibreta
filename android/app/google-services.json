@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:170659621285:android:c728adb3284e2521f7604c",
+        "mobilesdk_app_id": "1:170659621285:android:094c6e916576e7eaf7604c",
         "android_client_info": {
-          "package_name": "com.example.agrolibreta_v2"
+          "package_name": "com.andresdeisy.agrolibreta_v2"
         }
       },
       "oauth_client": [

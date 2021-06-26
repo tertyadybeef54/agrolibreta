@@ -262,7 +262,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
                         print(passwordVisible);
                       });
                     })),
-            onSaved: (value) => registro.password = int.parse(value),
+            onSaved: (value) => registro.password = value,
             onChanged: bloc.changePassword,
           );
         });
@@ -320,9 +320,8 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
                 ),
                 onPressed: snapshot.hasData
                     ? () {
-                            _mostrarSnackbar('Verificando sus datos, por favor espere.');
-                        _registrer(bloc, context);
-                      }
+                      _registrer(bloc, context);
+                    }
                     : null),
           );
         });
@@ -339,22 +338,18 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
 
   void _registrer(LoginRegistroBloc bloc, BuildContext context) async {
     registro.email = bloc.email;
-    registro.password = int.parse(bloc.password);
-    final int idUsuario = await _usuOper.nuevoUsuario(registro);
-    if (idUsuario != 1) {
-      _mostrarSnackbar(
-          'YA EXISTE UN USUARIO PARA ESTE DISPOSITIVO, INICIE SESIÓN O RESTABLESCA LA APLICACIÓN');
-    } else {
-      Map info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
+    registro.password = bloc.password;
+    await _usuOper.nuevoUsuario(registro);
+    Map info = await usuarioProvider.nuevoUsuario(bloc.email, bloc.password);
+    
+    if (info['ok']) {
+      SincronizacionProvider().subirUser(registro.email);
       _mostrarSnackbar('Usuario registrado');
-      if (info['ok']) {
-        SincronizacionProvider().subirUser(registro.email);
-        Navigator.pop(context);
-      } else {
-        mostrarAlerta(context, info['mensaje']);
-      }
-      print('Email: ${bloc.email}');
-      print('Password: ${bloc.password}');
+      Navigator.pop(context);
+    } else {
+      mostrarAlerta(context, info['mensaje']);
     }
+    print('Email: ${bloc.email}');
+    print('Password: ${bloc.password}');
   }
 }

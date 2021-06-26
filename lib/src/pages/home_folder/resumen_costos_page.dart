@@ -78,7 +78,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     return AppBar(
       automaticallyImplyLeading: false,
       title: Column(children: [
-        Text(nombreCul),Text('Total: ' + total.toString()),
+        Text(nombreCul),Text('Total: \$' + total.toString()),
       ],),
       centerTitle: true,
       actions: <Widget>[

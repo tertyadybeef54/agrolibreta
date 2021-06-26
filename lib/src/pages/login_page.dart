@@ -219,12 +219,12 @@ class _Page2State extends State<Page2> {
                         Text('Registrarse', style: TextStyle(fontSize: 18.0))),
               ],
             )),
-        TextButton(
+/*         TextButton(
             onPressed: () {
               Navigator.pushNamed(context, 'restaurarPassword');
             },
             child: Text('¿Olvido la contraseña?',
-                style: TextStyle(fontSize: 18.0))),
+                style: TextStyle(fontSize: 18.0))), */
       ],
     ));
   }
