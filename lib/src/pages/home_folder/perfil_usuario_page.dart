@@ -97,13 +97,13 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
             )
           ]),
           Divider(height: 10.0),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+         /*  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text('  Cambiar password'),
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: () => _cambiarPasswordAlert(context),
             )
-          ]),
+          ]), */
           Divider(height: 10.0),
           Container(
             height: 30.0,
@@ -363,7 +363,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
     }
   }
 
-  void _cambiarPasswordAlert(BuildContext context) {
+/*   void _cambiarPasswordAlert(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -449,7 +449,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
       },
     );
   }
-
+ */
   void _cerrarSesionAlert(BuildContext context) {
     showDialog(
       context: context,

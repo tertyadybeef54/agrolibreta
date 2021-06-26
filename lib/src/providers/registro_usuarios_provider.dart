@@ -154,7 +154,6 @@ class SincronizacionProvider {
     usuario[0].fechaUltimaSincro =
         DateFormat('dd-MM-yyyy  HH:mm').format(fecha).toString();
     _usuOper.updateUsuarios(usuario[0]);
-    print(usuario[0].fechaUltimaSincro);
     await dbFirestore
         .collection('Usuario')
         .doc('${usuario[0].idUsuario}')

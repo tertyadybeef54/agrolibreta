@@ -28,10 +28,10 @@ class LoginPage extends StatelessWidget {
 class Page1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-        SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return Stack(
       children: [
         Background(),
@@ -176,7 +176,6 @@ class _Page2State extends State<Page2> {
   Widget _loginForm(BuildContext context) {
     final bloc = BlocProvider.of(context);
     final size = MediaQuery.of(context).size;
-
     return SingleChildScrollView(
         child: Column(
       children: <Widget>[
@@ -212,8 +211,12 @@ class _Page2State extends State<Page2> {
                 _crearBoton(context, bloc),
                 TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, 'registrarUsuario',
-                          arguments: bloc);
+                      if(_prefs.password != ''){
+                        _mostrarSnackbar('Inicie sesión, solo se permite un usuario por dispositivo');
+                      }else{
+                        Navigator.pushNamed(context, 'registrarUsuario',
+                            arguments: bloc);
+                      }
                     },
                     child:
                         Text('Registrarse', style: TextStyle(fontSize: 18.0))),
@@ -308,18 +311,17 @@ class _Page2State extends State<Page2> {
     //si el password no esta guardado localmente
     //else compare el passwod con el ingresado
     if (password == '') {
-        Map info = await usuarioProvider.login(bloc.email, bloc.password);
-        if (info['ok']) {
-          _mostrarSnackbar('cargando datos...');
-          await SincronizacionProvider().bajarUsuario(bloc.email);
-          _prefs.password = bloc.password;
-          Navigator.pushReplacementNamed(context, 'taps');
-        } else {
-          mostrarAlerta(context, info['mensaje']);
-        }
-        print('Email: ${bloc.email}');
-        print('Password: ${bloc.password}');
- 
+      Map info = await usuarioProvider.login(bloc.email, bloc.password);
+      if (info['ok']) {
+        _mostrarSnackbar('cargando datos...');
+        await SincronizacionProvider().bajarUsuario(bloc.email);
+        _prefs.password = bloc.password;
+        Navigator.pushReplacementNamed(context, 'taps');
+      } else {
+        mostrarAlerta(context, info['mensaje']);
+      }
+      print('Email: ${bloc.email}');
+      print('Password: ${bloc.password}');
     } else {
       if (password == bloc.password) {
         Navigator.pushReplacementNamed(context, 'taps');
