@@ -1,17 +1,12 @@
-/* import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
-import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
-import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
-import 'package:agrolibreta_v2/src/dataproviders/pie_data_provider.dart';
-import 'package:agrolibreta_v2/src/dataproviders/porcentajes_data_provider.dart';
-import 'package:agrolibreta_v2/src/dataproviders/registro_fotograficos_data.dart'; */
-import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
-import 'package:agrolibreta_v2/src/modelos/usuario_model.dart';
-import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
-import 'package:agrolibreta_v2/src/providers/registro_usuarios_provider.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import 'package:agrolibreta_v2/src/modelos/usuario_model.dart';
+import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
+import 'package:agrolibreta_v2/src/providers/registro_usuarios_provider.dart';
+import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
 
 class PerfilUsuarioPage extends StatefulWidget {
   @override
@@ -97,14 +92,6 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
             )
           ]),
           Divider(height: 10.0),
-         /*  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('  Cambiar password'),
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () => _cambiarPasswordAlert(context),
-            )
-          ]), */
-          Divider(height: 10.0),
           Container(
             height: 30.0,
             child: TextButton(
@@ -154,12 +141,6 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               List<Widget> children;
               if (snapshot.hasData) {
-/*                 Provider.of<ModeloReferenciaData>(context, listen: false);
-                Provider.of<CostosData>(context, listen: false);
-                Provider.of<RegistrosFotograficosData>(context, listen: false);
-                Provider.of<FiltrosCostosData>(context, listen: false);
-                Provider.of<PieData>(context, listen: false);
-                Provider.of<UsuarioProvider>(context, listen: false); */
                 children = <Widget>[
                   const Icon(
                     Icons.check_circle_outline,
@@ -169,13 +150,13 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
                     child: Text(
-                        'Terminado, por favor precione OK! para salir y vuelva a entrar'),
+                        'Terminado, si envió datos por favor presione atras, si restauró sus datos presione salir para poder cargar los datos y vuelva a entrar.'),
                   ),
                   TextButton(
                     onPressed: () {
                       SystemNavigator.pop();
                     },
-                    child: Text(' OK!'),
+                    child: Text(' Salir!'),
                   ),
                 ];
                 //Provider.of<CostosData>(context, listen: false).getCostos();

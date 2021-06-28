@@ -1,9 +1,10 @@
-import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:agrolibreta_v2/src/widgets/ubicaciones_dropdown.dart';
 import 'package:agrolibreta_v2/src/dataproviders/ubicaciones_data.dart';
+import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/widgets/modelo_referencia_dropdown.dart';
 
 import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
@@ -13,10 +14,8 @@ import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
 import 'package:agrolibreta_v2/src/data/estados_operations.dart';
 import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
 import 'package:agrolibreta_v2/src/data/producto_agricola_operations.dart';
+import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
 
-import 'package:agrolibreta_v2/src/widgets/ubicaciones_dropdown.dart';
-
-import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 
 class CrearCultivoPage extends StatefulWidget {
   @override
@@ -57,9 +56,9 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
 
   //valores para crear el cultivo, el id es automatico
   String _nombreDistintivo = 'Nn'; //nn sin especificar
-  int _areaSembrada = 1;
+  double _areaSembrada = 1;
   String _fechaInicio = 'Nf';
-  int _presupuesto = 1;
+  double _presupuesto = 1;
   //variables para crear la ubicacion
   String _nombreUbicacion = 'Nu';
   String _desUbicacion = 'No existe';
@@ -92,11 +91,11 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
               'Ejemplo: Arveja con Luis', TextInputType.name, 1),
           Divider(),
           _input('Área a sembrar en metros cuadrados', '10000',
-              'Ejemplo: 10000', TextInputType.numberWithOptions(decimal: false), 2),
+              'Ejemplo: 10000 (sin punto)', TextInputType.numberWithOptions(decimal: false), 2),
           Divider(),
           _fecha(context),
           Divider(),
-          _input('Presupuesto estimado', '5000000', 'Ejemplo: 5000000',
+          _input('Presupuesto estimado', '5000000', 'Ejemplo: 5000000 (sin punto)',
               TextInputType.numberWithOptions(decimal: false), 3),
           Divider(),
           _guardar(context),
@@ -248,10 +247,10 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
               _nombreDistintivo = valor;
             }
             if (n == 2) {
-              _areaSembrada = int.parse(valor);
+              _areaSembrada = double.parse(valor);
             }
             if (n == 3) {
-              _presupuesto = int.parse(valor);
+              _presupuesto = double.parse(valor);
             }
           });
         },
@@ -271,7 +270,7 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
           hintText: 'fecha día-mes-año',
           labelText: 'fecha día-mes-año',
-          helperText: 'Seleccione fecha de inicio del cultivo',
+          helperText: 'Fecha de inicio de actividades del cultivo',
           icon: Icon(Icons.calendar_today),
           suffixIcon: Icon(Icons.touch_app),
         ),
@@ -337,9 +336,9 @@ class _CrearCultivoPageState extends State<CrearCultivoPage> {
       _selectedUbicacion.idUbicacion.toString(),
       _selectedModeloReferencia.idModeloReferencia.toString(),
       _nombreDistintivo,
-      _areaSembrada,
+      _areaSembrada.round(),
       _fechaInicio,
-      _presupuesto
+      _presupuesto.round()
     );
   }
 }

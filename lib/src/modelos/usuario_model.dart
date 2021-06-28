@@ -39,7 +39,7 @@ class RegistroUsuariosModel {
         documento: json["documento"],
         email: json["email"],
         fechaNacimiento: json["fechaNacimiento"],
-        password: json["password"],
+        password: json["password"].toString(),
         fechaUltimaSincro: json["fechaUltimaSincro"]
       );
 

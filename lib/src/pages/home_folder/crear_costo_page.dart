@@ -1,23 +1,23 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/widgets/concepto_dropdown.dart';
 import 'package:agrolibreta_v2/src/widgets/unidad_medida_dropdown.dart';
+import 'package:agrolibreta_v2/src/widgets/producto_actividad_dropdown.dart';
 
-import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
 import 'package:agrolibreta_v2/src/data/costo_operations.dart';
+import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
+import 'package:agrolibreta_v2/src/data/unidad_medida_operations.dart';
 import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
 import 'package:agrolibreta_v2/src/data/registro_fotografico_operations.dart';
-import 'package:agrolibreta_v2/src/data/unidad_medida_operations.dart';
 
-import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
 import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
-import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
+import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
 import 'package:agrolibreta_v2/src/modelos/unidad_medida_model.dart';
+import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
+import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 
-import 'package:agrolibreta_v2/src/widgets/producto_actividad_dropdown.dart';
-import 'package:provider/provider.dart';
 
 class CrearCostoPage extends StatefulWidget {
   @override
@@ -65,14 +65,13 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   //int _fkidCultivo = 1;
   double _cantidad = 1;
   double _valorTotal = 0;
-  
+
   String _fechaC;
   //variables para la creacion de el producto actividad
   String _nombreProductoActividad = '';
   //variables para crear unidad de medida
   String _nombreUnidadMedida = '';
   String _descripcionUnidadMedida = '';
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +94,10 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
           Divider(),
           Row(
             children: [
-              Icon(Icons.square_foot, color: Colors.black54,),
+              Icon(
+                Icons.square_foot,
+                color: Colors.black54,
+              ),
               SizedBox(
                 width: 10.0,
               ),
@@ -156,21 +158,21 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
 
   Widget _unidad() {
     if (_selectedProductoActividad == null) {
-      return Text('Seleccione un producto o actividad');
+      return Text('und');
     }
     print(_selectedProductoActividad.fkidUnidadMedida);
     ProductoActividadOperations _proActOper = new ProductoActividadOperations();
     return FutureBuilder<String>(
-        future: _proActOper
-            .consultarNombreUnidad(_selectedProductoActividad.idProductoActividad.toString()),
+        future: _proActOper.consultarNombreUnidad(
+            _selectedProductoActividad.idProductoActividad.toString()),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           Widget child;
           if (snapshot.hasData) {
             child = Text(snapshot.data);
           } else if (snapshot.hasError) {
-            child = Text('Seleccione un producto o actividad');
+            child = Text('und');
           } else {
-            child = Text('Seleccione un producto o actividad'); //
+            child = Text('und'); //
           }
           return child;
         });
@@ -308,6 +310,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
                       uniMedOper.nuevoUnidadMedida(unidadMedida);
                     });
                     Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                   child: Text('Guardar')),
             ],
@@ -354,7 +357,13 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
   //calcular valor total
   Widget _valorUnitario() {
     setState(() {});
-    int _valorUnidad = (_valorTotal / _cantidad).round();
+    int _valorUnidad;
+    if (_cantidad > 0) {
+      _valorUnidad = (_valorTotal / _cantidad).round();
+    } else {
+      _valorUnidad = 0;
+    }
+
     return Text(
       'Valor unitario: \$ ${_valorUnidad.toString()}',
       textAlign: TextAlign.right,
@@ -426,7 +435,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
       context: context,
       initialDate: new DateTime.now(),
       firstDate: new DateTime(2021),
-      lastDate: new DateTime(2030),
+      lastDate: new DateTime.now(),
       locale: Locale('es', 'ES'),
       builder: (BuildContext context, Widget child) {
         return Theme(
@@ -478,7 +487,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
       fkidCultivo: fkidCultivo,
       fkidRegistroFotografico: "0",
       cantidad: _cantidad,
-      valorUnidad: (_valorTotal/_cantidad).round(),
+      valorUnidad: (_valorTotal / _cantidad).round(),
       fecha: int.parse(_fechaC),
     );
     cosOper.nuevoCosto(costoTemp);

@@ -57,12 +57,12 @@ class _Paginas extends StatelessWidget {
     final navegacionModel = Provider.of<_NavegacionModel>(context);
     //Provider.of<CultivosData>(context, listen: false);
     Provider.of<PorcentajeData>(context, listen: false);
-    Provider.of<ModeloReferenciaData>(context, listen: false);
     Provider.of<CostosData>(context, listen: false);
     Provider.of<RegistrosFotograficosData>(context, listen: false);
     Provider.of<FiltrosCostosData>(context, listen: false);
     Provider.of<PieData>(context, listen: false);
     Provider.of<UsuarioProvider>(context, listen: false);
+    Provider.of<ModeloReferenciaData>(context, listen: false);
     return PageView(
       controller: navegacionModel.pageController,
       physics: NeverScrollableScrollPhysics(),

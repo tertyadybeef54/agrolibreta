@@ -120,10 +120,13 @@ class SincronizacionProvider {
     });
 
     final DateTime fecha = new DateTime.now();
+    DateTime horaTotal= fecha.add(Duration(hours: -6));
+
     final List<RegistroUsuariosModel> usuario =
         await _usuOper.consultarUsuario();
+
     usuario[0].fechaUltimaSincro =
-        DateFormat('dd-MM-yyyy  HH:mm').format(fecha).toString();
+        DateFormat('dd-MM-yyyy  HH:mm').format(horaTotal).toString();
     _usuOper.updateUsuarios(usuario[0]);
     print(usuario[0].fechaUltimaSincro);
     await dbFirestore

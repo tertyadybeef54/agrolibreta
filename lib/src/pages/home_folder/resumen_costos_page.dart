@@ -31,8 +31,8 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     _sumasAll.forEach((element) {
       print(element.toString());
     });
-
-    _sumasAll[idCul-1].forEach((element) {
+    total = 0;
+    _sumasAll[idCul - 1].forEach((element) {
       total += element;
     });
     _conceptosAll.forEach((element) {
@@ -49,37 +49,40 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
       body: RefreshIndicator(
         onRefresh: _refrescar,
         child: ListView.builder(
-          padding: EdgeInsets.only(
-              left: 0.0, right: 0.0, top: 25.0, bottom: 20.0),
+          padding:
+              EdgeInsets.only(left: 0.0, right: 0.0, top: 25.0, bottom: 20.0),
           itemCount: 4,
           itemBuilder: (context, i) {
             if (_conceptosAll.length > 0) {
-                  return _concepto(
-              _conceptosAll[idCul - 1][i].nombreConcepto,
-              _sumasAll[idCul - 1][i],
-              _sugeridos[idCul - 1][i],
-              _conceptosAll[idCul - 1][4 + i].nombreConcepto,
-              _sumasAll[idCul - 1][4 + i],
-              _sugeridos[idCul - 1][4 + i],
-              i + 1);
-        } else
-          return Center(
-            child: Text('Actualizar'),
-          );
-        },
+              return _concepto(
+                  _conceptosAll[idCul - 1][i].nombreConcepto,
+                  _sumasAll[idCul - 1][i],
+                  _sugeridos[idCul - 1][i],
+                  _conceptosAll[idCul - 1][4 + i].nombreConcepto,
+                  _sumasAll[idCul - 1][4 + i],
+                  _sugeridos[idCul - 1][4 + i],
+                  i + 1);
+            } else
+              return Center(
+                child: Text('Actualizar'),
+              );
+          },
+        ),
       ),
-    ),
-    floatingActionButton: _botonNuevoCosto(context, idCul),
-    floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: _botonNuevoCosto(context, idCul),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
   Widget _appBar(BuildContext context, String nombreCul, int idCul) {
     return AppBar(
       automaticallyImplyLeading: false,
-      title: Column(children: [
-        Text(nombreCul),Text('Total: \$' + total.toString()),
-      ],),
+      title: Column(
+        children: [
+          Text(nombreCul),
+          Text('Total: \$' + total.toString()),
+        ],
+      ),
       centerTitle: true,
       actions: <Widget>[
         IconButton(

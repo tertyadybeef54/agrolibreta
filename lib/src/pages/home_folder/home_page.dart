@@ -1,15 +1,17 @@
-import 'package:agrolibreta_v2/src/data/estados_operations.dart';
-import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
-import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
-import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
-import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
-import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
-import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
+import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
+
+import 'package:agrolibreta_v2/src/data/estados_operations.dart';
+import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
+
+import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
+import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
+
 
 class HomePage extends StatelessWidget {
   final UbicacionesOperations _ubiOper = new UbicacionesOperations();
@@ -18,10 +20,6 @@ class HomePage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
     prefs.ultimaPagina = 'taps';
     final cosData = Provider.of<CostosData>(context);
     final List<CultivoModel> cultivos = cosData.cultivos;
@@ -98,11 +96,6 @@ class HomePage extends StatelessWidget {
                 Row(children: [
                   Text('Nombre: '),
                   Text('$_nombre',
-                      style: TextStyle(fontWeight: FontWeight.bold))
-                ]),
-                Row(children: [
-                  Text('Cultivo de: '),
-                  Text('Arveja',
                       style: TextStyle(fontWeight: FontWeight.bold))
                 ]),
                 Row(children: [

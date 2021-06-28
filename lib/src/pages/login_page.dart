@@ -1,12 +1,13 @@
-import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
-import 'package:agrolibreta_v2/src/providers/registro_usuarios_provider.dart';
-import 'package:agrolibreta_v2/src/providers/usuario_provider.dart';
 import 'package:flutter/material.dart';
 
-import 'package:agrolibreta_v2/src/blocs/login_registro_bloc.dart';
-import 'package:agrolibreta_v2/src/blocs/provider.dart';
 import 'package:agrolibreta_v2/src/utils/utils.dart';
-import 'package:flutter/services.dart';
+import 'package:agrolibreta_v2/src/providers/usuario_provider.dart';
+import 'package:agrolibreta_v2/src/providers/registro_usuarios_provider.dart';
+
+import 'package:agrolibreta_v2/src/blocs/provider.dart';
+import 'package:agrolibreta_v2/src/blocs/login_registro_bloc.dart';
+import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dart';
+
 
 class LoginPage extends StatelessWidget {
   @override
@@ -25,13 +26,9 @@ class LoginPage extends StatelessWidget {
 }
 
 //Front end Primera pagina, la imagen de fonto y los titulos
-class Page1 extends StatelessWidget {
+class Page1 extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
     return Stack(
       children: [
         Background(),
@@ -44,19 +41,20 @@ class Page1 extends StatelessWidget {
 class MainContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    double  media = MediaQuery.of(context).size.height;
     return SafeArea(
       bottom: false,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 200),
+            SizedBox(height: media*0.3),
             Text('AgroLibreta',
                 style: TextStyle(
                     fontSize: 60,
                     fontWeight: FontWeight.bold,
                     color: Colors.white)),
-            SizedBox(height: 100),
+            SizedBox(height: media*0.05),
             Text('Escuela Ingenieria de Sistemas',
                 style: TextStyle(
                     fontSize: 20,

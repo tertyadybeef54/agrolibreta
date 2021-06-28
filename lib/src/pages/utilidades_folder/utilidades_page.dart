@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:agrolibreta_v2/src/dataproviders/ubicaciones_data.dart';
-import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/unidades_medida_data_provider.dart';
 
 class UtilidadesPage extends StatelessWidget {
@@ -11,8 +10,6 @@ class UtilidadesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //provider para listar los datos de las utilidades
-    final modelosReferenciaData = Provider.of<ModeloReferenciaData>(context, listen: false);
-    modelosReferenciaData.obtenerByID();
     Provider.of<UbicacionesData>(context, listen: false);
     Provider.of<UnidadesMedidaData>(context, listen: false);
     Provider.of<ProductoActividadData>(context, listen: false);

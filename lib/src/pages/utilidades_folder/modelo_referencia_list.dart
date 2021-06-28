@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
 import 'package:agrolibreta_v2/src/modelos/porcentaje_model.dart';
 import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
-
 import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
 
 class ModeloReferenciaList extends StatefulWidget {
@@ -25,22 +24,7 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
     final List<List<ConceptoModel>> conceptosList =
         modelosReferenciaData.conceptosList;
 
-   /*  modelosReferencia.forEach((element) {
-      print('########modelo: ' + element.idModeloReferencia.toString());
-      conceptosList[element.idModeloReferencia-1].forEach((c) {
-          print(c.nombreConcepto);
-        });
-     
-    });
-    modelosReferencia.forEach((element) {
-      print('######## Modelo: ' + element.idModeloReferencia.toString());
-      porcentajesList[element.idModeloReferencia-1].forEach((c) {
-          print(c.porcentaje);
-        });
-     
-    }); */
-
-
+  
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -58,9 +42,7 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
       List<ModeloReferenciaModel> modelosReferencia,
       List<List<PorcentajeModel>> porcentajesList,
       List<List<ConceptoModel>> conceptosList) {
-    return /* RefreshIndicator(
-      onRefresh: _refrescar, */
-      /* child:  */ListView.builder(
+    return ListView.builder(
         itemCount: modelosReferencia.length,
         itemBuilder: (_, i) => Dismissible(
           key: UniqueKey(),
@@ -132,8 +114,4 @@ class _ModeloReferenciaListState extends State<ModeloReferenciaList> {
       },
     );
   }
-
-/*   Future<void> _refrescar() async {
-    setState(() {});
-  } */
 }

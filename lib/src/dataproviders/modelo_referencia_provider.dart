@@ -22,10 +22,12 @@ class ModeloReferenciaData with ChangeNotifier {
 
   ModeloReferenciaData() {
     this.getModelosReferencia();
+    this.obtenerByID();
   }
   getModelosReferencia() async {
     final _resp = await _modOper.consultarModelosReferencia();
     this.modelosReferencia = [..._resp];
+    
   }
 
   anadirModeloReferencia(
@@ -92,15 +94,17 @@ class ModeloReferenciaData with ChangeNotifier {
     final _resp =
         await _porOper.consultarPorcentajesbyModeloReferencia(_id.toString());
 
-    final _resp2 = await _conOper.consultarConceptos(); //lista temporal de conceptos
+    final _resp2 =
+        await _conOper.consultarConceptos(); //lista temporal de conceptos
     this.conceptosList.add(_resp2); //se añade la lista de conceptos
     this.porcentajesList.add(_resp); //añade la lista de porcentajes
     notifyListeners();
     print('provider modelo referencia nuevo mr');
   }
 
-  obtenerByID() {
-    this.modelosReferencia.forEach(
+  obtenerByID() async {
+    final _resp = await _modOper.consultarModelosReferencia();
+    _resp.forEach(
       (modelo) async {
         final _resp = await _porOper.consultarPorcentajesbyModeloReferencia(
             modelo.idModeloReferencia.toString());
@@ -110,7 +114,6 @@ class ModeloReferenciaData with ChangeNotifier {
         this.porcentajesList.add(_resp); //añade la lista de porcentajes
       },
     );
-    print('provider modelo referencia ob');
   }
 
   eliminarModelo(int idMr, List<PorcentajeModel> porcentajes,
@@ -118,9 +121,8 @@ class ModeloReferenciaData with ChangeNotifier {
     await _modOper.deleteModeloReferencia(idMr);
     this.getModelosReferencia();
     await _porOper.deletePorcentajesByMR(idMr);
-    this.conceptosList.removeWhere((element) => element == conceptos);
-    this.porcentajesList.removeWhere((element) => element == porcentajes);
-    print('provider modelo referencia eliminado');
+    this.conceptosList.remove(conceptos);
+    this.porcentajesList.remove(porcentajes);
     notifyListeners();
   }
 }

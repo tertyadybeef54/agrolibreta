@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqlite_api.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqlite_api.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DBProvider {
   static Database _database;
@@ -219,10 +219,6 @@ class DBProvider {
       await db.rawInsert('''
         INSERT INTO Porcentajes(fk2idModeloReferencia, fk2idConcepto, porcentaje) VALUES("1", "8", 5.5)
       ''');
-//################# productos agricolas
-      await db.rawInsert('''
-        INSERT INTO ProductosAgricolas(nombreProducto) VALUES("Arveja")
-      ''');
 //################ productos actividades
       await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("1", "1", "Rabo de gallo")
@@ -237,7 +233,7 @@ class DBProvider {
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("3", "3", "Metarex")
       ''');
       await db.rawInsert('''
-        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("3", "1", "Dinate")
+        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("3", "1", "Dithane")
       ''');
       await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("4", "5", "Alambre")
@@ -249,7 +245,13 @@ class DBProvider {
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Arar")
       ''');
       await db.rawInsert('''
+        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Sembrar")
+      ''');
+      await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Tutorar")
+      ''');
+      await db.rawInsert('''
+        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Deshierbar")
       ''');
       await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Fumigar")
@@ -257,7 +259,6 @@ class DBProvider {
       await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Recolectar")
       ''');
-
       print('base creada');
     });
   }
