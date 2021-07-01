@@ -1,7 +1,8 @@
-import 'package:agrolibreta_v2/src/dataproviders/cultivo_data.dart';
 import 'package:flutter/material.dart';
-import 'package:agrolibreta_v2/src/data/estados_operations.dart';
 import 'package:provider/provider.dart';
+
+import 'package:agrolibreta_v2/src/data/estados_operations.dart';
+import 'package:agrolibreta_v2/src/dataproviders/cultivo_data.dart';
 
 // ignore: must_be_immutable
 class ConfigCultivoPage extends StatelessWidget {

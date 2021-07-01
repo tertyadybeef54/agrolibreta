@@ -30,13 +30,11 @@ class CultivoData with ChangeNotifier {
   actualizarData(CultivoModel nuevoCultivo) async {
     final res = await _culOper.updateCultivos(nuevoCultivo);
     this.cultivo = nuevoCultivo;
-    print('actualizar cultivo: ');
     print(res.toString());
   }
 
   calcularCostosTotales(int idCultivo) async {
     final res = await _cosOper.getCostoTotalByCultivo(idCultivo.toString());
-    print('calcular costos totales: $res');
     costosTotales = res;
   }
 
@@ -58,7 +56,6 @@ class CultivoData with ChangeNotifier {
     culTemp.fkidEstado = idEst.toString();
     final res = await _culOper.updateCultivos(culTemp);
     this.cultivo = culTemp;
-    print('actualizar estado: ');
     print(res.toString());
   }
 }

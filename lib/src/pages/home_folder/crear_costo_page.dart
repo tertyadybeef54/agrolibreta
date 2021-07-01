@@ -184,42 +184,44 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
         context: context,
         barrierDismissible: true,
         builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Registrar nuevo producto o actividad'),
-            content: Column(
-              //mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _seleccioneUnidadMedida(),
-                SizedBox(height: 10.0),
-                _inputI('', 'Nombre', TextInputType.name, 3),
-                SizedBox(height: 10.0),
-                _seleccioneConcepto(),
+          return SingleChildScrollView(
+              child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              title: Text('Registrar nuevo producto o actividad'),
+              content: Column(
+                //mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [ 
+                  _seleccioneUnidadMedida(),
+                  SizedBox(height: 8.0),
+                  _inputI('', 'Nombre', TextInputType.name, 3),
+                  SizedBox(height: 8.0),
+                  _seleccioneConcepto(),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  child: Text('Cancelar'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      final productoActividad = new ProductoActividadModel(
+                        nombreProductoActividad: _nombreProductoActividad,
+                        fkidConcepto: _selectedConcepto.idConcepto.toString(),
+                        fkidUnidadMedida:
+                            _selectedUnidadMedida.idUnidadMedida.toString(),
+                      );
+                      proActOper.nuevoProductoActividad(productoActividad);
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: Text('Guardar'),
+                ),
               ],
             ),
-            actions: [
-              TextButton(
-                child: Text('Cancelar'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    final productoActividad = new ProductoActividadModel(
-                      nombreProductoActividad: _nombreProductoActividad,
-                      fkidConcepto: _selectedConcepto.idConcepto.toString(),
-                      fkidUnidadMedida:
-                          _selectedUnidadMedida.idUnidadMedida.toString(),
-                    );
-                    proActOper.nuevoProductoActividad(productoActividad);
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text('Guardar'),
-              ),
-            ],
           );
         });
   }
@@ -229,7 +231,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     return Row(
       children: [
         Icon(Icons.grass_rounded, color: Colors.black45),
-        SizedBox(width: 13.0),
+        SizedBox(width: 15.0),
         FutureBuilder<List<ConceptoModel>>(
           //debe consultar solo los conceptos que estan relacionados con ese cultivo
           future: conOper.consultarConceptos(),
@@ -354,7 +356,7 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     );
   }
 
-  //calcular valor total
+  //calcular valor unidad
   Widget _valorUnitario() {
     setState(() {});
     int _valorUnidad;

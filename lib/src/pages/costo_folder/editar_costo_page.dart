@@ -1,23 +1,19 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
-import 'package:agrolibreta_v2/src/widgets/concepto_dropdown.dart';
-import 'package:agrolibreta_v2/src/widgets/unidad_medida_dropdown.dart';
+import 'package:agrolibreta_v2/src/widgets/producto_actividad_dropdown.dart';
 
-import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
 import 'package:agrolibreta_v2/src/data/costo_operations.dart';
+import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
+import 'package:agrolibreta_v2/src/data/unidad_medida_operations.dart';
 import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
 import 'package:agrolibreta_v2/src/data/registro_fotografico_operations.dart';
-import 'package:agrolibreta_v2/src/data/unidad_medida_operations.dart';
 
-import 'package:agrolibreta_v2/src/modelos/concepto_model.dart';
 import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
-import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
-import 'package:agrolibreta_v2/src/modelos/unidad_medida_model.dart';
 
-import 'package:agrolibreta_v2/src/widgets/producto_actividad_dropdown.dart';
-import 'package:provider/provider.dart';
+import 'package:agrolibreta_v2/src/modelos/producto_actividad_model.dart';
 
 class EditarCostoPage extends StatefulWidget {
   @override
@@ -41,20 +37,6 @@ class EditarCostoPageState extends State<EditarCostoPage> {
     });
   }
 
-  ConceptoModel _selectedConcepto;
-  callback1(selectedConcepto) {
-    setState(() {
-      _selectedConcepto = selectedConcepto;
-    });
-  }
-
-  UnidadMedidaModel _selectedUnidadMedida;
-  callback2(selectedUnidadMedida) {
-    setState(() {
-      _selectedUnidadMedida = selectedUnidadMedida;
-    });
-  }
-
   //estilo de texto letra tamaño 20
   final _style = new TextStyle(
     fontSize: 20.0,
@@ -64,24 +46,26 @@ class EditarCostoPageState extends State<EditarCostoPage> {
   TextEditingController _controlValor = new TextEditingController();
 
   String _fechaC;
-  //variables para la creacion de el producto actividad
-  String _nombreProductoActividad = '';
-  //variables para crear unidad de medida
-  String _nombreUnidadMedida = '';
-  String _descripcionUnidadMedida = '';
   CostoModel _costoTemp;
+  double _cantidad = 1;
+  double _valorTotal = 0;
+  bool check = false;
   @override
   Widget build(BuildContext context) {
-    final CostoModel costo = ModalRoute.of(context).settings.arguments;
+    if (!check) {
+      final CostoModel costo = ModalRoute.of(context).settings.arguments;
 
-    final fecha = costo.fecha.toString();
-    final fechaDate = DateTime.tryParse(fecha);
-    final fechaFormatted = DateFormat('dd-MM-yyyy').format(fechaDate);
-
-    controlFecha.text = fechaFormatted;
-    _controlCantidad.text = costo.cantidad.toString();
-    _controlValor.text = costo.valorUnidad.toString();
-    _costoTemp = costo;
+      final fecha = costo.fecha.toString();
+      final fechaDate = DateTime.tryParse(fecha);
+      final fechaFormatted = DateFormat('dd-MM-yyyy').format(fechaDate);
+      controlFecha.text = fechaFormatted;
+      _controlValor.text = costo.valorUnidad.round().toString();
+      _controlCantidad.text = costo.cantidad.toString();
+      _costoTemp = costo;
+      _cantidad = costo.cantidad;
+      _valorTotal = (costo.cantidad * costo.valorUnidad);
+    }
+    check = true;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -102,12 +86,26 @@ class EditarCostoPageState extends State<EditarCostoPage> {
           ),
           _seleccioneProductoActividad(),
           Divider(),
-          _input('Cantidad de unidades o jornales', '5', 'Ejemplo: 5',
+          Row(
+            children: [
+              Icon(
+                Icons.square_foot,
+                color: Colors.black54,
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+              Text('Unidad de medida: '),
+              _unidad()
+            ],
+          ),
+          Divider(),
+          _input('Cantidad de unidades o jornales', 'Ejemplo: 5',
               TextInputType.number, 1),
           Divider(),
-          _input('Valor Unidad o jornal', '5700', 'Ejemplo: 5700',
+          _input('Valor Total en pesos', 'Ejemplo: \$100000',
               TextInputType.number, 2),
-          _valorTotal(),
+          _valorUnitario(),
           Divider(),
           _fecha(context),
           Divider(),
@@ -133,144 +131,29 @@ class EditarCostoPageState extends State<EditarCostoPage> {
                 : Text('debe crearlos');
           },
         ),
-        Stack(
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 9.0, vertical: 8.8),
-              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: Color(0xff8c6d62)),
-            ),
-            IconButton(
-              icon: Icon(Icons.add),
-              color: Colors.white,
-              onPressed: () => _registrarProductoActividad(context),
-            ),
-          ],
-        ),
       ],
     );
   }
 
-  // registrar un nuevo producto actividad si no existe
-  void _registrarProductoActividad(BuildContext context) {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Registrar'),
-            content: Column(
-              //se debe mejorar para mostrarlo mas estetico
-              children: [
-                _seleccioneUnidadMedida(),
-                Divider(),
-                _inputI(
-                    '', 'Nombre del prod...', 'Nombre', TextInputType.name, 3),
-                _seleccioneConcepto(),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    final productoActividad = new ProductoActividadModel(
-                      nombreProductoActividad: _nombreProductoActividad,
-                      fkidConcepto: _selectedConcepto.idConcepto.toString(),
-                      fkidUnidadMedida:
-                          _selectedUnidadMedida.idUnidadMedida.toString(),
-                    );
-                    proActOper.nuevoProductoActividad(productoActividad);
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text('Guardar'),
-              ),
-            ],
-          );
-        });
-  }
-
-  //2. segundo dropdown seleccionar el concepto
-  Widget _seleccioneConcepto() {
-    return FutureBuilder<List<ConceptoModel>>(
-      //debe consultar solo los conceptos que estan relacionados con ese cultivo
-      future: conOper.consultarConceptos(),
-      builder: (context, snapshot) {
-        return snapshot.hasData
-            ? ConceptoDropdown(snapshot.data, callback1) //selected concepto
-            : Text('sin conceptos');
-      },
-    );
-  }
-
-  //3.tercer dropdown Seleccionar unidad de medida
-  Widget _seleccioneUnidadMedida() {
-    return Row(
-      children: [
-        FutureBuilder<List<UnidadMedidaModel>>(
-          future: uniMedOper.consultarUnidadesMedida(),
-          builder: (context, snapshot) {
-            return snapshot.hasData
-                ? UnidadMedidaDropdown(snapshot.data, callback2)
-                : Text('debe crearlas');
-          },
-        ),
-        Stack(
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 9.0, vertical: 8.8),
-              padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.lightBlue),
-            ),
-            IconButton(
-              icon: Icon(Icons.add),
-              color: Colors.white,
-              onPressed: () => _registrarUnidadMedida(context),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  //registrar nueva unidad de medida si no existe
-  void _registrarUnidadMedida(BuildContext context) {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text('Registrar unidad de medida'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _inputI('', 'kg', 'Ejemplo: kg', TextInputType.name, 4),
-                Divider(),
-                _inputI(
-                    '', 'bolsas de kilo', 'Descripcion', TextInputType.name, 5),
-              ],
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      final unidadMedida = new UnidadMedidaModel(
-                        nombreUnidadMedida: _nombreUnidadMedida,
-                        descripcion: _descripcionUnidadMedida,
-                      );
-                      uniMedOper.nuevoUnidadMedida(unidadMedida);
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: Text('Guardar')),
-            ],
-          );
+  Widget _unidad() {
+    if (_selectedProductoActividad == null) {
+      return Text('und');
+    }
+    print(_selectedProductoActividad.fkidUnidadMedida);
+    ProductoActividadOperations _proActOper = new ProductoActividadOperations();
+    return FutureBuilder<String>(
+        future: _proActOper.consultarNombreUnidad(
+            _selectedProductoActividad.idProductoActividad.toString()),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          Widget child;
+          if (snapshot.hasData) {
+            child = Text(snapshot.data);
+          } else if (snapshot.hasError) {
+            child = Text('und');
+          } else {
+            child = Text('und'); //
+          }
+          return child;
         });
   }
 
@@ -278,11 +161,10 @@ class EditarCostoPageState extends State<EditarCostoPage> {
   //###############################################
   // ingresar el nombre 1.distintivo, 2.area sembrada 3.presupuesto y 4. nombre ubicacion 5. descripcion ubicacion
   // Se debe agrgar condicion de solo enteros para 2 y 3
-  Widget _input(String descripcion, String hilabel, String labeltext,
-      TextInputType tipotext, int n) {
+  Widget _input(
+      String descripcion, String labeltext, TextInputType tipotext, int n) {
     var inputDecoration = InputDecoration(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-      hintText: hilabel,
       labelText: labeltext,
       helperText: descripcion,
       icon: Icon(Icons.drive_file_rename_outline),
@@ -299,58 +181,34 @@ class EditarCostoPageState extends State<EditarCostoPage> {
         textCapitalization: TextCapitalization.sentences,
         decoration: inputDecoration,
         onChanged: (valor) {
-          if (n == 1) {
-            _costoTemp.cantidad = double.parse(valor);
-          }
-          if (n == 2) {
-            _costoTemp.valorUnidad = int.parse(valor);
-          }
-        },
-      ),
-    );
-  }
-
-  //calcular valor total
-  Widget _valorTotal() {
-    setState(() {});
-    double total = _costoTemp.valorUnidad * _costoTemp.cantidad;
-    return Text(
-      'Total: ${total.toString()}',
-      textAlign: TextAlign.right,
-    );
-  }
-
-  //input internos
-  Widget _inputI(String descripcion, String hilabel, String labeltext,
-      TextInputType tipotext, int n) {
-    var inputDecoration = InputDecoration(
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
-      hintText: hilabel,
-      labelText: labeltext,
-    );
-    return Container(
-      padding: EdgeInsets.only(bottom: 5.0),
-      height: 60.0,
-      width: double.infinity,
-      child: TextField(
-        textAlignVertical: TextAlignVertical.bottom,
-        keyboardType: tipotext,
-        textCapitalization: TextCapitalization.sentences,
-        decoration: inputDecoration,
-        onChanged: (valor) {
           setState(() {
-            if (n == 3) {
-              _nombreProductoActividad = valor;
+            if (n == 1) {
+              _cantidad = double.parse(valor);
+              _costoTemp.cantidad = double.parse(valor);
             }
-            if (n == 4) {
-              _nombreUnidadMedida = valor;
-            }
-            if (n == 5) {
-              _descripcionUnidadMedida = valor;
+            if (n == 2) {
+              _valorTotal = double.parse(valor);
+              _costoTemp.valorUnidad = (_valorTotal / _cantidad).round();
             }
           });
         },
       ),
+    );
+  }
+
+  //calcular valor unidad
+  Widget _valorUnitario() {
+    setState(() {});
+    int _valorUnidad = 1;
+    if (_cantidad > 0) {
+      _valorUnidad = (_valorTotal / _cantidad).round();
+    } else {
+      _valorUnidad = 0;
+    }
+
+    return Text(
+      'Valor unitario: \$ ${_valorUnidad.toString()}',
+      textAlign: TextAlign.right,
     );
   }
 
@@ -366,7 +224,7 @@ class EditarCostoPageState extends State<EditarCostoPage> {
         decoration: InputDecoration(
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
           hintText: '',
-          labelText: 'fecha',
+          labelText: 'fecha: día-mes-año',
           helperText: 'Seleccione fecha de compra',
           icon: Icon(Icons.calendar_today),
           suffixIcon: Icon(Icons.touch_app),
@@ -384,7 +242,7 @@ class EditarCostoPageState extends State<EditarCostoPage> {
       context: context,
       initialDate: new DateTime.now(),
       firstDate: new DateTime(2021),
-      lastDate: new DateTime(2030),
+      lastDate: new DateTime.now(),
       locale: Locale('es', 'ES'),
       builder: (BuildContext context, Widget child) {
         return Theme(

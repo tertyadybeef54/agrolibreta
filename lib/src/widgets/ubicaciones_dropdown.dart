@@ -18,7 +18,7 @@ class UbicacionesDropdowun extends StatefulWidget {
 }
 
 class _UbicacionesDropdownState extends State<UbicacionesDropdowun> {
-  String selected = 'Seleccione ubicación';
+  String selected = 'Ubicación';
   @override
   Widget build(BuildContext context) {
     

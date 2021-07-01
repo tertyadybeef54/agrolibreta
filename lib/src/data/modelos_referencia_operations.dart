@@ -14,7 +14,6 @@ class ModelosReferenciaOperations {
     final res =
         await db.insert('ModelosReferencia', nuevoModeloReferencia.toJson());
     // Es el ID del último registro insertado;
-    print('MR');
     print(res);
     return res;
   }
@@ -44,7 +43,6 @@ class ModelosReferenciaOperations {
     final db = await dbProvider.database;
     final res = await db.delete('ModelosReferencia',
         where: 'idModeloReferencia = ?', whereArgs: [id]);
-    print('eliminado');
     return res;
   }
 

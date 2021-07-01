@@ -80,7 +80,7 @@ class _CostosPageState extends State<CostosPage> {
         onRefresh: _refrescar,
         child: ListView.builder(
           padding:
-              EdgeInsets.only(left: 0.0, right: 0.0, top: 10.0, bottom: 20.0),
+              EdgeInsets.only(left: 0.0, right: 0.0, top: 2.0, bottom: 20.0),
           itemCount: costos.length + 3,
           itemBuilder: (context, index) {
             return listado[index];
@@ -133,13 +133,9 @@ class _CostosPageState extends State<CostosPage> {
   Widget filtros() {
     return Column(
       children: [
-        SizedBox(
-          height: 3.0,
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(width: 8.0),
             Text('Cultivo: '),
             _seleccioneCultivo(),
           ],
@@ -147,7 +143,6 @@ class _CostosPageState extends State<CostosPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(width: 8.0),
             Icon(
               Icons.calendar_today,
               color: Colors.black54,
@@ -162,7 +157,6 @@ class _CostosPageState extends State<CostosPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(width: 8.0),
             Text('Producto o actividadad: '),
             _seleccioneProductoActividad(),
           ],
@@ -170,7 +164,6 @@ class _CostosPageState extends State<CostosPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(width: 8.0),
             Text('Concepto: '),
             _seleccioneConcepto(),
           ],
@@ -225,11 +218,11 @@ class _CostosPageState extends State<CostosPage> {
         if (n == 1) {
           //para identificar cual date esta seleccionado
           _fechaDesde = DateFormat('yyyyMMdd').format(picked);
-          controlDesde.text = _fechaDesde;
+          controlDesde.text = DateFormat('dd-MM-yy').format(picked);
         }
         if (n == 2) {
           _fechaHasta = DateFormat('yyyyMMdd').format(picked);
-          controlHasta.text = DateFormat('dd-MM-yyyy').format(picked);
+          controlHasta.text = DateFormat('dd-MM-yy').format(picked);
         }
       });
     }

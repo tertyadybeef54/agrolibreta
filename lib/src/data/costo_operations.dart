@@ -11,7 +11,6 @@ class CostoOperations {
     final db = await dbProvider.database;
     final res = await db.insert('Costos', nuevoCosto.toJson());
     // Es el ID del último registro insertado;
-    print('cos');
     print(res);
     return res;
   }
@@ -31,7 +30,6 @@ class CostoOperations {
     final db = await dbProvider.database;
     final res = await db.update('Costos', nuevoCosto.toJson(),
         where: 'idCosto = ?', whereArgs: [nuevoCosto.idCosto]);
-    print('costo actualizado: $res');
     return res;
   }
 
@@ -55,9 +53,8 @@ class CostoOperations {
       costos = res.map((s) => CostoModel.fromJson(s)).toList();
       costos.forEach((costo) async {
         costo.fkidRegistroFotografico = '0';
-        final res = await db.update('Costos', costo.toJson(),
+        await db.update('Costos', costo.toJson(),
             where: 'idCosto = ?', whereArgs: [costo.idCosto]);
-        print('costo actualizado: $res');
       });
       return 1;
     }

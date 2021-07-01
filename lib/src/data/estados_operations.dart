@@ -11,7 +11,6 @@ class EstadosOperations {
     final db = await dbProvider.database;
     final res = await db.insert('EstadosCultivo', nuevoEstado.toJson());
     // Es el ID del último registro insertado;
-    print('est');
     print(res);
     return res;
   }

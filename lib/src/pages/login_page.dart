@@ -220,12 +220,6 @@ class _Page2State extends State<Page2> {
                         Text('Registrarse', style: TextStyle(fontSize: 18.0))),
               ],
             )),
-/*         TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, 'restaurarPassword');
-            },
-            child: Text('¿Olvido la contraseña?',
-                style: TextStyle(fontSize: 18.0))), */
       ],
     ));
   }
@@ -267,7 +261,6 @@ class _Page2State extends State<Page2> {
                 icon: Icon(Icons.lock_outline, color: Colors.brown),
                 labelText: 'Contraseña',
                 labelStyle: TextStyle(fontSize: 20.0),
-                counterText: snapshot.data,
                 errorText: snapshot.error,
                 suffixIcon: IconButton(
                     icon: Icon(passwordVisible
@@ -318,8 +311,6 @@ class _Page2State extends State<Page2> {
       } else {
         mostrarAlerta(context, info['mensaje']);
       }
-      print('Email: ${bloc.email}');
-      print('Password: ${bloc.password}');
     } else {
       if (password == bloc.password) {
         Navigator.pushReplacementNamed(context, 'taps');

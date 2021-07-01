@@ -186,7 +186,7 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
     DateTime picked = await showDatePicker(
       context: context,
       initialDate: new DateTime.now(),
-      firstDate: new DateTime(1910),
+      firstDate: new DateTime(1931),
       lastDate: new DateTime.now(),
       builder: (BuildContext context, Widget child) {
         return Theme(
@@ -349,7 +349,5 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
     } else {
       mostrarAlerta(context, info['mensaje']);
     }
-    print('Email: ${bloc.email}');
-    print('Password: ${bloc.password}');
   }
 }

@@ -15,7 +15,6 @@ class UsuarioProvider with ChangeNotifier {
   getUsuarios() async {
     final resp = await _usuOper.consultarUsuario();
     this.usuarios = [...resp];
-    print('data provider usuarios');
     print(resp);
     notifyListeners();
   }
@@ -23,7 +22,6 @@ class UsuarioProvider with ChangeNotifier {
   actualizarData(RegistroUsuariosModel nuevoUsuario) async {
     final res = await _usuOper.updateUsuarios(nuevoUsuario);
     notifyListeners();
-    print('actualizar usuario: ');
     print(res.toString());
   }
 }

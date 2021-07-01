@@ -50,7 +50,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
         onRefresh: _refrescar,
         child: ListView.builder(
           padding:
-              EdgeInsets.only(left: 0.0, right: 0.0, top: 25.0, bottom: 20.0),
+              EdgeInsets.only(left: 0.0, right: 0.0, top: 8.0, bottom: 20.0),
           itemCount: 4,
           itemBuilder: (context, i) {
             if (_conceptosAll.length > 0) {
@@ -114,14 +114,14 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     }
     String img1 = n.toString();
     String img2 = (n + 4).toString();
-
+    double  media = MediaQuery.of(context).size.width;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ClipRect(
           child: Container(
             height: 150.0,
-            width: 155.0,
+            width: media*0.43,
             margin: EdgeInsets.all(8.0),
             decoration: BoxDecoration(
                 color: Colors.lightGreen.shade200,
@@ -155,7 +155,7 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
         ClipRect(
           child: Container(
             height: 150.0,
-            width: 155.0,
+            width: media*0.43,
             margin: EdgeInsets.all(8.0),
             decoration: BoxDecoration(
                 color: Colors.lightGreen.shade200,

@@ -227,10 +227,8 @@ class _EditarRegFotPageState extends State<EditarRegFotPage> {
             _bloquear[i] = _bloquear[i] ? false : true;
             if (_bloquear[i]) {
               _costosSelecteds.add(costo);
-              print('añadido');
             }else{
               _costosSelecteds.remove(costo);
-              print('removido');
             }
           });
         });

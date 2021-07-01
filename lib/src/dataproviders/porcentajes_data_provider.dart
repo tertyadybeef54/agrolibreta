@@ -34,7 +34,6 @@ class PorcentajeData with ChangeNotifier {
     final _resp = await _porOper.nuevoPorcentaje(nuevoPor);
     //poner el id de la base de datos al porcentaje que ira a la lista
     nuevoPor.idPorcentaje = _resp;
-/*     print('por creado idconcepto:${nuevoPor.fk2idConcepto}, idMR: ${nuevoPor.fk2idModeloReferencia}'); */
     //se añaden a la lista correspondiente
     this.porcentajes.add(nuevoPor);
     this.conceptos.add(concepto);

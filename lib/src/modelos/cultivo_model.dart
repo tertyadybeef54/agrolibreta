@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final cultivoModel = cultivoModelFromJson(jsonString);
-
 import 'dart:convert';
 
 CultivoModel cultivoModelFromJson(String str) =>

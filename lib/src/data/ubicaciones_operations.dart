@@ -12,7 +12,6 @@ class UbicacionesOperations {
     final db = await dbProvider.database;
     final res = await db.insert('Ubicaciones', nuevaUbicacion.toJson());
     // Es el ID del último registro insertado;
-    print('ubi');
     print(res);
     return res;
   }
@@ -40,7 +39,6 @@ class UbicacionesOperations {
     final db = await dbProvider.database;
     final res = await db
         .delete('Ubicaciones', where: 'idUbicacion = ?', whereArgs: [id]);
-    print('eliminado');
     return res;
   }
   Future<UbicacionModel> getUbicacionById(String id) async {

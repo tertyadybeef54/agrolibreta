@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:agrolibreta_v2/src/modelos/unidad_medida_model.dart';
+
 // ignore: must_be_immutable
 class UnidadMedidaDropdown extends StatefulWidget {
   List<UnidadMedidaModel> unidadMedida;
@@ -18,10 +19,9 @@ class UnidadMedidaDropdown extends StatefulWidget {
 }
 
 class _UnidadMedidaDropdownState extends State<UnidadMedidaDropdown> {
-  String selected = 'Seleccione Unidad';
+  String selected = 'Unidad';
   @override
   Widget build(BuildContext context) {
-    
     return DropdownButton<UnidadMedidaModel>(
       hint: Text(selected),
       onChanged: (UnidadMedidaModel value) {

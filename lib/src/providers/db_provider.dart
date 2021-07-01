@@ -25,7 +25,6 @@ class DBProvider {
     // Crear base de datos
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
-      print('crear base');
       await db.execute('''
         CREATE TABLE Cultivos(
           idCultivo INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -192,7 +191,10 @@ class DBProvider {
         INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Jornal", "8 horas")
       ''');
       await db.rawInsert('''
-        INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Rollo", "Rollo n metros")
+        INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Rollo", "Rollo de x metros")
+      ''');
+      await db.rawInsert('''
+        INSERT INTO UnidadesMedida(nombreUnidadMedida, descripcion) VALUES("Und", "Medida general")
       ''');
 //#################  porcentajes del MR modelo de referencia
       await db.rawInsert('''
@@ -242,11 +244,17 @@ class DBProvider {
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("4", "5", "Cabuya")
       ''');
       await db.rawInsert('''
+        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("4", "5", "Costales")
+      ''');
+      await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Arar")
       ''');
       await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Sembrar")
       ''');
+      await db.rawInsert('''
+        INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Abonar")
+      ''');      
       await db.rawInsert('''
         INSERT INTO ProductosActividades(fkidConcepto, fkidUnidadMedida, nombreProductoActividad) VALUES("6", "4", "Tutorar")
       ''');

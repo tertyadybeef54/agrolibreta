@@ -33,7 +33,6 @@ class PieData with ChangeNotifier {
   getCultivo() async {
     final _cultivo = await _culOper.getCultivoById(1);
     this.cultivo = _cultivo;
-    print('provider pie data');
     notifyListeners();
   }
 

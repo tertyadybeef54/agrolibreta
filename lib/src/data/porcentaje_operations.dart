@@ -11,7 +11,6 @@ class PorcentajeOperations {
     final db = await dbProvider.database;
     final res = await db.insert('Porcentajes', nuevoPorcentaje.toJson());
     // Es el ID del último registro insertado;
-    print('por');
     print(res);
     return res;
   }
@@ -83,7 +82,6 @@ class PorcentajeOperations {
     final db = await dbProvider.database;
     final res = await db.delete('Porcentajes',
         where: 'fk2idModeloReferencia = ?', whereArgs: [idMr]);
-    print('eliminado: ' + res.toString());
     return res;
   }
 }

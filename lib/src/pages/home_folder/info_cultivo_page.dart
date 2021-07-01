@@ -236,6 +236,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
     });
   }
   void actualizar2(){
+    
     setState(() {
       final culData = Provider.of<CultivoData>(context, listen: false);
       culData.actualizarData(culTemp);
@@ -367,8 +368,8 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
     DateTime picked = await showDatePicker(
       context: context,
       initialDate: new DateTime.now(),
-      firstDate: new DateTime.now(),
-      lastDate: new DateTime(2050),
+      firstDate: new DateTime(2021),
+      lastDate: new DateTime(2031),
       builder: (BuildContext context, Widget child) {
         return Theme(
           data: Theme.of(context).copyWith(

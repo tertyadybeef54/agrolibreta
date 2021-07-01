@@ -11,7 +11,6 @@ class RegistroFotograficoOperations {
     final db = await dbProvider.database;
     final res = await db.insert('RegistrosFotograficos', nuevoRegistroFotografico.toJson());
     // Es el ID del último registro insertado;
-    print('regFot creado');
     print(res);
     return res;
   }

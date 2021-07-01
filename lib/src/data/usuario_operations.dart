@@ -11,8 +11,6 @@ class UsuarioOperations {
     final db = await dbProvider.database;
     final res = await db.insert('Usuario', nuevoUsuario.toJson());
     // Es el ID del último registro insertado;
-    print(res);
-    print('Usuario creado');
     return res;
   }
 

@@ -45,10 +45,6 @@ class _GaleriaRegistrosFotograficosPageState
     final regFotData = Provider.of<RegistrosFotograficosData>(context);
     final List<RegistroFotograficoModel> imagenes = regFotData.imagenes;
     _max = imagenes.length - 5;
-/*     imagenes.forEach((element) {
-      print('lo que hay en la abse de datos de las img');
-      print(element.pathFoto);
-    }); */
     return Scaffold(
       appBar: AppBar(
         title: Center(

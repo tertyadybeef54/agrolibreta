@@ -50,7 +50,6 @@ class SincronizacionProvider {
 //se hace una consulta a la base de datos locar tabla por tabla y los resultados son enviados a la nube
 //en caso de ser nuevos se crea un noevo documento en la nube, en caso de hac}ber sido modificado solo se actualiza.
   Future<bool> subirDatos(String email) async {
-    print('subir datos');
     await Firebase.initializeApp();
     final dbFirestore =
         FirebaseFirestore.instance.collection('users').doc('$email');
@@ -166,7 +165,6 @@ class SincronizacionProvider {
   }
 
   Future<bool> bajarDatos(String email) async {
-    print('bajar datos');
     await Firebase.initializeApp();
     final snapshot =
         FirebaseFirestore.instance.collection('users').doc('$email');

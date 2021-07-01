@@ -233,10 +233,8 @@ class _NuevoRegistroFotograficoPageState
             _bloquear[i] = _bloquear[i] ? false : true;
             if (_bloquear[i]) {
               _costosSelecteds.add(costo);
-              print('añadido');
             }else{
               _costosSelecteds.remove(costo);
-              print('removido');
             }
           });
         });
@@ -297,8 +295,6 @@ class _NuevoRegistroFotograficoPageState
     setState(() {
       if (imagen != null) {
         imagenFile = File(imagen.path);
-      } else {
-        print('No Image Selected');
       }
     });
   }

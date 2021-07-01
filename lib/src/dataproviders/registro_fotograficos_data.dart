@@ -17,7 +17,6 @@ class RegistrosFotograficosData with ChangeNotifier {
   getRegFotograficos() async {
     final resp = await _regFotOper.consultarRegistrosFotograficos();
     this.imagenes = [...resp];
-    print('provider de las fotos ');
     notifyListeners();
   }
 
@@ -28,7 +27,6 @@ class RegistrosFotograficosData with ChangeNotifier {
     //asignar el id de la base de datos al local
     nuevoRegFot.idRegistroFotografico = _id;
     this.imagenes.add(nuevoRegFot);
-    print('nuevo rf añadido');
     notifyListeners();
     costosSelecteds.forEach((costo) async {
       final CostoModel costoTemp = costo;

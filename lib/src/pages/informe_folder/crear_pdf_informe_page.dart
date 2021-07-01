@@ -65,7 +65,6 @@ Future<Uint8List> buildPdf(PdfPageFormat format) async {
   final _area = informeAreaCultivo;
   final _presupuesto = informePresupuestoCultivo;
   final _precio = informePrecioIdealCultivo;
-  //final _mR = _cultivo.fkidModeloReferencia;
 
   // );
 final totalReal = 
@@ -88,38 +87,38 @@ sumasMr[6]+
 sumasMr[7];
 
 
-List dataTable = [
+List dataTablepie = [
   ['Semi', sumasCultivo[0], sumasMr[0]],
-  ['Abo-fert', sumasCultivo[1], sumasMr[1]],
-  ['Plag-herb', sumasCultivo[2], sumasMr[2]],
+  ['Abonos', sumasCultivo[1], sumasMr[1]],
+  ['Plag', sumasCultivo[2], sumasMr[2]],
   ['Mat-emp', sumasCultivo[3], sumasMr[3]],
   ['Maqui', sumasCultivo[4], sumasMr[4]],
-  ['Mano-obra', sumasCultivo[5], sumasMr[5]],
+  ['Mano', sumasCultivo[5], sumasMr[5]],
   ['Transp', sumasCultivo[6], sumasMr[6]],
   ['Otros', sumasCultivo[7], sumasMr[7]],
 ];
-List dataTable3 = [
-  ['Semi', sumasCultivo[0], sumasMr[0]],
-  ['Abo-fert', sumasCultivo[1], sumasMr[1]],
-  ['Plag-herb', sumasCultivo[2], sumasMr[2]],
-  ['Mat-emp', sumasCultivo[3], sumasMr[3]],
-  ['Maqui', sumasCultivo[4], sumasMr[4]],
-  ['Mano-obra', sumasCultivo[5], sumasMr[5]],
-  ['Transp', sumasCultivo[6], sumasMr[6]],
+List dataTableTabla1 = [
+  ['Semilla', sumasCultivo[0], sumasMr[0]],
+  ['Abonos y fert.', sumasCultivo[1], sumasMr[1]],
+  ['Plaguicidas', sumasCultivo[2], sumasMr[2]],
+  ['Materiales y emp.', sumasCultivo[3], sumasMr[3]],
+  ['Maquinaria', sumasCultivo[4], sumasMr[4]],
+  ['Mano de obra', sumasCultivo[5], sumasMr[5]],
+  ['Transporte', sumasCultivo[6], sumasMr[6]],
   ['Otros', sumasCultivo[7], sumasMr[7]],
-  ['total', totalReal, totalideal],
+  ['Total', totalReal, totalideal],
 ];
 
 // Some summary maths
 //convertir el valor umerico en un porcentaje
-final expense = dataTable
+final expense = dataTablepie
     .map((e) => e[1] as num)
     .reduce((value, element) => value + element);
 
 
 
 
-  // Top bar chart
+  // Top bar chart  graficos pie y barras
   final chart1 = pw.Chart(
     left: pw.Container(
       alignment: pw.Alignment.topCenter,
@@ -139,9 +138,9 @@ final expense = dataTable
     grid: pw.CartesianGrid(
       xAxis: pw.FixedAxis.fromStrings(
         List<String>.generate(
-            dataTable.length, (index) => dataTable[index][0] as String),
-        marginStart: 30,
-        marginEnd: 30,
+            dataTablepie.length, (index) => dataTablepie[index][0] as String),
+        marginStart: 20,
+        marginEnd: 20,
         ticks: true,
       ),
       yAxis: pw.FixedAxis(
@@ -165,9 +164,9 @@ final expense = dataTable
         offset: -10,
         borderColor: PdfColors.blue,
         data: List<pw.LineChartValue>.generate(
-          dataTable.length,
+          dataTablepie.length,
           (i) {
-            final v = dataTable[i][1] as num;
+            final v = dataTablepie[i][1] as num;
             return pw.LineChartValue(i.toDouble(), v.toDouble());
           },
         ),
@@ -179,9 +178,9 @@ final expense = dataTable
         offset: 10,
         borderColor: PdfColors.green,
         data: List<pw.LineChartValue>.generate(
-          dataTable.length,
+          dataTablepie.length,
           (i) {
-            final v = dataTable[i][2] as num;
+            final v = dataTablepie[i][2] as num;
             return pw.LineChartValue(i.toDouble(), v.toDouble());
           },
         ),
@@ -190,7 +189,7 @@ final expense = dataTable
   );
 
 
-//date table favorable desfavorable
+//date table favorable desfavorable Tabla 1
   final table3 = pw.Table.fromTextArray(
     border: pw.TableBorder(
         left: pw.BorderSide(),
@@ -202,10 +201,10 @@ final expense = dataTable
     data: List<List<dynamic>>.generate(
       9,
       (index) => <dynamic>[
-        dataTable3[index][0],
-        dataTable3[index][2],
-        dataTable3[index][1],
-        (dataTable3[index][2] as num) - (dataTable3[index][1] as num),
+        dataTableTabla1[index][0],
+        dataTableTabla1[index][2],
+        dataTableTabla1[index][1],
+        (dataTableTabla1[index][2] as num) - (dataTableTabla1[index][1] as num),
       ],
     ),
     headerStyle: pw.TextStyle(
@@ -365,9 +364,6 @@ final expense = dataTable
                 ),
                 pw.SizedBox(height: 40.0),
                 pw.Expanded(flex: 3, child: chart1),
-                //pw.SizedBox(height: 40.0),
-                // pw.Divider(),
-                //  pw.SizedBox(height: 20.0),
               ],
             ),
           ),
@@ -377,6 +373,7 @@ final expense = dataTable
   );
 
   // Second page with a pie chart
+  //pie
   doc.addPage(
     pw.Page(
       pageFormat: format,
@@ -408,8 +405,8 @@ final expense = dataTable
                   ]
                 ),
                 grid: pw.PieGrid(),
-                datasets: List<pw.Dataset>.generate(dataTable.length, (index) {
-                  final data = dataTable[index];
+                datasets: List<pw.Dataset>.generate(dataTablepie.length, (index) {
+                  final data = dataTablepie[index];
                   final color = chartColors[index % chartColors.length];
                   final value = (data[1] as num).toDouble();
                   final pct = (value / expense * 100).round();

@@ -11,7 +11,6 @@ class CultivoOperations {
     final db = await dbProvider.database;
     final res = await db.insert('Cultivos', nuevoCultivo.toJson());
     // Es el ID del último registro insertado;
-    print('cul');
     print(res);
     return res;
   }

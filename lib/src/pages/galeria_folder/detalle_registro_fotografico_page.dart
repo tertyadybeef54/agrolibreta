@@ -353,10 +353,8 @@ class _DetalleRegistroFotograficoPageState
             _bloquear[i] = _bloquear[i] ? false : true;
             if (_bloquear[i]) {
               _costosunSelecteds.removeWhere((e) => e.idCosto == costo.idCosto);
-              print('removido');
             } else {
               _costosunSelecteds.add(costo);
-              print('añadido');
             }
           });
         });

@@ -97,11 +97,9 @@ class CostosData with ChangeNotifier {
         });
       }
     }
-    print('provider costos data, carga data');
   }
 
   actualizarCultivos() async {
-    print('provider costos actualizar cultivo');
     this.cultivos = [];
     final cul = await _culOper.consultarCultivos();
     this.cultivos = [...cul];

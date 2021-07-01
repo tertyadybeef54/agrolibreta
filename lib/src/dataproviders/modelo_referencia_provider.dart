@@ -99,7 +99,6 @@ class ModeloReferenciaData with ChangeNotifier {
     this.conceptosList.add(_resp2); //se añade la lista de conceptos
     this.porcentajesList.add(_resp); //añade la lista de porcentajes
     notifyListeners();
-    print('provider modelo referencia nuevo mr');
   }
 
   obtenerByID() async {

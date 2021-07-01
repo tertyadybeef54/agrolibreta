@@ -1,23 +1,23 @@
+import 'package:pdf/pdf.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
-import 'package:agrolibreta_v2/src/data/estados_operations.dart';
-import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
-import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
 import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/estado_model.dart';
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
+import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
+import 'package:agrolibreta_v2/src/data/estados_operations.dart';
+import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
+import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
 
+import 'crear_pdf_informe_page.dart';
 import 'package:agrolibreta_v2/src/widgets/cultivo_dropdown.dart';
 import 'package:agrolibreta_v2/src/dataproviders/pie_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
-import 'crear_pdf_informe_page.dart';
 
 //Se muestran los datos importantes del cultivo, los costos, un grafico de torta con el porcentaje que tienen los costos agrupados por conceptos con respecto al 100 porcento del costo total de la produccion, y un grafico de barras que compara el costo total de costos asociados por concepto del cultivo con el modelo de referencia. es decir costo esperado segun el presupuesto y el MR con costo obtenido.
 class InformeCultivoPage extends StatefulWidget {
@@ -37,7 +37,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
       _selectedCultivo = selectedCultivo;
     });
   }
-
+  CultivoModel _check = new CultivoModel();
   int total = 0;
   @override
   void initState() {
@@ -55,23 +55,20 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         presupuesto: 0,
         precioVentaIdeal: 0.0);
   }
-
   @override
   Widget build(BuildContext context) {
     final filData = Provider.of<FiltrosCostosData>(context, listen: false);
     final costos = filData.costosbyCul;
-    final pieData = Provider.of<PieData>(context, listen: false);
-    pieData.generarData();
-    pieData.generarDataMRCul();
-    total = 0;
-    costos.forEach((element) {
-      total += (element.cantidad * element.valorUnidad).round();
-    });
-    final tabs = [
-      Tab(icon: Icon(Icons.assignment)),
-      Tab(icon: Icon(Icons.equalizer)),
-      //Tab(icon: Icon(Icons.donut_small)),
-    ];
+    if (_selectedCultivo != _check) {
+      final pieData = Provider.of<PieData>(context, listen: false);
+      pieData.generarData();
+      pieData.generarDataMRCul();
+      total = 0;
+      costos.forEach((element) {
+        total += (element.cantidad * element.valorUnidad).round();
+      });
+      _check = _selectedCultivo;
+    }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
@@ -81,19 +78,22 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
             backgroundColor: Color(0xff9ccc65),
             bottom: TabBar(
               indicatorColor: Color(0xff1b5e20),
-              tabs: tabs,
+              tabs:[
+                Tab(icon: Icon(Icons.assignment)),
+                Tab(icon: Icon(Icons.equalizer)),
+              ],
             ),
             title: Text('Informe del cultivo'),
             centerTitle: true,
             actions: <Widget>[
               IconButton(
-                  iconSize: 40.0,
-                  icon: Icon(Icons.picture_as_pdf),
-                  tooltip: 'Ver documento',
-                  onPressed: () {
-                    Printing.layoutPdf(
-                      onLayout: (PdfPageFormat pageFormat) {
-                        return (buildPdf(pageFormat));
+                iconSize: 40.0,
+                icon: Icon(Icons.picture_as_pdf),
+                tooltip: 'Ver documento',
+                onPressed: () {
+                  Printing.layoutPdf(
+                    onLayout: (PdfPageFormat pageFormat) {
+                      return (buildPdf(pageFormat));
                       },
                     );
                   }),
@@ -103,8 +103,6 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
             children: [
               _tapUno(context, costos),
               _graficarBarras(),
-              //_graficarBarras(),
-              //_graficarDona(),
             ],
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -131,14 +129,14 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     listado.add(cultivow(_selectedCultivo));
     listado.add(titulos(context));
 
-    //#############################################################
+    //###############################################
     informeFecha = []; //############################
     informeCant = []; //#############################
     informeUnidad = []; //###########################
     informeNombre = []; //###########################
     informeValUni = []; //###########################
     informeVtotal = []; //###########################
-    //#############################################################
+    //###############################################
 
     costos.forEach((costo) {
       listado.add(_costo(costo, context));
@@ -435,13 +433,6 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
         });
   }
 
-  // ignore: unused_element
-  Widget _botonPDF(BuildContext context) {
-    return FloatingActionButton(
-      child: Text('PDF'),
-      onPressed: () {},
-    );
-  }
 
   Widget _botonFiltrar(BuildContext context) {
     final pieData = Provider.of<PieData>(context, listen: false);
@@ -463,8 +454,6 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
     );
   }
 
-//############################################
-  //grafica de la dona
 
 //#############################################
 //brafico de barras camparar cultivo con MR
@@ -500,60 +489,5 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
       ),
     );
   }
-/*    Widget _graficarDona() {
-    final pieData = Provider.of<PieData>(context, listen: false);
-    final _seriesPieData = pieData.seriesPieData;
-    if (_seriesPieData == null) {
-      return Container();
-    }
-    return Padding(
-      padding: EdgeInsets.all(20.0),
-      child: Container(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Center(
-                child: Text(
-                    'Grafico 2. Porcentaje de costos por conceptos del cultivo',
-                    style:
-                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
-              ),
-              SizedBox(height: 10.0),
-              Expanded(
-                child: charts.PieChart(
-                  _seriesPieData,
-                  animate: true,
-                  behaviors: [
-                    new charts.DatumLegend(
-                      outsideJustification:
-                          charts.OutsideJustification.endDrawArea,
-                      horizontalFirst: false,
-                      desiredMaxRows: 4,
-                      //cellPadding: new EdgeInsets.only(),
-                      entryTextStyle: charts.TextStyleSpec(
-                        color: charts.MaterialPalette.purple.shadeDefault,
-                        fontFamily: 'Georgia',
-                        fontSize: 11,
-                      ),
-                    )
-                  ],
-                  animationDuration: Duration(seconds: 2),
-                  defaultRenderer: new charts.ArcRendererConfig(
-                    arcWidth: 100,
-                    arcRendererDecorators: [
-                      new charts.ArcLabelDecorator(
-                        labelPosition: charts.ArcLabelPosition.inside,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  } */
 
 }

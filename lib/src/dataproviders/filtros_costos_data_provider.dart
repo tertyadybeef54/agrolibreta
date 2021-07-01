@@ -20,7 +20,6 @@ class FiltrosCostosData with ChangeNotifier {
     this.costos = [..._resp];
     final _cultivo = await _culOper.getCultivoById(1);
     this.cultivo = _cultivo;
-    print('provider filtros costos');
     notifyListeners();
   }
 
@@ -38,19 +37,11 @@ class FiltrosCostosData with ChangeNotifier {
   costosByCultivo(String fkidCultivo) async {
     final _resp = await _cosOper.costosFiltrados(
         fkidCultivo, '20210000', '30000000', 'todos', 'todos');
-    print('provider filtros by cul');
     /* _resp.forEach((e) {
       print(e.idCosto);
     }); */
     this.costosbyCul = _resp;
   }
-
-/*   actualizarCosto(int idCos, int fkidRegistroF) async {
-    final CostoModel cosTemp = await _cosOper.getCostoById(idCos);
-    cosTemp.fkidRegistroFotografico = fkidRegistroF.toString();
-    await _cosOper.updateCosto(cosTemp);
-    print('actualizar registro F provider filtros');
-  } */
   resetCostos() async {
     final _resp = await _cosOper.consultarCostos();
     this.costos = [..._resp];

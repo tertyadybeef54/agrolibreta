@@ -14,7 +14,6 @@ class ProductoActividadOperations {
     final res = await db.insert(
         'ProductosActividades', nuevoProductoActividad.toJson());
     // Es el ID del último registro insertado;
-    print('proAct creada');
     print(res);
     return res;
   }

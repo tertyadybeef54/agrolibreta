@@ -320,7 +320,7 @@ class _PerfilUsuarioPageState extends State<PerfilUsuarioPage> {
     DateTime picked = await showDatePicker(
       context: context,
       initialDate: new DateTime.now(),
-      firstDate: new DateTime(1910),
+      firstDate: new DateTime(1931),
       lastDate: new DateTime.now(),
       builder: (BuildContext context, Widget child) {
         return Theme(

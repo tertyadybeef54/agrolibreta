@@ -1,11 +1,12 @@
+import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
 import 'package:agrolibreta_v2/src/data/costo_operations.dart';
 import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
 import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
 import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
-import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class VerCostoPage extends StatefulWidget {
   @override
@@ -95,7 +96,7 @@ class _VerCostoPageState extends State<VerCostoPage> {
               title: Row(
                 children: [
                   Text('Valor Total: '),
-                  Text((costo.cantidad * costo.valorUnidad).toString()),
+                  Text((costo.cantidad * costo.valorUnidad).round().toString()),
                 ],
               ),
             ),
