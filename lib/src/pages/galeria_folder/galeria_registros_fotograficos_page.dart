@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:agrolibreta_v2/src/data/registro_fotografico_operations.dart';
 import 'package:agrolibreta_v2/src/modelos/registro_fotografico_model.dart';
 import 'package:flutter/material.dart';
-import 'package:agrolibreta_v2/src/dataproviders/registro_fotograficos_data.dart';
+import 'package:agrolibreta_v2/src/dataproviders/registro_fotografico_data.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
@@ -51,7 +51,7 @@ class _GaleriaRegistrosFotograficosPageState
             child: Column(
           children: [
             Text('Galeria'),
-            Text('Registros Fotograficos'),
+            Text('Registros Fotográficos'),
           ],
         )),
       ),

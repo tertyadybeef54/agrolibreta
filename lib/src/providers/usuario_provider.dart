@@ -51,7 +51,6 @@ class UsuarioProvider {
 
     Map<String, dynamic> decodedResp = json.decode(resp.body);
 
-    print(decodedResp);
 
     if (decodedResp.containsKey('idToken')) {
       _prefs.password = password;

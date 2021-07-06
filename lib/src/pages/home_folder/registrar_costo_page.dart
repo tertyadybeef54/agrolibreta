@@ -25,13 +25,12 @@ class CrearCostoPage extends StatefulWidget {
 }
 
 class _CrearCostoPageState extends State<CrearCostoPage> {
-  //las operaciones de las 5 tablas que se usan
-  //Conceptos, UnidadesMedida, ProductosActividades, RegistroFotografico, Costos
+  //Se requiere manejar datos de 5 modelos
+  //ConceptoModel, UnidadMedidaModel, ProductosActividadesModel, RegistroFotograficoModel, CostosModel
   ConceptoOperations conOper = new ConceptoOperations();
   UnidadMedidaOperations uniMedOper = new UnidadMedidaOperations();
   ProductoActividadOperations proActOper = new ProductoActividadOperations();
-  RegistroFotograficoOperations regFotOper =
-      new RegistroFotograficoOperations();
+  RegistroFotograficoOperations regFotOper = new RegistroFotograficoOperations();
   CostoOperations cosOper = new CostoOperations();
 
   ProductoActividadModel _selectedProductoActividad;
@@ -160,7 +159,6 @@ class _CrearCostoPageState extends State<CrearCostoPage> {
     if (_selectedProductoActividad == null) {
       return Text('und');
     }
-    print(_selectedProductoActividad.fkidUnidadMedida);
     ProductoActividadOperations _proActOper = new ProductoActividadOperations();
     return FutureBuilder<String>(
         future: _proActOper.consultarNombreUnidad(

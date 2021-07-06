@@ -8,9 +8,9 @@ import 'package:agrolibreta_v2/src/pages/home_folder/perfil_usuario_page.dart';
 import 'package:agrolibreta_v2/src/pages/home_folder/config_cultivo_page.dart';
 import 'package:agrolibreta_v2/src/pages/home_folder/info_cultivo_page.dart';
 import 'package:agrolibreta_v2/src/pages/login_page.dart';
-import 'package:agrolibreta_v2/src/pages/home_folder/crear_cultivo_page.dart';
+import 'package:agrolibreta_v2/src/pages/home_folder/registrar_cultivo_page.dart';
 import 'package:agrolibreta_v2/src/pages/home_folder/resumen_costos_page.dart';
-import 'package:agrolibreta_v2/src/pages/home_folder/crear_costo_page.dart';
+import 'package:agrolibreta_v2/src/pages/home_folder/registrar_costo_page.dart';
 import 'package:agrolibreta_v2/src/pages/utilidades_folder/crear_modelo_referencia_page.dart';
 import 'package:agrolibreta_v2/src/pages/costo_folder/costos_page.dart';
 import 'package:agrolibreta_v2/src/pages/informe_folder/informe_cultivo_page.dart';
@@ -18,7 +18,6 @@ import 'package:agrolibreta_v2/src/pages/utilidades_folder/utilidades_page.dart'
 import 'package:agrolibreta_v2/src/pages/galeria_folder/galeria_registros_fotograficos_page.dart';
 import 'package:agrolibreta_v2/src/pages/galeria_folder/nuevo_registro_fotografico_page.dart';
 import 'package:agrolibreta_v2/src/pages/galeria_folder/detalle_registro_fotografico_page.dart';
-import 'package:agrolibreta_v2/src/pages/restaurar_password.dart';
 
 import 'package:agrolibreta_v2/src/pages/home_folder/ver_modelo_referencia.dart';
 import 'package:agrolibreta_v2/src/widgets/barraNavegacion.dart';
@@ -38,7 +37,7 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
     'configCultivo': (BuildContext context) => ConfigCultivoPage(),
     'infoCultivo': (BuildContext context) => InformacionCultivo(),
     'login': (BuildContext context) => LoginPage(),
-    'crearCultivo': (BuildContext context) => CrearCultivoPage(),
+    'crearCultivo': (BuildContext context) => RegistrarCultivoPage(),
     'resumenCostos': (BuildContext context) => ResumencostosPage(),
     'crearCosto': (BuildContext context) => CrearCostoPage(),
     'crearModeloReferencia': (BuildContext context) => CrearModeloReferencia(),
@@ -51,7 +50,6 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
         NuevoRegistroFotograficoPage(),
     'detalleRegistroFoto': (BuildContext context) =>
         DetalleRegistroFotograficoPage(),
-    'restaurarPassword': (BuildContext context) => RestaurarPassword(),
     'verModelo': (BuildContext context) => VerModeloReferencia(),
     'registrarUsuario' : (BuildContext context) => RegistrarUsuario(),
     'modeloUtil': (BuildContext context) => ModeloReferenciaList(),

@@ -14,7 +14,7 @@ import 'package:agrolibreta_v2/src/dataproviders/pie_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/porcentajes_data_provider.dart';
-import 'package:agrolibreta_v2/src/dataproviders/registro_fotograficos_data.dart';
+import 'package:agrolibreta_v2/src/dataproviders/registro_fotografico_data.dart';
 import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/unidades_medida_data_provider.dart';
@@ -35,16 +35,14 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => new CultivoData()),
-          ChangeNotifierProvider(
-              create: (context) => new ModeloReferenciaData()),
+          ChangeNotifierProvider(create: (context) => new ModeloReferenciaData()),
           ChangeNotifierProvider(create: (context) => new PorcentajeData()),
           ChangeNotifierProvider(create: (context) => new UbicacionesData()),
           ChangeNotifierProvider(create: (context) => new UnidadesMedidaData()),
-          ChangeNotifierProvider(
-              create: (context) => new ProductoActividadData()),
+          ChangeNotifierProvider(create: (context) => new ProductoActividadData()),
           ChangeNotifierProvider(create: (context) => new CostosData()),
           ChangeNotifierProvider(create: (context) => new UsuarioProvider()),
-          ChangeNotifierProvider(              create: (context) => new RegistrosFotograficosData()),
+          ChangeNotifierProvider(create: (context) => new RegistrosFotograficosData()),
           ChangeNotifierProvider(create: (context) => new FiltrosCostosData() ),
           ChangeNotifierProvider(create: (context) => new PieData() ),
         ],

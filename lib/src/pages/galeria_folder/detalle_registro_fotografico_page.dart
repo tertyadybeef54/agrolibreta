@@ -1,7 +1,7 @@
 import 'package:agrolibreta_v2/src/data/costo_operations.dart';
 import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
 import 'package:agrolibreta_v2/src/data/registro_fotografico_operations.dart';
-import 'package:agrolibreta_v2/src/dataproviders/registro_fotograficos_data.dart';
+import 'package:agrolibreta_v2/src/dataproviders/registro_fotografico_data.dart';
 import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
 import 'package:agrolibreta_v2/src/modelos/registro_fotografico_model.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +77,6 @@ class _DetalleRegistroFotograficoPageState
             (BuildContext context, AsyncSnapshot<List<CostoModel>> snapshot) {
           Widget child;
           if (snapshot.hasData) {
-            //print(snapshot.data);
             child = page(context, imagen, snapshot.data);
           } else if (snapshot.hasError) {
             child = Text(snapshot.error);

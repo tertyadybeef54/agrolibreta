@@ -139,7 +139,6 @@ class EditarCostoPageState extends State<EditarCostoPage> {
     if (_selectedProductoActividad == null) {
       return Text('und');
     }
-    print(_selectedProductoActividad.fkidUnidadMedida);
     ProductoActividadOperations _proActOper = new ProductoActividadOperations();
     return FutureBuilder<String>(
         future: _proActOper.consultarNombreUnidad(

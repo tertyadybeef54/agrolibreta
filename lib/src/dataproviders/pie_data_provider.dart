@@ -18,7 +18,6 @@ final ConceptoOperations _conOper = new ConceptoOperations();
 final PorcentajeOperations _porOper = new PorcentajeOperations();
 
 class PieData with ChangeNotifier {
-  List<charts.Series<PorcConcepto, String>> seriesPieData;
   List<charts.Series<Concepto, String>> seriesData;
 
   CultivoModel cultivo;
@@ -26,7 +25,6 @@ class PieData with ChangeNotifier {
 //inicializa con el cultivo 1 por defecto
   PieData() {
     this.getCultivo();
-    this.seriesPieData = [];
     this.seriesData = [];
   }
   //se asigna el cultivo 1 al parametro cultivo del provider
@@ -38,7 +36,6 @@ class PieData with ChangeNotifier {
 
 //se consultan y almacenan los datos para graficar la torta
   generarData() async {
-    this.seriesPieData = [];
     if (this.cultivo != null) {
       List<PorcConcepto> piedataa = [];
       final _conceptos = await _conOper.consultarConceptos();
@@ -47,7 +44,6 @@ class PieData with ChangeNotifier {
       _conceptos.forEach((concepto) async {
         final resp = await _cosOper.sumaCostosByConcepto(
             this.cultivo.idCultivo, concepto.idConcepto.toString());
-        print(resp);
         double porcentaje = 1;
         if (total != 0) {
           porcentaje = resp * 100 / total;
@@ -61,18 +57,6 @@ class PieData with ChangeNotifier {
                 .withOpacity(1.0));
         piedataa.add(nuevoPorcConcepto);
       });
-
-      this.seriesPieData.add(
-            charts.Series(
-              domainFn: (PorcConcepto concepto, _) => concepto.concepto,
-              measureFn: (PorcConcepto concepto, _) => concepto.porcentaje,
-              colorFn: (PorcConcepto concepto, _) =>
-                  charts.ColorUtil.fromDartColor(concepto.colorval),
-              id: 'porcentajes',
-              data: piedataa,
-              labelAccessorFn: (PorcConcepto row, _) => '${row.porcentaje}',
-            ),
-          );
     }
   }
 
@@ -104,9 +88,7 @@ class PieData with ChangeNotifier {
         sumasMr
             .add(gastoIdeal.round()); //#######################################
         //###############################################################
-        print(suma);
-        print(gastoIdeal);
-        print("#### provider pie data datos de las barras");
+
         final nombre = concepto.nombreConcepto.substring(0, 5);
         final conTempR = new Concepto(nombre, suma);
         final conTempI = new Concepto(nombre, gastoIdeal);

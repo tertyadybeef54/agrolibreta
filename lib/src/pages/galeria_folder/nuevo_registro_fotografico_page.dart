@@ -1,18 +1,19 @@
-import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
-import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
-import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
-import 'package:flutter/material.dart';
 import 'dart:io';
-
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
+import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
+
+import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
+import 'package:agrolibreta_v2/src/data/producto_actividad_operations.dart';
 
 import 'package:agrolibreta_v2/src/widgets/cultivo_dropdown.dart';
-import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
-import 'package:agrolibreta_v2/src/dataproviders/registro_fotograficos_data.dart';
-import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
+import 'package:agrolibreta_v2/src/dataproviders/registro_fotografico_data.dart';
+import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
 
 class NuevoRegistroFotograficoPage extends StatefulWidget {
   @override
@@ -45,7 +46,6 @@ class _NuevoRegistroFotograficoPageState
     if (_bloquear.length < costosByCul.length) {
       for (var i = 0; i < costosByCul.length; i++) {
         _bloquear.add(false);
-        print(i);
       }
     }
     armarWidgets(context, costosByCul);
@@ -55,7 +55,7 @@ class _NuevoRegistroFotograficoPageState
         title: Column(
           children: [
             Text('Nuevo'),
-            Text('Registro Fotografico'),
+            Text('Registro Fotográfico'),
           ],
         ),
         centerTitle: true,
@@ -309,7 +309,6 @@ class _NuevoRegistroFotograficoPageState
     final regFotData =
         Provider.of<RegistrosFotograficosData>(context, listen: false);
     regFotData.nuevoRegFotografico(imagenRuta, _costosSelecteds);
-    print(imagenRuta);
     mostrarSnackbar('Imagen guardada');
     Navigator.pop(context);
   }

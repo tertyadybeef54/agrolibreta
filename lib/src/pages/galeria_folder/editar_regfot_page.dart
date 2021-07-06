@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 import 'package:agrolibreta_v2/src/widgets/cultivo_dropdown.dart';
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
-import 'package:agrolibreta_v2/src/dataproviders/registro_fotograficos_data.dart';
+import 'package:agrolibreta_v2/src/dataproviders/registro_fotografico_data.dart';
 import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
 
 class EditarRegFotPage extends StatefulWidget {
@@ -44,7 +44,6 @@ class _EditarRegFotPageState extends State<EditarRegFotPage> {
     if (_bloquear.length < costosByCul.length) {
       for (var i = 0; i < costosByCul.length; i++) {
         _bloquear.add(false);
-        //print(i);
       }
     }
     armarWidgets(context, costosByCul, imagen);
@@ -55,7 +54,7 @@ class _EditarRegFotPageState extends State<EditarRegFotPage> {
             child: Column(
           children: [
             Text('Asociar'),
-            Text('mas costos'),
+            Text('más costos'),
           ],
         )),
       ),

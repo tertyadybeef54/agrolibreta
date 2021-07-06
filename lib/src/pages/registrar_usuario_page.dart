@@ -259,7 +259,6 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
                     onPressed: () {
                       setState(() {
                         passwordVisible = !passwordVisible;
-                        print(passwordVisible);
                       });
                     })),
             onSaved: (value) => registro.password = value,
@@ -286,7 +285,6 @@ class _RegistrarUsuarioState extends State<RegistrarUsuario> {
             setState(
               () {
                 passwordVisible = !passwordVisible;
-                print(passwordVisible);
               },
             );
           },

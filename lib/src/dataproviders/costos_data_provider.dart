@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
 import 'package:agrolibreta_v2/src/modelos/cultivo_model.dart';
+import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
 
 import 'package:agrolibreta_v2/src/modelos/costo_model.dart';
 import 'package:agrolibreta_v2/src/data/costo_operations.dart';
@@ -10,19 +10,19 @@ import 'package:agrolibreta_v2/src/data/concepto_operations.dart';
 import 'package:agrolibreta_v2/src/data/porcentaje_operations.dart';
 
 final CostoOperations _cosOper = new CostoOperations();
-final ConceptoOperations _conOper = new ConceptoOperations();
 final CultivoOperations _culOper = new CultivoOperations();
+final ConceptoOperations _conOper = new ConceptoOperations();
 final PorcentajeOperations _porOper = new PorcentajeOperations();
 
 //provider para manejar los datos relacionados a los costos
 class CostosData with ChangeNotifier {
   
   List<List<int>> sumasList = [];
-  List<List<ConceptoModel>> conceptosList = [];
   List<List<int>> sugeridosList = [];
+  List<List<ConceptoModel>> conceptosList = [];
 
-  List<CultivoModel> cultivos = [];
   List<CostoModel> costos = [];
+  List<CultivoModel> cultivos = [];
   List<ConceptoModel> conceptos = [];
 
   CostosData() {
@@ -31,10 +31,10 @@ class CostosData with ChangeNotifier {
   getCostos() async {
     final resp = await _cosOper.consultarCostos();
     this.costos = [...resp];
-    final res = await _conOper.consultarConceptos();
-    this.conceptos = [...res];
     final cul = await _culOper.consultarCultivos();
     this.cultivos = [...cul];
+    final res = await _conOper.consultarConceptos();
+    this.conceptos = [...res];
 
     notifyListeners();
   }

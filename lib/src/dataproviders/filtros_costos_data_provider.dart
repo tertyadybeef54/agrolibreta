@@ -28,18 +28,12 @@ class FiltrosCostosData with ChangeNotifier {
     final _resp = await _cosOper.costosFiltrados(
         fkidCultivo, fechaDesde, fechaHasta, fkidproAct, fkidConcepto);
 
-    _resp.forEach((e) {
-      print(e.idCosto);
-    });
     this.costos = _resp;
   }
 
   costosByCultivo(String fkidCultivo) async {
     final _resp = await _cosOper.costosFiltrados(
         fkidCultivo, '20210000', '30000000', 'todos', 'todos');
-    /* _resp.forEach((e) {
-      print(e.idCosto);
-    }); */
     this.costosbyCul = _resp;
   }
   resetCostos() async {

@@ -10,57 +10,49 @@ import 'package:agrolibreta_v2/src/widgets/modelo_referencia_dropdown.dart';
 import 'package:agrolibreta_v2/src/modelos/ubicacion_model.dart';
 import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
 
-import 'package:agrolibreta_v2/src/data/cultivo_operations.dart';
-import 'package:agrolibreta_v2/src/data/estados_operations.dart';
 import 'package:agrolibreta_v2/src/data/ubicaciones_operations.dart';
-import 'package:agrolibreta_v2/src/data/producto_agricola_operations.dart';
 import 'package:agrolibreta_v2/src/data/modelos_referencia_operations.dart';
 
 
-class CrearCultivoPage extends StatefulWidget {
+class RegistrarCultivoPage extends StatefulWidget {
   @override
-  _CrearCultivoPageState createState() => _CrearCultivoPageState();
+  _RegistrarCultivoPageState createState() => _RegistrarCultivoPageState();
 }
 
-class _CrearCultivoPageState extends State<CrearCultivoPage> {
-  ModelosReferenciaOperations _modRefOper = new ModelosReferenciaOperations();
-  CultivoOperations operacionCultivo = new CultivoOperations();
+class _RegistrarCultivoPageState extends State<RegistrarCultivoPage> {
+  //Se requiere presentar en esta pantalla datos de 2 modelos
+  //ubicacion_model y modelo_referencia_model, los cuales listan los dropdown
   UbicacionesOperations ubicacionesOperations = new UbicacionesOperations();
-  EstadosOperations estadosOperations = new EstadosOperations();
+  ModelosReferenciaOperations _modRefOper = new ModelosReferenciaOperations();
 
-  ModelosReferenciaOperations modelosReferenciaOperations =
-      new ModelosReferenciaOperations();
-  ProductoAgricolaOperations productoAgricolaOperations =
-      new ProductoAgricolaOperations();
-
+ //Estas funciones son usadas para recibir la opción seleccionada en el dropdown de las ubicaciones
+ //y se almacena en la variable declaradaen esta clase.
   UbicacionModel _selectedUbicacion;
   callback(selectedUbicacion) {
     setState(() {
       _selectedUbicacion = selectedUbicacion;
     });
   }
-
-  ModeloReferenciaModel
-      _selectedModeloReferencia; //modeloreferencia seleccionado en el dropdown
+  ModeloReferenciaModel _selectedModeloReferencia;
   callback2(selectedModeloReferencia) {
     setState(() {
       _selectedModeloReferencia = selectedModeloReferencia;
     });
   }
-
-  //estilo de texto letra tamaño 20
+  //letra tamaño 20
   final _style = new TextStyle(
     fontSize: 18.0,
   );
+  //esta variable permite mostrar la fecha al momento que es seleccionada
   TextEditingController controlFecha = new TextEditingController();
 
-  //valores para crear el cultivo, el id es automatico
+  //variables inicializadas para crear el cultivo, el id es automatico
   String _nombreDistintivo = 'Nn'; //nn sin especificar
   double _areaSembrada = 1;
   String _fechaInicio = 'Nf';
   double _presupuesto = 1;
-  //variables para crear la ubicacion
-  String _nombreUbicacion = 'Nu';
+  //variables inicializadas para crear la ubicacion
+  String _nombreUbicacion = 'Nn';
   String _desUbicacion = 'No existe';
 
   @override

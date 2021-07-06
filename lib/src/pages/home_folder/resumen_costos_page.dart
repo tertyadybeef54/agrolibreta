@@ -28,21 +28,11 @@ class _ResumencostosPageState extends State<ResumencostosPage> {
     culData.porcentajes = [];
     culData.consultarMR(cultivoArg.fkidModeloReferencia);
 
-    _sumasAll.forEach((element) {
-      print(element.toString());
-    });
     total = 0;
     _sumasAll[idCul - 1].forEach((element) {
       total += element;
     });
-    _conceptosAll.forEach((element) {
-      element.forEach((e) {
-        print(e.nombreConcepto);
-      });
-    });
-    _sugeridos.forEach((element) {
-      print(element.toString());
-    });
+
 
     return Scaffold(
       appBar: _appBar(context, nombreCul, idCul),

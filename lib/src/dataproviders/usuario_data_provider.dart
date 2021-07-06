@@ -20,8 +20,7 @@ class UsuarioProvider with ChangeNotifier {
   }
 
   actualizarData(RegistroUsuariosModel nuevoUsuario) async {
-    final res = await _usuOper.updateUsuarios(nuevoUsuario);
+    await _usuOper.updateUsuarios(nuevoUsuario);
     notifyListeners();
-    print(res.toString());
   }
 }

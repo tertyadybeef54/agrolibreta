@@ -32,19 +32,6 @@ UsuarioOperations _usuOper = new UsuarioOperations();
 
 //registrar un usuario en real time database
 class SincronizacionProvider {
-/*   final String _url = 'https://agrolibretav1-default-rtdb.firebaseio.com';
-  final _prefs = new PreferenciasUsuario();
-  Future<bool> crearUsuario(RegistroUsuariosModel registro) async {
-    final url = '$_url/usuarios.json?auth=${_prefs.token}';
-
-    final resp = await http.post(Uri.parse(url),
-        body: registroUsuariosModelToJson(registro));
-
-    final decodedData = json.decode(resp.body);
-
-    print(decodedData);
-    return true;
-  } */
 
 //metodo para sincronizar los datos locales con la nube que en este caso es cloud firestore de firebase
 //se hace una consulta a la base de datos locar tabla por tabla y los resultados son enviados a la nube
@@ -92,7 +79,7 @@ class SincronizacionProvider {
     final List<ProductoActividadModel> prodActs =
         await _proOper.consultarProductosActividades();
     prodActs.forEach((modelo) async {
-      if (modelo.idProductoActividad > 11) {
+      if (modelo.idProductoActividad > 15) {
         await dbFirestore
             .collection('ProductosActividades')
             .doc('${modelo.idProductoActividad}')
@@ -110,7 +97,7 @@ class SincronizacionProvider {
     final List<UnidadMedidaModel> unidades =
         await _uniOper.consultarUnidadesMedida();
     unidades.forEach((modelo) async {
-      if (modelo.idUnidadMedida > 5) {
+      if (modelo.idUnidadMedida > 6) {
         await dbFirestore
             .collection('UnidadesMedida')
             .doc('${modelo.idUnidadMedida}')
@@ -127,7 +114,6 @@ class SincronizacionProvider {
     usuario[0].fechaUltimaSincro =
         DateFormat('dd-MM-yyyy  HH:mm').format(horaTotal).toString();
     _usuOper.updateUsuarios(usuario[0]);
-    print(usuario[0].fechaUltimaSincro);
     await dbFirestore
         .collection('Usuario')
         .doc('${usuario[0].idUsuario}')

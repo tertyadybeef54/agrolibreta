@@ -1,11 +1,12 @@
-import 'package:agrolibreta_v2/src/dataproviders/pie_data_provider.dart';
-import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:agrolibreta_v2/src/dataproviders/pie_data_provider.dart';
+import 'package:agrolibreta_v2/src/dataproviders/usuario_data_provider.dart';
+
 import 'package:agrolibreta_v2/src/dataproviders/costos_data_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/porcentajes_data_provider.dart';
-import 'package:agrolibreta_v2/src/dataproviders/registro_fotograficos_data.dart';
+import 'package:agrolibreta_v2/src/dataproviders/registro_fotografico_data.dart';
 import 'package:agrolibreta_v2/src/dataproviders/modelo_referencia_provider.dart';
 import 'package:agrolibreta_v2/src/dataproviders/filtros_costos_data_provider.dart';
 
@@ -41,7 +42,7 @@ class _Navegacion extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.dns), label: 'Utilidades'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.collections), label: 'Galeria'),
+              icon: Icon(Icons.collections), label: 'Galería'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'costos'),
           BottomNavigationBarItem(
               icon: Icon(Icons.content_paste_rounded), label: 'Informes'),

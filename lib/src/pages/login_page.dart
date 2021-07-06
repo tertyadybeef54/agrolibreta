@@ -269,7 +269,6 @@ class _Page2State extends State<Page2> {
                     onPressed: () {
                       setState(() {
                         passwordVisible = !passwordVisible;
-                        print(passwordVisible);
                       });
                     })),
             onChanged: bloc.changePassword,

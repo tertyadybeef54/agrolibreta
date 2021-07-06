@@ -32,7 +32,6 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
 
   @override
   Widget build(BuildContext context) {
-    //final int idCulArg = ModalRoute.of(context).settings.arguments;
     final culData = Provider.of<CultivoData>(context, listen: false);
     final CultivoModel cultivo = culData.cultivo;
     final costosTotales = culData.costosTotales;
@@ -129,7 +128,7 @@ class _InformacionCultivoState extends State<InformacionCultivo> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween, 
             children: [Row(children:[
             Text('  Precio de venta sugerido: ', style:TextStyle(fontWeight: FontWeight.bold)),
-            Text('${cultivo.precioVentaIdeal==1 ? ' Ingrese datos' : cultivo.precioVentaIdeal}'),
+            Text('${cultivo.precioVentaIdeal==0 ? ' Ingrese datos' : cultivo.precioVentaIdeal.round()}'),
             ]),
             IconButton(
               icon: Icon(Icons.edit),
