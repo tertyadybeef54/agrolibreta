@@ -15,7 +15,6 @@ ModelosReferenciaOperations _modOper = new ModelosReferenciaOperations();
 //provider que para manejar datos de los modelosReferencia
 class ModeloReferenciaData with ChangeNotifier {
   List<ModeloReferenciaModel> modelosReferencia = []; //se almacenan MRs
-  //List<ConceptoModel> conceptos = [];  // almacena conceptos
   List<List<ConceptoModel>> conceptosList = []; //almacena listas de conceptos
   //almacena listas de porcentajes
   List<List<PorcentajeModel>> porcentajesList = [];
