@@ -3,20 +3,19 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
 import 'package:path_provider/path_provider.dart';
-
 class DBProvider {
   static Database _database;
   static final DBProvider db = DBProvider._();
   DBProvider._();
-
+  //Si la base de datos ya existe se accede a ella
   Future<Database> get database async {
     if (_database != null) return _database;
-
+  //si la base de datos no existe debe crearse por medio de initDB
     _database = await initDB();
 
     return _database;
   }
-
+ //Función para crear la base de datos
   Future<Database> initDB() async {
     // Path de donde almacenaremos la base de datos
     Directory documentsDirectory = await getApplicationDocumentsDirectory();

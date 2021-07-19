@@ -26,9 +26,9 @@ void main() async {
   await prefs.initPrefs();
   runApp(MyApp());
 }
-
+//Este es el widget raiz de la aplicación
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  
   final prefs = new PreferenciasUsuario();
   @override
   Widget build(BuildContext context) {

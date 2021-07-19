@@ -1,12 +1,11 @@
 import 'package:agrolibreta_v2/src/modelos/modelo_referencia_model.dart';
 import 'package:agrolibreta_v2/src/providers/db_provider.dart';
 
-//CRUD PARA Ubicacaciones
+//CRUD PARA modelos de referencia
 class ModelosReferenciaOperations {
   ModelosReferenciaOperations modelosReferenciaOperations;
-
+  //referencia a la base de datos
   final dbProvider = DBProvider.db;
-
 //C - crear
   Future<int> nuevoModeloReferencia(
       ModeloReferenciaModel nuevoModeloReferencia) async {
@@ -14,7 +13,6 @@ class ModelosReferenciaOperations {
     final res =
         await db.insert('ModelosReferencia', nuevoModeloReferencia.toJson());
     // Es el ID del último registro insertado;
-    print(res);
     return res;
   }
 

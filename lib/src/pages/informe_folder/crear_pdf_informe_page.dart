@@ -289,7 +289,7 @@ final expense = dataTablepie
                       pw.Text('Universidad Industrial de Santander',
                           style: pw.TextStyle(fontSize: 15.0)),
                       pw.Text(
-                          'Autores: Deisy Rangel Florez y Andres Javier Cuadros Sanabria',
+                          'Autores: Deisy Rangel Florez y Andres Cuadros Sanabria',
                           style: pw.TextStyle(fontSize: 15.0)),
                     ]),
                 pw.SizedBox(height: 20.0),
@@ -401,7 +401,8 @@ final expense = dataTablepie
                     style: pw.TextStyle(
                         fontSize: 18.0, fontWeight: pw.FontWeight.bold)),
                     pw.SizedBox(height: 30.0),
-                    pw.Text('Para entender mejor el siguiente grafico piense en el siguiente ejemplo: si para el concepto mano de obra aparece un valor del 50 porciento en la grafica quiere decir que de la suma del valor total de todos los costos la mitad se destinó para dicho concepto'),
+                    pw.Text('Para entender mejor el siguiente grafico piense en el siguiente ejemplo: si para el concepto mano de obra aparece un valor del 50 porciento en la grafica, quiere decir que de la suma del valor total de todos los costos la mitad se destinó para dicho concepto'),
+                    pw.SizedBox(height: 20.0),
                   ]
                 ),
                 grid: pw.PieGrid(),

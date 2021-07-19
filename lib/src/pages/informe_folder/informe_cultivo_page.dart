@@ -235,7 +235,7 @@ class _InformeCultivoPageState extends State<InformeCultivoPage> {
           builder: (context, snapshot) {
             return snapshot.hasData
                 ? CultivoDropdown(snapshot.data, callback) //selected concepto
-                : Text('sin conceptos');
+                : Text('sin cultivos');
           },
         ),
       ],

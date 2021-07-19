@@ -14,17 +14,17 @@ import 'package:agrolibreta_v2/src/preferencias_usuario/preferencias_usuario.dar
 
 
 class HomePage extends StatelessWidget {
+  //referencia a la clase que accede al CRUD de las ubicaciones y los estados
   final UbicacionesOperations _ubiOper = new UbicacionesOperations();
   final EstadosOperations _estOper = new EstadosOperations();
   final prefs = new PreferenciasUsuario();
-  
   @override
   Widget build(BuildContext context) {
     prefs.ultimaPagina = 'taps';
     final cosData = Provider.of<CostosData>(context);
     final List<CultivoModel> cultivos = cosData.cultivos;
     cosData.obtenerCostosByConceptos();
-
+    //widget padre de la pagina home
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -42,13 +42,13 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: _crearListaDeCultivo(context, cultivos),
-      floatingActionButton: _agregarCultivo(context),
+      floatingActionButton: cultivos.length>2? _agregarCultivo(context):_agregarCultivo2(context),
     );
   }
-
+//body de la vista de usuario home
   Widget _crearListaDeCultivo(
       BuildContext context, List<CultivoModel> cultivos) {
-    
+
     return ListView.builder(
       padding: EdgeInsets.all(5.0),
       itemCount: cultivos.length,
@@ -209,11 +209,32 @@ class HomePage extends StatelessWidget {
 
   //botton para añadir nuevo cultivo
   Widget _agregarCultivo(BuildContext context) {
-    return FloatingActionButton(
-      child: Icon(Icons.add),
-      onPressed: () {
-        Navigator.pushNamed(context, 'crearCultivo');
-      },
+    return 
+        FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.pushNamed(context, 'crearCultivo');
+          },
+    );
+  }
+    //botton para añadir nuevo cultivo
+  Widget _agregarCultivo2(BuildContext context) {
+    return 
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children:[
+        SizedBox(width: 20.0,),
+        Text('''
+          Resuelva sus dudas a travez de:
+          https://agrolibretav1.web.app/
+        '''),
+        FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.pushNamed(context, 'crearCultivo');
+          },
+        )
+      ]
     );
   }
 }
